@@ -1,0 +1,13 @@
+{
+  "extends": "fastify-tsconfig",
+  "compilerOptions": {
+    "target": "ES2023",
+    "lib": ["ES2023"],
+    "baseUrl": "./",
+    "paths": {
+      "@src/*": ["src/*"],
+      "@test/*": ["test/*"]
+    },
+    "outDir": "./dist"
+  }
+}

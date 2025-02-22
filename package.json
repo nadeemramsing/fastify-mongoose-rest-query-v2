@@ -1,0 +1,28 @@
+{
+  "name": "micro-rest-query",
+  "version": "0.0.1",
+  "description": "",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "node -r ts-node/register --test test/**/*.test.ts",
+    "test:watch": "node -r ts-node/register --test --watch test/**/*.test.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "fastify": "^5.2.1"
+  },
+  "devDependencies": {
+    "@fastify/autoload": "^6.1.0",
+    "@fastify/type-provider-typebox": "^5.1.0",
+    "@sinclair/typebox": "^0.34.27",
+    "@types/node": "^22.13.5",
+    "fastify-tsconfig": "^3.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  }
+}
