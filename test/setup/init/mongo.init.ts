@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 import { resources } from '@test/setup/fixtures/resources'
-import { Resource as ResourceSchema } from '@test/setup/schemas'
+import { ResourceSchema } from '@test/setup/schemas'
 
 export const mongoInit = async (uri: string) => {
   await mongoose.connect(uri)

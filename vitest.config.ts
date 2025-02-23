@@ -5,7 +5,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
-    globalSetup: './test/setup/gloablSetup.ts',
+    globalSetup: './test/setup/globalSetup.ts',
     setupFiles: ['./test/setup/setup.ts'],
   },
   plugins: [tsconfigPaths()],

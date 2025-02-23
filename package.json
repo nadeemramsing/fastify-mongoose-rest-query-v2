@@ -15,10 +15,13 @@
   "license": "MIT",
   "dependencies": {
     "fastify": "^5.0.0",
+    "fastify-plugin": "^5.0.1",
     "mongoose": "^8.10.1"
   },
   "peerDependencies": {
-    "fastify": "5.x"
+    "fastify": "5.x",
+    "fastify-plugin": "5.x",
+    "mongoose": "8.x"
   },
   "devDependencies": {
     "@fastify/autoload": "^6.1.0",

@@ -1,1 +1,1 @@
-export { ResourceSchema as Resource } from './resource.schema';
+export { ResourceSchema } from './resource.schema';
