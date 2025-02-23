@@ -1,16 +1,6 @@
-import { buildApp } from '@test/setup/app'
-import { FastifyInstance } from 'fastify'
+import { app } from '@test/setup/setup'
 
 describe('GET /health HTTP', () => {
-  let app: FastifyInstance
-
-  beforeAll(async () => {
-    app = await buildApp({ logger: false })
-  })
-
-  afterAll(async () => {
-    await app.close()
-  })
 
   it('GET /health returns status 200', async () => {
     const response = await app.inject({
