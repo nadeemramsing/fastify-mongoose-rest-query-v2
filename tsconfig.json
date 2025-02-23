@@ -8,6 +8,7 @@
       "@src/*": ["src/*"],
       "@test/*": ["test/*"]
     },
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "strict": true
   }
 }

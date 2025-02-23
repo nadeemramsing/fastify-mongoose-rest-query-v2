@@ -1,0 +1,1 @@
+export { ResourceSchema as Resource } from './resource.schema';
