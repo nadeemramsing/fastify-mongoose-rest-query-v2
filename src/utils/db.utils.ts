@@ -1,11 +1,16 @@
-import { IRestOptions } from '@src/mrq.interfaces'
+import { FastifyInstance } from 'fastify'
 import { Connection, createConnection, IndexesDiff } from 'mongoose'
 import { pickBy } from 'lodash/fp'
 import promiseAll from 'promise-all'
+import { IRestOptions } from '../mrq.interfaces'
 
 const pool: { [key: string]: Connection } = {}
 
-export async function getDB(uri: string, schemas: IRestOptions['schemas']) {
+export async function getDB(
+  app: FastifyInstance,
+  uri: string,
+  schemas: IRestOptions['schemas']
+) {
   let conn: Connection = pool[uri]
 
   if (!conn) {
@@ -15,13 +20,17 @@ export async function getDB(uri: string, schemas: IRestOptions['schemas']) {
 
     await conn.asPromise()
 
-    await mapModels(conn, schemas)
+    await mapModels(app, conn, schemas)
   }
 
   return conn
 }
 
-async function mapModels(conn: Connection, schemas: IRestOptions['schemas']) {
+async function mapModels(
+  app: FastifyInstance,
+  conn: Connection,
+  schemas: IRestOptions['schemas']
+) {
   const p: { [modelName: string]: Promise<IndexesDiff> } = {}
 
   for (const modelName in schemas) {
@@ -41,5 +50,5 @@ async function mapModels(conn: Connection, schemas: IRestOptions['schemas']) {
   const hasAnyDiff = Object.keys(diffs).length
 
   if (hasAnyDiff)
-    console.info('Result of diffIndexes:', JSON.stringify(diffs, null, 2))
+    app.log.info('Result of diffIndexes:', JSON.stringify(diffs, null, 2))
 }

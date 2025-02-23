@@ -10,7 +10,7 @@ export const assignModelsHook: (
   app.decorateRequest('x-client-mongodb-path', '')
 
   return (req, rep, done) => {
-    req.models = getDB(req['x-client-mongodb-path'] as string, schemas)
+    req.models = getDB(app, req['x-client-mongodb-path'] as string, schemas)
 
     done()
   }
