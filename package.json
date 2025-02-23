@@ -2,13 +2,13 @@
   "name": "micro-rest-query",
   "version": "0.0.1",
   "description": "",
+  "type": "module",
   "main": "src/index.ts",
   "exports": {
     ".": "./src/index.ts"
   },
   "scripts": {
-    "test": "node -r ts-node/register --test test/**/*.test.ts",
-    "test:watch": "node -r ts-node/register --test --watch test/**/*.test.ts"
+    "test": "NODE_OPTIONS='--import tsx' vitest"
   },
   "keywords": [],
   "author": "",
@@ -27,7 +27,11 @@
     "@types/node": "^22.13.5",
     "bson": "^6.10.3",
     "fastify-tsconfig": "^3.0.0",
+    "mongodb-memory-server": "^10.1.4",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.3"
+    "tsx": "^4.19.3",
+    "typescript": "^5.7.3",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^3.0.6"
   }
 }

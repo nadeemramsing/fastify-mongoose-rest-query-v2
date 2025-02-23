@@ -1,16 +1,14 @@
-import { buildApp } from '../setup/app'
+import { buildApp } from '@test/setup/app'
 import { FastifyInstance } from 'fastify'
-import { describe, it, before, after } from 'node:test'
-import assert from 'assert'
 
 describe('GET /health HTTP', () => {
   let app: FastifyInstance
 
-  before(async () => {
+  beforeAll(async () => {
     app = await buildApp({ logger: false })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await app.close()
   })
 
@@ -20,7 +18,7 @@ describe('GET /health HTTP', () => {
       url: '/api/health',
     })
 
-    assert.strictEqual(response.statusCode, 200)
-    assert.strictEqual(JSON.parse(response.payload).status, 'ok')
+    expect(response.statusCode).toBe(200)
+    expect(JSON.parse(response.payload).status).toBe('ok')
   })
 })

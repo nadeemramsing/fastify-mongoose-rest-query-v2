@@ -2,6 +2,14 @@ import Fastify, { FastifyInstance } from 'fastify'
 import autoload from '@fastify/autoload'
 import { join } from 'path'
 import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox'
+import { MongoMemoryServer } from 'mongodb-memory-server'
+import { mongoInit } from '@test/setup/init/mongo.init'
+
+declare module 'fastify' {
+  interface FastifyInstance {
+    mongod: MongoMemoryServer
+  }
+}
 
 const defaultOptions = {
   logger: true,
@@ -9,6 +17,9 @@ const defaultOptions = {
 }
 
 async function buildApp(options: Partial<typeof defaultOptions> = {}) {
+  const mongod = await MongoMemoryServer.create()
+  const uri = mongod.getUri()
+  await mongoInit(uri)
 
   const app: FastifyInstance = Fastify({
     ...defaultOptions,
@@ -19,6 +30,8 @@ async function buildApp(options: Partial<typeof defaultOptions> = {}) {
     dir: join(__dirname, 'routes'),
     options: { prefix: '/api' },
   })
+
+  app.mongod = mongod
 
   return app
 }

@@ -1,8 +1,9 @@
 {
-  "extends": "fastify-tsconfig",
   "compilerOptions": {
-    "target": "ES2023",
-    "lib": ["ES2023"],
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "target": "ESNext",
+    "types": ["vitest/globals"],
     "baseUrl": "./",
     "paths": {
       "@src/*": ["src/*"],
