@@ -4,7 +4,7 @@ import { buildApp } from '@test/setup/app'
 let app: FastifyInstance
 
 beforeAll(async () => {
-  app = await buildApp()
+  app = await buildApp({}, 'mongodb://localhost:27016/test')
 })
 
 afterAll(async () => {

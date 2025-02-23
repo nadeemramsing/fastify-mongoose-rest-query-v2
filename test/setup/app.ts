@@ -10,7 +10,10 @@ const defaultOptions = {
   ignoreTrailingSlash: true,
 }
 
-async function buildApp(options: Partial<typeof defaultOptions> = {}) {
+async function buildApp(
+  options: Partial<typeof defaultOptions> = {},
+  uri: string
+) {
   const app: FastifyInstance = Fastify({
     ...defaultOptions,
     ...options,
@@ -20,6 +23,9 @@ async function buildApp(options: Partial<typeof defaultOptions> = {}) {
     dir: join(__dirname, 'routes'),
     options: { prefix: '/api' },
   })
+
+  // Stub: Hook for x-client-mongodb-path
+  app.addHook('onRequest', async (req) => (req['x-client-mongodb-path'] = uri))
 
   app.register(restify, {
     prefix: '/fastify/api',

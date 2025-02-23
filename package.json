@@ -16,17 +16,22 @@
   "dependencies": {
     "fastify": "^5.0.0",
     "fastify-plugin": "^5.0.1",
-    "mongoose": "^8.10.1"
+    "lodash": "^4.17.21",
+    "mongoose": "^8.10.1",
+    "promise-all": "^1.0.0"
   },
   "peerDependencies": {
     "fastify": "5.x",
     "fastify-plugin": "5.x",
-    "mongoose": "8.x"
+    "lodash": "4.x",
+    "mongoose": "8.x",
+    "promise-all": "1.x"
   },
   "devDependencies": {
     "@fastify/autoload": "^6.1.0",
     "@fastify/type-provider-typebox": "^5.1.0",
     "@sinclair/typebox": "^0.34.27",
+    "@types/lodash": "^4.17.15",
     "@types/node": "^22.13.5",
     "bson": "^6.10.3",
     "fastify-tsconfig": "^3.0.0",
