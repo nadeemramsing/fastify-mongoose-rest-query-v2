@@ -1,7 +1,7 @@
 import { app } from '@test/setup/setup'
 
 describe('GET / HTTP', () => {
-  it('GET / returns status 200', async () => {
+  it('GET / returns status 404', async () => {
     const response = await app.inject({
       method: 'GET',
       url: '/',
