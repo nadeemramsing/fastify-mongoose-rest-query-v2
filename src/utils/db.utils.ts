@@ -16,9 +16,9 @@ export async function getDB(
   if (!conn) {
     conn = createConnection(uri, { autoIndex: false })
 
-    pool[uri] = conn
-
     await conn.asPromise()
+
+    pool[uri] = conn
 
     await mapModels(app, conn, schemas)
   }
@@ -51,4 +51,9 @@ async function mapModels(
 
   if (hasAnyDiff)
     app.log.info('Result of diffIndexes:', JSON.stringify(diffs, null, 2))
+}
+
+export async function closeConnections() {
+  // Test failing due to this right now
+  // for (const uri in pool) await pool[uri].close()
 }
