@@ -1,8 +1,9 @@
 import 'fastify'
+import { Connection } from 'mongoose'
 
 declare module 'fastify' {
   interface FastifyRequest {
-    models: any
+    mongoose_conn: Connection
     'x-client-mongodb-path': string
   }
 }

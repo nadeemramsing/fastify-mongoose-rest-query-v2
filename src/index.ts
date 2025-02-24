@@ -4,6 +4,10 @@ import { assignModelsHook } from './hooks/assign-models.hook'
 import { closeConnections } from './utils/db.utils'
 import { mainRoute } from './routes/main.route'
 
+export * from './mrq.errors'
+export * from './mrq.interfaces'
+export * from './utils/db.utils'
+
 export const restify = fastifyPlugin(async (app, opts: IRestOptions) => {
   app.addHook('onRequest', assignModelsHook(app, opts.schemas))
 

@@ -1,17 +1,19 @@
-import { FastifyInstance, onRequestHookHandler } from 'fastify'
+import { FastifyInstance, onRequestAsyncHookHandler } from 'fastify'
 import { IRestOptions } from '../mrq.interfaces'
 import { getDB } from '../utils/db.utils'
 
 export const assignModelsHook: (
   app: FastifyInstance,
   schemas: IRestOptions['schemas']
-) => onRequestHookHandler = (app, schemas) => {
+) => onRequestAsyncHookHandler = (app, schemas) => {
   app.decorateRequest('models', null)
   app.decorateRequest('x-client-mongodb-path', '')
 
-  return (req, rep, done) => {
-    req.models = getDB(app, req['x-client-mongodb-path'] as string, schemas)
-
-    done()
+  return async (req, rep) => {
+    req.mongoose_conn = await getDB(
+      app,
+      req['x-client-mongodb-path'] as string,
+      schemas
+    )
   }
 }

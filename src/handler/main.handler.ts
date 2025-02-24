@@ -1,5 +1,11 @@
 import { RouteHandlerMethod } from 'fastify'
 
-export const mainHandler: RouteHandlerMethod = (request, reply) => {
-  return 'TEST'
+export const getMainHandler = (modelName: string) => {
+  const get: RouteHandlerMethod = async (req, rep) => {
+    return 'TEST'
+  }
+
+  return {
+    get,
+  }
 }

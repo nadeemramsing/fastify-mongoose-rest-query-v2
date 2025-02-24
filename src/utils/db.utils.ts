@@ -1,8 +1,10 @@
-import { FastifyInstance } from 'fastify'
+import { FastifyInstance, FastifyRequest } from 'fastify'
+import { httpErrors } from '@fastify/sensible'
 import { Connection, createConnection, IndexesDiff } from 'mongoose'
 import { pickBy } from 'lodash/fp'
 import promiseAll from 'promise-all'
 import { IRestOptions } from '../mrq.interfaces'
+import { SCHEMA_NOT_REGISTERED } from '../mrq.errors'
 
 const pool: { [key: string]: Connection } = {}
 
@@ -54,6 +56,17 @@ async function mapModels(
 }
 
 export async function closeConnections() {
-  // Test failing due to this right now
-  // for (const uri in pool) await pool[uri].close()
+  const p = []
+
+  for (const uri in pool) p.push(pool[uri].close())
+
+  await Promise.allSettled(p)
+}
+
+export function model(req: FastifyRequest, modelName: string) {
+  const Model = req.mongoose_conn.models[modelName]
+
+  if (!Model) throw httpErrors.badRequest(SCHEMA_NOT_REGISTERED)
+
+  return Model
 }
