@@ -10,6 +10,6 @@ export const mainRoute = fastifyPlugin<IRestOptions>(async (app, opts) => {
 
     const mainHandler = getMainHandler(modelName)
 
-    app.get(prefix, mainHandler.get)
+    app.get(prefix, mainHandler.getByQuery)
   }
 })

@@ -10,14 +10,4 @@ describe('GET /health HTTP', () => {
     expect(response.statusCode).toBe(200)
     expect(JSON.parse(response.payload).status).toBe('ok')
   })
-
-  it('GET /health returns status 200', async () => {
-    const response = await app.inject({
-      method: 'GET',
-      url: '/fastify/api/resources',
-    })
-
-    expect(response.statusCode).toBe(200)
-    expect(response.payload).toBe('TEST')
-  })
 })

@@ -28,7 +28,7 @@ async function buildApp(
   app.addHook('onRequest', async (req) => (req['x-client-mongodb-path'] = uri))
 
   app.register(restify, {
-    prefix: '/fastify/api',
+    prefix: '/secure/mrq',
     schemas: {
       Resource: {
         endpointName: 'resources',

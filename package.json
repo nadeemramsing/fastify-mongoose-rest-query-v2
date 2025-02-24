@@ -37,6 +37,7 @@
     "@types/node": "^22.13.5",
     "bson": "^6.10.3",
     "fastify-tsconfig": "^3.0.0",
+    "map-obj": "^5.0.2",
     "mongodb-memory-server": "^10.1.4",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.3",
