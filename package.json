@@ -15,10 +15,12 @@
   "license": "MIT",
   "dependencies": {
     "@fastify/sensible": "^6.0.3",
+    "@mongodb-js/shell-bson-parser": "^1.2.0",
     "fastify": "^5.0.0",
     "fastify-plugin": "^5.0.1",
     "lodash": "^4.17.21",
     "mongoose": "^8.10.1",
+    "nano-memoize": "^3.0.16",
     "promise-all": "^1.0.0"
   },
   "peerDependencies": {

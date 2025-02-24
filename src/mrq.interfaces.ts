@@ -11,3 +11,7 @@ export interface IRestOptions {
     [modelName: string]: ISchemaOption
   }
 }
+
+export interface IGetQueryOptions {
+  ignoreSelect?: boolean
+}

@@ -8,7 +8,6 @@ export const toJSONOptions = {
   versionKey: false,
 }
 
-export const memoizeOptions = {
-  expiring: 30 * 24 * 60 * 60 * 1_000, // 1 month
-  hashFunction: JSON.stringify,
+export const memoOptions = {
+  maxAge: 30 * 24 * 60 * 60 * 1_000, // 1 month
 }

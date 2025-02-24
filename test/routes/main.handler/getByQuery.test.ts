@@ -7,6 +7,9 @@ describe('/', () => {
     const response = await app.inject({
       method: 'GET',
       url: '/secure/mrq/resources',
+      query: {
+        select: 'all',
+      },
     })
 
     const resourcesExpected = getDocsInJSON(resources)
