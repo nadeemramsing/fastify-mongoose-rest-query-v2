@@ -15,7 +15,7 @@ importers:
         specifier: ^5.0.0
         version: 5.2.1
       fastify-plugin:
-        specifier: ^5.0.1
+        specifier: ^5.0.0
         version: 5.0.1
       lodash:
         specifier: ^4.17.21

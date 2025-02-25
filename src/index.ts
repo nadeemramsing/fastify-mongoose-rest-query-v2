@@ -1,4 +1,4 @@
-import { fastifyPlugin } from 'fastify-plugin'
+import { FastifyInstance } from 'fastify'
 import { IRestOptions } from './mrq.interfaces'
 import { assignModelsHook } from './hooks/assign-models.hook'
 import { closeConnections } from './utils/db.utils'
@@ -9,8 +9,8 @@ export * from './mrq.interfaces'
 export * from './mrq.enum'
 export * from './utils/db.utils'
 
-export const restify = fastifyPlugin(async (app, opts: IRestOptions) => {
-  app.addHook('onRequest', assignModelsHook(app, opts.schemas))
+export const restify = (opts: IRestOptions) => async (app: FastifyInstance) => {
+  app.addHook('onRequest', assignModelsHook(app, opts))
 
   app.addHook('onRoute', ({ url, method }) =>
     app.log.info(`Endpoint created: ${url} ${method}`)
@@ -18,5 +18,5 @@ export const restify = fastifyPlugin(async (app, opts: IRestOptions) => {
 
   app.addHook('onClose', closeConnections)
 
-  app.register(mainRoute, opts)
-})
+  app.register(mainRoute(opts))
+}

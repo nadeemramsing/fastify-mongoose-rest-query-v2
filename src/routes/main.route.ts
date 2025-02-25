@@ -1,15 +1,19 @@
-import { fastifyPlugin } from 'fastify-plugin'
+import { FastifyInstance } from 'fastify'
 import { IRestOptions } from '../mrq.interfaces'
 import { getMainHandler } from '../handler/main.handler'
+import { roleHook } from '../hooks/role.hook'
 
-export const mainRoute = fastifyPlugin<IRestOptions>(async (app, opts) => {
-  for (const [modelName, { endpointName, schema }] of Object.entries(
-    opts.schemas
-  )) {
-    const prefix = `${opts.prefix}/${endpointName}`
+export const mainRoute =
+  (opts: IRestOptions) => async (app: FastifyInstance) => {
+    app.addHook('onRequest', roleHook(opts))
 
-    const mainHandler = getMainHandler(modelName)
+    for (const [modelName, { endpointName, schema }] of Object.entries(
+      opts.schemas
+    )) {
+      const prefix = `/${endpointName}`
 
-    app.get(prefix, mainHandler.getByQuery)
+      const mainHandler = getMainHandler(modelName)
+
+      app.get(prefix, mainHandler.getByQuery)
+    }
   }
-})

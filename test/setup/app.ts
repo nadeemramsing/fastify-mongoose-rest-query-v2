@@ -3,7 +3,8 @@ import autoload from '@fastify/autoload'
 import { join } from 'path'
 import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox'
 import { restify } from '@src/index'
-import { ResourceSchema } from './schemas'
+import { adminSchemas } from './admin-schemas'
+import { userSchemas } from './user-schemas'
 
 const defaultOptions = {
   logger: true,
@@ -25,17 +26,26 @@ async function buildApp(
   })
 
   // Stub: Hook for x-client-mongodb-path
-  app.addHook('onRequest', async (req) => (req['x-client-mongodb-path'] = uri))
-
-  app.register(restify, {
-    prefix: '/secure/mrq',
-    schemas: {
-      Resource: {
-        endpointName: 'resources',
-        schema: ResourceSchema,
-      },
-    },
+  app.addHook('onRequest', async (req) => {
+    req['role'] = (req.query as { role: string }).role ?? 'admin'
+    req['x-client-mongodb-path'] = uri
   })
+
+  app.register(
+    restify({
+      schemas: userSchemas,
+      role: 'user',
+    }),
+    { prefix: '/secure/user/mrq' }
+  )
+
+  app.register(
+    restify({
+      schemas: adminSchemas,
+      role: 'admin',
+    }),
+    { prefix: '/secure/admin/mrq' }
+  )
 
   return app
 }
