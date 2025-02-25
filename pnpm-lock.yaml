@@ -11,9 +11,6 @@ importers:
       '@fastify/sensible':
         specifier: ^6.0.3
         version: 6.0.3
-      '@mongodb-js/shell-bson-parser':
-        specifier: ^1.2.0
-        version: 1.2.0(bson@6.10.3)
       fastify:
         specifier: ^5.0.0
         version: 5.2.1
@@ -23,6 +20,9 @@ importers:
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
+      mongodb-query-parser:
+        specifier: ^4.3.0
+        version: 4.3.0(bson@6.10.3)
       mongoose:
         specifier: ^8.10.1
         version: 8.10.1
@@ -809,6 +809,9 @@ packages:
     resolution: {integrity: sha512-WhB9zCku7EGTj/HQQRz5aUQEUeoQZH2bWcltRErOpymJ4boYE6wL9Tbr23krRPSZ+C5zqNSrSw+Cc7sZZ4b7vg==}
     engines: {node: '>=0.10.0'}
 
+  javascript-stringify@2.1.0:
+    resolution: {integrity: sha512-JVAfqNPTvNq3sB/VHQJAFxN/sPgKnsKrCwyRt15zwNCdrMMJDdcEOdubuy+DuJYYdm0ox1J4uzEuYKkN+9yhVg==}
+
   json-schema-ref-resolver@2.0.1:
     resolution: {integrity: sha512-HG0SIB9X4J8bwbxCbnd5FfPEbcXAJYTi1pBJeP/QPON+w8ovSME8iRG+ElHNxZNX2Qh6eYn1GdzJFS4cDFfx0Q==}
 
@@ -871,6 +874,11 @@ packages:
   mongodb-memory-server@10.1.4:
     resolution: {integrity: sha512-+oKQ/kc3CX+816oPFRtaF0CN4vNcGKNjpOQe4bHo/21A3pMD+lC7Xz1EX5HP7siCX4iCpVchDMmCOFXVQSGkUg==}
     engines: {node: '>=16.20.1'}
+
+  mongodb-query-parser@4.3.0:
+    resolution: {integrity: sha512-3t8HZWzexoLAd8rXdecYgk7Xv22kd7QSYu6wNy+SxuHBiIQOG4NoK5AKw3xaMeNdJFUptv8FhgvmpKI+4gUA5A==}
+    peerDependencies:
+      bson: ^4.6.3 || ^5 || ^6
 
   mongodb@6.13.1:
     resolution: {integrity: sha512-gdq40tX8StmhP6akMp1pPoEVv+9jTYFSrga/g23JxajPAQhH39ysZrHGzQCSd9PEOnuEQEdjIWqxO7ZSwC0w7Q==}
@@ -1850,6 +1858,8 @@ snapshots:
 
   isobject@3.0.1: {}
 
+  javascript-stringify@2.1.0: {}
+
   json-schema-ref-resolver@2.0.1:
     dependencies:
       dequal: 2.0.3
@@ -1935,6 +1945,16 @@ snapshots:
       - mongodb-client-encryption
       - snappy
       - socks
+      - supports-color
+
+  mongodb-query-parser@4.3.0(bson@6.10.3):
+    dependencies:
+      '@mongodb-js/shell-bson-parser': 1.2.0(bson@6.10.3)
+      bson: 6.10.3
+      debug: 4.4.0
+      javascript-stringify: 2.1.0
+      lodash: 4.17.21
+    transitivePeerDependencies:
       - supports-color
 
   mongodb@6.13.1:

@@ -6,6 +6,7 @@ import { mainRoute } from './routes/main.route'
 
 export * from './mrq.errors'
 export * from './mrq.interfaces'
+export * from './mrq.enum'
 export * from './utils/db.utils'
 
 export const restify = fastifyPlugin(async (app, opts: IRestOptions) => {

@@ -1,6 +1,6 @@
 import memoize from 'nano-memoize'
 import { httpErrors } from '@fastify/sensible'
-import { parse } from '@mongodb-js/shell-bson-parser'
+import { parseFilter, parseSort, parseProject } from 'mongodb-query-parser'
 import { IMPLICIT_SELECT_ALL_NOT_ALLOWED } from '../mrq.errors'
 import { IGetQueryOptions } from '../mrq.interfaces'
 import { memoOptions } from '../mrq.config'
@@ -8,12 +8,7 @@ import { memoOptions } from '../mrq.config'
 export const getQuery = memoize(getQuery_, memoOptions)
 
 function getQuery_(query: any, options: IGetQueryOptions = {}) {
-  const filterStr =
-    typeof query.filter !== 'string'
-      ? JSON.stringify(query.filter)
-      : query.filter
-
-  const filter = parse(filterStr) ?? {}
+  const filter = getFilter(query)
 
   const sort = getSort(query.sort)
 
@@ -35,6 +30,17 @@ function getQuery_(query: any, options: IGetQueryOptions = {}) {
   }
 }
 
+function getFilter(query: any) {
+  const filterStr =
+    typeof query.filter !== 'string'
+      ? JSON.stringify(query.filter)
+      : query.filter
+
+  const filter = parseFilter(filterStr) ?? {}
+
+  return filter
+}
+
 export function getSort(fields: string) {
   if (!fields) return {}
 
@@ -47,7 +53,7 @@ export function getSort(fields: string) {
     else sort[field] = 1
   }
 
-  return sort
+  return parseSort(JSON.stringify(sort))
 }
 
 export function getSelect(fields: string = '', options: IGetQueryOptions = {}) {
@@ -74,10 +80,10 @@ export function getSelect(fields: string = '', options: IGetQueryOptions = {}) {
     else select[field] = 1
   }
 
-  return select
+  return parseProject(JSON.stringify(select))
 }
 
-function getPopulate(fields: string) {
+function getPopulate(fields: string): string {
   if (!fields) return ''
 
   if (typeof fields === 'string')
