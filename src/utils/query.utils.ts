@@ -1,4 +1,4 @@
-import memoize from 'nano-memoize'
+import memoize from 'moize'
 import { httpErrors } from '@fastify/sensible'
 import { parseFilter, parseSort, parseProject } from 'mongodb-query-parser'
 import { IMPLICIT_SELECT_ALL_NOT_ALLOWED } from '../mrq.errors'
@@ -7,7 +7,9 @@ import { memoOptions } from '../mrq.config'
 
 export const getQuery = memoize(getQuery_, memoOptions)
 
-function getQuery_(query: any, options: IGetQueryOptions = {}) {
+export function getQuery_(query: any, options: IGetQueryOptions = {}) {
+  console.log(1, { options })
+
   const filter = getFilter(query.filter)
 
   const sort = getSort(query.sort)
@@ -52,6 +54,7 @@ export function getSort(fields: string) {
 }
 
 export function getSelect(fields: string = '', options: IGetQueryOptions = {}) {
+  console.log(2, { options })
   if (options.ignoreSelect) return {}
 
   const select: Record<string, 1 | 0> = {}

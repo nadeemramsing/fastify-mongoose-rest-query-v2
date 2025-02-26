@@ -32,7 +32,23 @@ export const getMainHandler = (
     return docs
   }
 
+  // ---
+
+  const count: RouteHandlerMethod = async (req, rep) => {
+    if (!handlerAccesses.includes(HandlerAccessEnum.COUNT))
+      throw httpErrors.unauthorized(ROLE_DOES_NOT_HAVE_ACCESS_HANDLER_LEVEL)
+
+    const Model = model(req, modelName)
+
+    const query = getQuery(req.query, { ignoreSelect: true })
+
+    return { n: await Model.countDocuments(query.filter) }
+  }
+
+  // --
+
   return {
     getByQuery,
+    count,
   }
 }

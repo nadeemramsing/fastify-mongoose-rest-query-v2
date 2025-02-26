@@ -7,13 +7,16 @@ export const mainRoute =
   (opts: IRestOptions) => async (app: FastifyInstance) => {
     app.addHook('onRequest', roleHook(opts))
 
-    for (const [modelName, { endpointName, schema, handlerAccesses }] of Object.entries(
-      opts.schemas
-    )) {
+    for (const [
+      modelName,
+      { endpointName, schema, handlerAccesses },
+    ] of Object.entries(opts.schemas)) {
       const prefix = `/${endpointName}`
 
       const mainHandler = getMainHandler(modelName, handlerAccesses)
 
       app.get(prefix, mainHandler.getByQuery)
+
+      app.get(`${prefix}/count`, mainHandler.count)
     }
   }
