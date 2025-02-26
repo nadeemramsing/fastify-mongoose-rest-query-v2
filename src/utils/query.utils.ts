@@ -8,7 +8,7 @@ import { memoOptions } from '../mrq.config'
 export const getQuery = memoize(getQuery_, memoOptions)
 
 function getQuery_(query: any, options: IGetQueryOptions = {}) {
-  const filter = getFilter(query)
+  const filter = getFilter(query.filter)
 
   const sort = getSort(query.sort)
 
@@ -30,15 +30,10 @@ function getQuery_(query: any, options: IGetQueryOptions = {}) {
   }
 }
 
-function getFilter(query: any) {
-  const filterStr =
-    typeof query.filter !== 'string'
-      ? JSON.stringify(query.filter)
-      : query.filter
+function getFilter(filter: string) {
+  const filterStr = typeof filter !== 'string' ? JSON.stringify(filter) : filter
 
-  const filter = parseFilter(filterStr) ?? {}
-
-  return filter
+  return parseFilter(filterStr) ?? {}
 }
 
 export function getSort(fields: string) {
@@ -83,11 +78,19 @@ export function getSelect(fields: string = '', options: IGetQueryOptions = {}) {
   return parseProject(JSON.stringify(select))
 }
 
-function getPopulate(fields: string): string {
-  if (!fields) return ''
+function getPopulate(populate: string): any {
+  return parsePopulate(populate)
+}
 
-  if (typeof fields === 'string')
-    return fields.replaceAll(' ', '').replaceAll(',', ' ')
+function parsePopulate(populate: string) {
+  try {
+    const parsed = JSON.parse(populate)
 
-  return fields
+    if (typeof parsed !== 'object') throw 1
+
+    // Sanitize normally is being done in parseFilter
+    return parseFilter(JSON.stringify(parsed))
+  } catch (e) {
+    return populate
+  }
 }

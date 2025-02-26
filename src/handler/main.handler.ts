@@ -19,8 +19,7 @@ export const getMainHandler = (
 
     const query = getQuery(req.query)
 
-    const docs = await Model.find(query.filter, {}, { req })
-      .select(query.select)
+    const docs = await Model.find(query.filter, query.select, { req })
       .populate(query.populate)
       .sort(query.sort)
       .collation({ locale: 'simple', caseLevel: true })
