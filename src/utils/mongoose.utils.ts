@@ -1,4 +1,4 @@
-import { Model } from 'mongoose'
+import { ClientSession, Model } from 'mongoose'
 import { FastifyRequest } from 'fastify'
 
 interface IRunStaticMethods<T> {
@@ -24,4 +24,18 @@ export function runStaticMethods<T>({
         { req, query }
       )
   }
+}
+
+export async function useSession(
+  Model: Model<any>,
+  shouldUseSession: boolean = false,
+  cb: (session?: ClientSession) => any
+) {
+  if (!shouldUseSession) return cb()
+
+  const session = await Model.startSession()
+  const res = await cb(session)
+  session.endSession()
+
+  return res
 }

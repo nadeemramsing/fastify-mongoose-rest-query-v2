@@ -20,5 +20,7 @@ export const mainRoute =
       app.get(`${prefix}/count`, mainHandler.count)
 
       app.get(`${prefix}/distinct/:path`, mainHandler.distinct)
+
+      app.post(prefix, mainHandler.create)
     }
   }

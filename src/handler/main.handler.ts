@@ -1,14 +1,15 @@
 import { RouteHandlerMethod } from 'fastify'
 import { httpErrors } from '@fastify/sensible'
 import { model } from '../utils/db.utils'
-import { leanOptions } from '../mrq.config'
+import { leanOptions, toJSONOptions } from '../mrq.config'
 import { getQuery } from '../utils/query.utils'
 import { HandlerAccessEnum } from '../mrq.enum'
-import { runStaticMethods } from '../utils/mongoose.utils'
+import { runStaticMethods, useSession } from '../utils/mongoose.utils'
 import {
   PATH_NOT_FOUND_IN_SCHEMA,
   ROLE_DOES_NOT_HAVE_ACCESS_HANDLER_LEVEL,
 } from '../mrq.errors'
+import { ClientSession } from 'mongoose'
 
 export const getMainHandler = (
   modelName: string,
@@ -69,9 +70,38 @@ export const getMainHandler = (
 
   // ---
 
+  const create: RouteHandlerMethod = async (req, rep) => {
+    if (!handlerAccesses.includes(HandlerAccessEnum.CREATE))
+      throw httpErrors.unauthorized(ROLE_DOES_NOT_HAVE_ACCESS_HANDLER_LEVEL)
+
+    const Model = model(req, modelName)
+
+    let body: any = req.body
+
+    const isBodyAnArray = Array.isArray(body)
+
+    if (isBodyAnArray && !body.length)
+      throw httpErrors.notFound('invalid_body: no object found in array')
+
+    if (!isBodyAnArray) body = [body]
+
+    const query = req.query as { shouldUseSession: boolean }
+
+    const docs = await useSession(
+      Model,
+      query.shouldUseSession,
+      (session?: ClientSession) => Model.create(body, { req, session })
+    )
+
+    const result = docs.map((doc: any) => doc.toJSON(toJSONOptions))
+
+    return isBodyAnArray ? result : result[0]
+  }
+
   return {
     getByQuery,
     count,
     distinct,
+    create,
   }
 }

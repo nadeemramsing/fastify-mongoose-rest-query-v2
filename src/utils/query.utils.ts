@@ -8,8 +8,6 @@ import { memoOptions } from '../mrq.config'
 export const getQuery = memoize(getQuery_, memoOptions)
 
 export function getQuery_(query: any, options: IGetQueryOptions = {}) {
-  console.log(1, { options })
-
   const filter = getFilter(query.filter)
 
   const sort = getSort(query.sort)
@@ -54,7 +52,6 @@ export function getSort(fields: string) {
 }
 
 export function getSelect(fields: string = '', options: IGetQueryOptions = {}) {
-  console.log(2, { options })
   if (options.ignoreSelect) return {}
 
   const select: Record<string, 1 | 0> = {}
