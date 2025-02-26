@@ -1,13 +1,19 @@
-import { Schema, InferSchemaType } from 'mongoose'
+import { Schema, InferSchemaType, Types } from 'mongoose'
 
 const AliasSchema = new Schema({
-  _id: Schema.ObjectId,
+  _id: {
+    type: Schema.ObjectId,
+    default: () => new Types.ObjectId(),
+  },
   name: String,
   abbreviation: String,
 })
 
 const AddressSchema = new Schema({
-  _id: Schema.ObjectId,
+  _id: {
+    type: Schema.ObjectId,
+    default: () => new Types.ObjectId(),
+  },
   street: String,
   city: String,
   aliases: [AliasSchema],
@@ -18,7 +24,10 @@ const AddressSchema = new Schema({
 })
 
 export const ResourceSchema = new Schema({
-  _id: Schema.ObjectId,
+  _id: {
+    type: Schema.ObjectId,
+    default: () => new Types.ObjectId(),
+  },
 
   name: {
     type: String,

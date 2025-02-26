@@ -28,9 +28,12 @@ export function runStaticMethods<T>({
 
 export async function useSession(
   Model: Model<any>,
-  shouldUseSession: boolean = false,
+  req: FastifyRequest,
   cb: (session?: ClientSession) => any
 ) {
+  const query = req.query as { useSession: string }
+  const shouldUseSession = query.useSession === 'true'
+
   if (!shouldUseSession) return cb()
 
   const session = await Model.startSession()

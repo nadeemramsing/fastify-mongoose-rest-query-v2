@@ -85,12 +85,8 @@ export const getMainHandler = (
 
     if (!isBodyAnArray) body = [body]
 
-    const query = req.query as { shouldUseSession: boolean }
-
-    const docs = await useSession(
-      Model,
-      query.shouldUseSession,
-      (session?: ClientSession) => Model.create(body, { req, session })
+    const docs = await useSession(Model, req, (session?: ClientSession) =>
+      Model.create(body, { req, session })
     )
 
     const result = docs.map((doc: any) => doc.toJSON(toJSONOptions))
