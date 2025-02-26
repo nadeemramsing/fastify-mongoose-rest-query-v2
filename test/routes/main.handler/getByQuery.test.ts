@@ -305,5 +305,49 @@ describe('/ GET (getByQuery)', () => {
     expect(response.statusCode).toBe(200)
     expect(response.json()).toMatchObject([resourceExpected])
   })
+
+  it('should return resource with name=Zakariyya and populated paths father and mother (using array of objects with path, match, select)', async () => {
+    const response = await app.inject({
+      method: 'GET',
+      url: '/secure/admin/mrq/resources',
+      query: {
+        select: 'all',
+        populate: JSON.stringify([
+          {
+            path: 'father',
+            match: { age: { $gte: 28 } },
+            select: 'name',
+          },
+          {
+            path: 'mother',
+            match: { age: { $gte: 24 } },
+            select: 'name',
+          },
+        ]),
+        filter: JSON.stringify({ name: 'Zakariyya' }),
+      },
+    })
+
+    const resourcesJSON = getDocsInJSON(resources)
+
+    const resourceExpected: any = find({ name: 'Zakariyya' }, resourcesJSON)
+
+    const father = pipe(
+      find({ _id: resourceExpected.father }),
+      pick('name')
+    )(resourcesJSON)
+
+    resourceExpected.father = father
+
+    const mother = pipe(
+      find({ _id: resourceExpected.mother }),
+      pick('name')
+    )(resourcesJSON)
+
+    resourceExpected.mother = mother
+
+    expect(response.statusCode).toBe(200)
+    expect(response.json()).toMatchObject([resourceExpected])
+  })
   //#endregion populate
 })
