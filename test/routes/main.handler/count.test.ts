@@ -8,7 +8,6 @@ describe('/ GET (count)', () => {
     const response = await app.inject({
       method: 'GET',
       url: '/secure/admin/mrq/resources/count',
-      query: {},
     })
 
     const resourcesExpected = getDocsInJSON(resources)

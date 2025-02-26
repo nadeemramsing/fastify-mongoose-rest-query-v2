@@ -4,8 +4,11 @@ import { model } from '../utils/db.utils'
 import { leanOptions } from '../mrq.config'
 import { getQuery } from '../utils/query.utils'
 import { HandlerAccessEnum } from '../mrq.enum'
-import { ROLE_DOES_NOT_HAVE_ACCESS_HANDLER_LEVEL } from '../mrq.errors'
 import { runStaticMethods } from '../utils/mongoose.utils'
+import {
+  PATH_NOT_FOUND_IN_SCHEMA,
+  ROLE_DOES_NOT_HAVE_ACCESS_HANDLER_LEVEL,
+} from '../mrq.errors'
 
 export const getMainHandler = (
   modelName: string,
@@ -45,10 +48,30 @@ export const getMainHandler = (
     return { n: await Model.countDocuments(query.filter) }
   }
 
-  // --
+  // ---
+
+  const distinct: RouteHandlerMethod = async (req, rep) => {
+    if (!handlerAccesses.includes(HandlerAccessEnum.DISTINCT))
+      throw httpErrors.unauthorized(ROLE_DOES_NOT_HAVE_ACCESS_HANDLER_LEVEL)
+
+    const params = req.params as { path: string }
+
+    const Model = model(req, modelName)
+
+    const doesPathExists = Model.schema.path(params.path)
+
+    if (!doesPathExists) throw httpErrors.notFound(PATH_NOT_FOUND_IN_SCHEMA)
+
+    const query = getQuery(req.query, { ignoreSelect: true })
+
+    return Model.distinct(params.path, query.filter)
+  }
+
+  // ---
 
   return {
     getByQuery,
     count,
+    distinct,
   }
 }

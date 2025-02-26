@@ -18,5 +18,7 @@ export const mainRoute =
       app.get(prefix, mainHandler.getByQuery)
 
       app.get(`${prefix}/count`, mainHandler.count)
+
+      app.get(`${prefix}/distinct/:path`, mainHandler.distinct)
     }
   }
