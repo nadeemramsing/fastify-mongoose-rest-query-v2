@@ -134,5 +134,31 @@ describe('/ GET (getByQuery)', () => {
     expect(response.statusCode).toBe(200)
     expect(response.json()).toMatchObject(resourcesExpected)
   })
+
+  it('should return all resources with selected fields name, age, addresses and selected static method firstCity', async () => {
+    const response = await app.inject({
+      method: 'GET',
+      url: '/secure/admin/mrq/resources',
+      query: {
+        select: 'name, age, addresses, firstCity',
+      },
+    })
+
+    const resourcesExpected = map(
+      pick(['_id', 'name', 'age', 'addresses']),
+      getDocsInJSON(resources)
+    )
+
+    resourcesExpected.forEach((doc: any) => {
+      const firstCity = doc.addresses.find(
+        (address: any) => address.flags?.is_a_city
+      )?.city
+
+      if (firstCity) doc.firstCity = firstCity
+    })
+
+    expect(response.statusCode).toBe(200)
+    expect(response.json()).toMatchObject(resourcesExpected)
+  })
   //#endregion select
 })

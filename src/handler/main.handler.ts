@@ -5,6 +5,7 @@ import { leanOptions } from '../mrq.config'
 import { getQuery } from '../utils/query.utils'
 import { HandlerAccessEnum } from '../mrq.enum'
 import { ROLE_DOES_NOT_HAVE_ACCESS_HANDLER_LEVEL } from '../mrq.errors'
+import { runStaticMethods } from '../utils/mongoose.utils'
 
 export const getMainHandler = (
   modelName: string,
@@ -26,6 +27,8 @@ export const getMainHandler = (
       .limit(query.limit)
       .skip(query.skip)
       .lean(leanOptions)
+
+    runStaticMethods({ Model, docs, query, req })
 
     return docs
   }
