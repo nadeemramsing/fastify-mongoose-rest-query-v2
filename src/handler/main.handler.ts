@@ -1,15 +1,20 @@
 import { RouteHandlerMethod } from 'fastify'
 import { httpErrors } from '@fastify/sensible'
+import { ClientSession, Document } from 'mongoose'
+import { flatten } from 'flat'
 import { model } from '../utils/db.utils'
 import { leanOptions, toJSONOptions } from '../mrq.config'
 import { getQuery } from '../utils/query.utils'
 import { HandlerAccessEnum } from '../mrq.enum'
-import { runStaticMethods, useSession } from '../utils/mongoose.utils'
+import {
+  getArrayFromBodyWithId,
+  runStaticMethods,
+  useSession,
+} from '../utils/mongoose.utils'
 import {
   PATH_NOT_FOUND_IN_SCHEMA,
   ROLE_DOES_NOT_HAVE_ACCESS_HANDLER_LEVEL,
 } from '../mrq.errors'
-import { ClientSession } from 'mongoose'
 
 export const getMainHandler = (
   modelName: string,
@@ -94,10 +99,52 @@ export const getMainHandler = (
     return isBodyAnArray ? result : result[0]
   }
 
+  // ---
+
+  const updateMany: RouteHandlerMethod = async (req, rep) => {
+    if (!handlerAccesses.includes(HandlerAccessEnum.UPDATE_MANY))
+      throw httpErrors.unauthorized(ROLE_DOES_NOT_HAVE_ACCESS_HANDLER_LEVEL)
+
+    const Model = model(req, modelName)
+
+    const body = getArrayFromBodyWithId(req.body as any[])
+
+    const _id = { $in: body.map((item: any) => item._id) }
+
+    const docs: Record<string, Document> = await Model.find({ _id }).then(
+      (docs) => docs.reduce((acc, v: any) => ({ ...acc, [v._id]: v }), {})
+    )
+
+    //@ts-ignore
+    req.query.useSession = 'true'
+
+    const docsSaved: Document[] = []
+
+    await useSession(Model, req, async (session?: ClientSession) => {
+      for (const item of body) {
+        const doc = docs[item._id]
+
+        const _prev = doc.toJSON(toJSONOptions)
+
+        const itemFlat: any = flatten(item)
+
+        Object.entries(itemFlat).forEach(
+          ([k, v]) => k !== '_id' && doc.set(k, v)
+        )
+
+        // @ts-ignore: custom arg req
+        docsSaved.push(await doc.save({ req, session, _prev }))
+      }
+    })
+
+    return docsSaved
+  }
+
   return {
     getByQuery,
     count,
     distinct,
     create,
+    updateMany,
   }
 }
