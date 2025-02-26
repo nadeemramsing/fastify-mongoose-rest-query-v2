@@ -9,8 +9,6 @@ export async function setup() {
       port: 27016,
     },
   })
-  const uri = mongod.getUri()
-  await mongoInit(uri)
 }
 
 export async function teardown() {
