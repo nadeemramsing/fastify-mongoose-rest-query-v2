@@ -22,7 +22,7 @@ export const getMainHandler = (
       .select(query.select)
       .populate(query.populate)
       .sort(query.sort)
-      .collation({ locale: 'en', caseLevel: true })
+      .collation({ locale: 'simple', caseLevel: true })
       .limit(query.limit)
       .skip(query.skip)
       .lean(leanOptions)
