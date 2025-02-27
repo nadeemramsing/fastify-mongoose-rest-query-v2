@@ -1,7 +1,7 @@
 import { app } from '@test/setup/setup'
 import { ObjectId } from 'bson'
 
-describe('/ POST (create)', () => {
+describe.sequential('/ POST (create)', () => {
   it('should create and return document when object body used', async () => {
     const resource = {
       _id: ObjectId.createFromTime(4).toString(),

@@ -3,7 +3,7 @@ import { resources } from '@test/setup/fixtures/resources'
 import { app } from '@test/setup/setup'
 import { filter, flatten, pipe, pluck, uniq } from 'lodash/fp'
 
-describe('/ GET (distinct)', () => {
+describe.sequential('/ GET (distinct)', () => {
   it('should return distinct names of all resources when no filter used', async () => {
     const response = await app.inject({
       method: 'GET',

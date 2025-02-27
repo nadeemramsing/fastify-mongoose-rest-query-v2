@@ -3,7 +3,7 @@ import { ObjectId } from 'bson'
 
 const resourceId = ObjectId.createFromTime(12345)
 
-describe('/ GET (deleteByQuery > Error handling)', () => {
+describe.sequential('/ GET (deleteByQuery > Error handling)', () => {
   it('should return "IMPLICIT_DELETE_ALL_NOT_ALLOWED" error when no filter', async () => {
     const response = await app.inject({
       method: 'DELETE',

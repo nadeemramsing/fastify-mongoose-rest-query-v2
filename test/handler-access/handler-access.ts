@@ -4,7 +4,7 @@ import { getDocsInJSON } from '@test/setup/fixtures/get-docs-in-json.method'
 import { filter } from 'lodash/fp'
 
 // TODO once we have post/put/delete handlers
-describe('/ GET (getByQuery)', () => {
+describe.sequential('/ GET (getByQuery)', () => {
   it('should return all resources with no filter', async () => {
     const response = await app.inject({
       method: 'GET',

@@ -3,7 +3,7 @@ import { resources } from '@test/setup/fixtures/resources'
 import { getDocsInJSON } from '@test/setup/fixtures/get-docs-in-json.method'
 import { drop, filter, find, map, orderBy, pick, pipe, take } from 'lodash/fp'
 
-describe('/ GET (getByQuery)', () => {
+describe.sequential('/ GET (getByQuery)', () => {
   //#region filter
   it('should return all resources with no filter', async () => {
     const response = await app.inject({

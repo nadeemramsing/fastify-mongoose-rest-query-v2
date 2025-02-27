@@ -3,7 +3,7 @@ import { resources } from '@test/setup/fixtures/resources'
 import { getDocsInJSON } from '@test/setup/fixtures/get-docs-in-json.method'
 import { filter } from 'lodash/fp'
 
-describe('/ GET (count)', () => {
+describe.sequential('/ GET (count)', () => {
   it('should return count of all resources with no filter', async () => {
     const response = await app.inject({
       method: 'GET',

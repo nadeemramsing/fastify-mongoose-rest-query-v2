@@ -1,6 +1,6 @@
 import { app } from '@test/setup/setup'
 
-describe('/ GET (distinct > Error handling)', () => {
+describe.sequential('/ GET (distinct > Error handling)', () => {
   it('should return "path_not_found_in_schema" error when non-existing path used', async () => {
     const response = await app.inject({
       method: 'GET',

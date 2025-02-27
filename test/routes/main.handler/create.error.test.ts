@@ -1,7 +1,7 @@
 import { app } from '@test/setup/setup'
 import { isValidObjectId } from 'mongoose'
 
-describe('/ POST (create > Error handling)', () => {
+describe.sequential('/ POST (create > Error handling)', () => {
   it('should create and return 1 document with _id only when empty object body used', async () => {
     const resource = {}
 

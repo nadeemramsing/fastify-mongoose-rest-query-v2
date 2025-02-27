@@ -4,7 +4,7 @@ import { mongoInit } from '@test/setup/init/mongo.init'
 import { app } from '@test/setup/setup'
 import { filter } from 'lodash/fp'
 
-describe('/ GET (deleteByQuery)', () => {
+describe.sequential('/ GET (deleteByQuery)', () => {
   it('should delete and return deletedCount of resources with 1 filter name=Nadeem', async () => {
     const response = await app.inject({
       method: 'DELETE',

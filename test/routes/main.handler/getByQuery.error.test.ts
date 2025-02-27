@@ -1,6 +1,6 @@
 import { app } from '@test/setup/setup'
 
-describe('/ GET (getByQuery > Error handling)', () => {
+describe.sequential('/ GET (getByQuery > Error handling)', () => {
   it('should return 405 on trying to select all without explicitly selecting all', async () => {
     const response = await app.inject({
       method: 'GET',

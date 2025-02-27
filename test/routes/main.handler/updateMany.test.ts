@@ -1,7 +1,7 @@
 import { ObjectId } from 'bson'
 import { app } from '@test/setup/setup'
 
-describe('/ PUT (updateMany)', () => {
+describe.sequential('/ PUT (updateMany)', () => {
   it('should update and return updated documents', async () => {
     const resources = [
       {

@@ -2,7 +2,7 @@ import { ObjectId } from 'bson'
 import { app } from '@test/setup/setup'
 import { filter } from 'lodash/fp'
 
-describe('/ PUT (updateMany > Error handling)', () => {
+describe.sequential('/ PUT (updateMany > Error handling)', () => {
   it('should return "EMPTY_BODY" error when empty array used', async () => {
     const response = await app.inject({
       method: 'PUT',

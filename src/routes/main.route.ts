@@ -2,6 +2,7 @@ import { FastifyInstance } from 'fastify'
 import { IRestOptions } from '../mrq.interfaces'
 import { getMainHandler } from '../handler/main.handler'
 import { roleHook } from '../hooks/role.hook'
+import { mainParamRoute } from './main.param.route'
 
 export const mainRoute =
   (opts: IRestOptions) => async (app: FastifyInstance) => {
@@ -26,5 +27,9 @@ export const mainRoute =
       app.put(prefix, mainHandler.updateMany)
 
       app.delete(prefix, mainHandler.deleteByQuery)
+
+      app.register(mainParamRoute(modelName, { schema, handlerAccesses }), {
+        prefix,
+      })
     }
   }
