@@ -1,7 +1,6 @@
 import { RouteHandlerMethod } from 'fastify'
 import { httpErrors } from '@fastify/sensible'
 import { ClientSession, Document } from 'mongoose'
-import { flatten } from 'flat'
 import { model } from '../utils/db.utils'
 import { leanOptions, toJSONOptions } from '../mrq.config'
 import { getQuery } from '../utils/query.utils'
@@ -62,9 +61,9 @@ export const getMainParamHandler = (
 
     const _prev = doc.toJSON(toJSONOptions)
 
-    const bodyFlat: any = flatten(req.body)
-
-    Object.entries(bodyFlat).forEach(([k, v]) => k !== '_id' && doc.set(k, v))
+    req.routeOptions.url?.endsWith?.('/overwrite')
+      ? doc.overwrite(req.body)
+      : doc.set(req.body)
 
     await useSession(
       Model,
@@ -75,6 +74,8 @@ export const getMainParamHandler = (
 
     return doc.toJSON(toJSONOptions)
   }
+
+  // ---
 
   return {
     getById,

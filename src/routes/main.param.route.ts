@@ -12,4 +12,6 @@ export const mainParamRoute =
     app.get(`/:id`, mainParamHandler.getById)
 
     app.put(`/:id`, mainParamHandler.updateById)
+
+    app.put(`/:id/overwrite`, mainParamHandler.updateById)
   }

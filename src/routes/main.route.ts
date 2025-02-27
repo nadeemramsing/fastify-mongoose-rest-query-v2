@@ -26,6 +26,8 @@ export const mainRoute =
 
       app.put(prefix, mainHandler.updateMany)
 
+      app.put(`${prefix}/overwrite`, mainHandler.updateMany)
+
       app.delete(prefix, mainHandler.deleteByQuery)
 
       app.register(mainParamRoute(modelName, { schema, handlerAccesses }), {

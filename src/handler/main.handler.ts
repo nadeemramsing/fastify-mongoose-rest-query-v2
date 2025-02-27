@@ -1,7 +1,6 @@
 import { RouteHandlerMethod } from 'fastify'
 import { httpErrors } from '@fastify/sensible'
 import { ClientSession, Document } from 'mongoose'
-import { flatten } from 'flat'
 import { model } from '../utils/db.utils'
 import { leanOptions, toJSONOptions } from '../mrq.config'
 import { getQuery } from '../utils/query.utils'
@@ -123,17 +122,15 @@ export const getMainHandler = (
 
     const docsSaved: Document[] = []
 
+    const isOverwrite = req.routeOptions.url?.endsWith?.('/overwrite')
+
     await useSession(Model, req, async (session?: ClientSession) => {
       for (const item of body) {
         const doc = docs[item._id]
 
         const _prev = doc.toJSON(toJSONOptions)
 
-        const itemFlat: any = flatten(item)
-
-        Object.entries(itemFlat).forEach(
-          ([k, v]) => k !== '_id' && doc.set(k, v)
-        )
+        isOverwrite ? doc.overwrite(item) : doc.set(item)
 
         // @ts-ignore: custom arg req
         docsSaved.push(await doc.save({ req, session, _prev }))
