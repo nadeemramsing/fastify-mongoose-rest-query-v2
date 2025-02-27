@@ -12,6 +12,9 @@ import {
   useSession,
 } from '../utils/mongoose.utils'
 import {
+  IMPLICIT_DELETE_ALL_NOT_ALLOWED,
+  INVALID_BODY,
+  NO_DOCUMENT_FOUND,
   PATH_NOT_FOUND_IN_SCHEMA,
   ROLE_DOES_NOT_HAVE_ACCESS_HANDLER_LEVEL,
 } from '../mrq.errors'
@@ -86,7 +89,7 @@ export const getMainHandler = (
     const isBodyAnArray = Array.isArray(body)
 
     if (isBodyAnArray && !body.length)
-      throw httpErrors.notFound('invalid_body: no object found in array')
+      throw httpErrors.notFound(`${INVALID_BODY}: no object found in array`)
 
     if (!isBodyAnArray) body = [body]
 
@@ -140,11 +143,40 @@ export const getMainHandler = (
     return docsSaved
   }
 
+  // ---
+
+  const deleteByQuery: RouteHandlerMethod = async (req, rep) => {
+    if (!handlerAccesses.includes(HandlerAccessEnum.DELETE_BY_QUERY))
+      throw httpErrors.unauthorized(ROLE_DOES_NOT_HAVE_ACCESS_HANDLER_LEVEL)
+
+    const Model = model(req, modelName)
+
+    const query = getQuery(req.query, { ignoreSelect: true })
+
+    const isDeleteAll = !Object.keys(query.filter).length
+
+    if (isDeleteAll)
+      throw httpErrors.methodNotAllowed(
+        `${IMPLICIT_DELETE_ALL_NOT_ALLOWED}: delete directly in database`
+      )
+
+    const { deletedCount } = await useSession(
+      Model,
+      req,
+      (session?: ClientSession) => Model.deleteMany(query.filter, { session })
+    )
+
+    if (!deletedCount) throw httpErrors.notFound(NO_DOCUMENT_FOUND)
+
+    return { deletedCount }
+  }
+
   return {
     getByQuery,
     count,
     distinct,
     create,
     updateMany,
+    deleteByQuery,
   }
 }

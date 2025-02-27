@@ -1,6 +1,7 @@
 import { ClientSession, Model } from 'mongoose'
 import { FastifyRequest } from 'fastify'
 import { httpErrors } from '@fastify/sensible'
+import { EMPTY_BODY, INVALID_BODY } from '../mrq.errors'
 
 interface IRunStaticMethods<T> {
   Model: Model<T>
@@ -47,19 +48,19 @@ export async function useSession(
 export function getArrayFromBodyWithId(body: any[]) {
   if (!Array.isArray(body))
     throw httpErrors.unprocessableEntity(
-      'invalid_body: body should be an array'
+      `${INVALID_BODY}: body should be an array`
     )
 
   if (!body.length)
     throw httpErrors.unprocessableEntity(
-      'empty_body: body should contain at least one object'
+      `${EMPTY_BODY}: body should contain at least one object`
     )
 
   body = body.filter((doc) => doc._id)
 
   if (!body.length)
     throw httpErrors.unprocessableEntity(
-      'invalid_body: body should contain at least one object with _id'
+      `${INVALID_BODY}: body should contain at least one object with _id`
     )
 
   return body

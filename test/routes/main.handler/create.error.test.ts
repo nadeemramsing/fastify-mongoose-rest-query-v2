@@ -40,7 +40,7 @@ describe('/ POST (create > Error handling)', () => {
 
     expect(response.statusCode).toBe(404)
     expect(response.json().message).toMatch(
-      /^invalid_body: no object found in array/
+      /^INVALID_BODY: no object found in array/
     )
   })
 
@@ -54,7 +54,7 @@ describe('/ POST (create > Error handling)', () => {
 
     expect(response.statusCode).toBe(404)
     expect(response.json().message).toMatch(
-      /^invalid_body: no object found in array/
+      /^INVALID_BODY: no object found in array/
     )
   })
 

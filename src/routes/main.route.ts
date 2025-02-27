@@ -24,5 +24,7 @@ export const mainRoute =
       app.post(prefix, mainHandler.create)
 
       app.put(prefix, mainHandler.updateMany)
+
+      app.delete(prefix, mainHandler.deleteByQuery)
     }
   }

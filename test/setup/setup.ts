@@ -11,9 +11,6 @@ beforeAll(async () => {
   app = await buildApp({}, uri)
 })
 
-beforeEach(async () => {
-})
-
 afterAll(async () => {
   await app.close()
 })

@@ -1,5 +1,4 @@
 import { MongoMemoryServer } from 'mongodb-memory-server'
-import { mongoInit } from '@test/setup/init/mongo.init'
 
 let mongod: MongoMemoryServer
 

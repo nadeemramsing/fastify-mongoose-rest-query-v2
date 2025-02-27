@@ -3,7 +3,7 @@ import { app } from '@test/setup/setup'
 import { filter } from 'lodash/fp'
 
 describe('/ PUT (updateMany > Error handling)', () => {
-  it('should return "empty_body" error when empty array used', async () => {
+  it('should return "EMPTY_BODY" error when empty array used', async () => {
     const response = await app.inject({
       method: 'PUT',
       url: '/secure/admin/mrq/resources',
@@ -12,11 +12,11 @@ describe('/ PUT (updateMany > Error handling)', () => {
 
     expect(response.statusCode).toBe(422)
     expect(response.json().message).toMatch(
-      /^empty_body: body should contain at least one object/
+      /^EMPTY_BODY: body should contain at least one object/
     )
   })
 
-  it('should return "invalid_body" error when array with 1 empty object used', async () => {
+  it('should return "INVALID_BODY" error when array with 1 empty object used', async () => {
     const resources = [{}]
 
     const response = await app.inject({
@@ -27,11 +27,11 @@ describe('/ PUT (updateMany > Error handling)', () => {
 
     expect(response.statusCode).toBe(422)
     expect(response.json().message).toMatch(
-      /^invalid_body: body should contain at least one object with _id/
+      /^INVALID_BODY: body should contain at least one object with _id/
     )
   })
 
-  it('should return "invalid_body" error when object used', async () => {
+  it('should return "INVALID_BODY" error when object used', async () => {
     const resources = {}
 
     const response = await app.inject({
@@ -42,7 +42,7 @@ describe('/ PUT (updateMany > Error handling)', () => {
 
     expect(response.statusCode).toBe(422)
     expect(response.json().message).toMatch(
-      /^invalid_body: body should be an array/
+      /^INVALID_BODY: body should be an array/
     )
   })
 

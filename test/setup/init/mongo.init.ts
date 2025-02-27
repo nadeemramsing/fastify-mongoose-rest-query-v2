@@ -2,7 +2,9 @@ import mongoose from 'mongoose'
 import { resources } from '@test/setup/fixtures/resources'
 import { ResourceSchema } from '@test/setup/schemas'
 
-export const mongoInit = async (uri: string) => {
+export const mongoInit = async (
+  uri: string = 'mongodb://localhost:27016/test'
+) => {
   await mongoose.connect(uri)
 
   // mongoose.set('debug', true);
