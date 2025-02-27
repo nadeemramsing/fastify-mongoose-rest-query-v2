@@ -8,7 +8,7 @@
     ".": "./src/index.ts"
   },
   "scripts": {
-    "test": "NODE_OPTIONS='--import tsx' vitest run updateMany"
+    "test": "NODE_OPTIONS='--import tsx' vitest run deleteById"
   },
   "keywords": [],
   "author": "",
