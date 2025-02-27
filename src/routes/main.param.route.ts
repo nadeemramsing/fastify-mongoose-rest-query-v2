@@ -10,4 +10,6 @@ export const mainParamRoute =
     const mainParamHandler = getMainParamHandler(modelName, handlerAccesses)
 
     app.get(`/:id`, mainParamHandler.getById)
+
+    app.put(`/:id`, mainParamHandler.updateById)
   }

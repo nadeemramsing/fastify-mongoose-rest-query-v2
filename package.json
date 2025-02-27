@@ -8,7 +8,7 @@
     ".": "./src/index.ts"
   },
   "scripts": {
-    "test": "NODE_OPTIONS='--import tsx' vitest run getById"
+    "test": "NODE_OPTIONS='--import tsx' vitest run updateById"
   },
   "keywords": [],
   "author": "",

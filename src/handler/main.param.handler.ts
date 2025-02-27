@@ -46,7 +46,38 @@ export const getMainParamHandler = (
     return doc
   }
 
+  // ---
+
+  const updateById: RouteHandlerMethod = async (req, rep) => {
+    if (!handlerAccesses.includes(HandlerAccessEnum.UPDATE_BY_ID))
+      throw httpErrors.unauthorized(ROLE_DOES_NOT_HAVE_ACCESS_HANDLER_LEVEL)
+
+    const Model = model(req, modelName)
+
+    const { id } = req.params as { id: string }
+
+    const doc = await Model.findById(id)
+
+    if (!doc) throw httpErrors.notFound(DOCUMENT_NOT_FOUND)
+
+    const _prev = doc.toJSON(toJSONOptions)
+
+    const bodyFlat: any = flatten(req.body)
+
+    Object.entries(bodyFlat).forEach(([k, v]) => k !== '_id' && doc.set(k, v))
+
+    await useSession(
+      Model,
+      req,
+      // @ts-ignore: custom arg req
+      (session: ClientSession) => doc.save({ req, session, _prev })
+    )
+
+    return doc.toJSON(toJSONOptions)
+  }
+
   return {
     getById,
+    updateById,
   }
 }
