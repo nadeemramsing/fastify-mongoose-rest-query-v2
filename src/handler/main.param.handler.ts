@@ -12,6 +12,7 @@ import {
   useSession,
 } from '../utils/mongoose.utils'
 import {
+  DOCUMENT_NOT_FOUND,
   IMPLICIT_DELETE_ALL_NOT_ALLOWED,
   INVALID_BODY,
   NO_DOCUMENT_FOUND,
@@ -28,9 +29,24 @@ export const getMainParamHandler = (
       throw httpErrors.unauthorized(ROLE_DOES_NOT_HAVE_ACCESS_HANDLER_LEVEL)
 
     const Model = model(req, modelName)
+
+    const { id } = req.params as { id: string }
+
+    const query = getQuery(req.query)
+
+    const doc = await Model.findById(id, query.select, { req })
+      .and(query.filter)
+      .populate(query.populate)
+      .lean(leanOptions)
+
+    if (!doc) throw httpErrors.notFound(DOCUMENT_NOT_FOUND)
+
+    runStaticMethods({ Model, docs: [doc], query, req })
+
+    return doc
   }
 
   return {
-    getById
+    getById,
   }
 }
