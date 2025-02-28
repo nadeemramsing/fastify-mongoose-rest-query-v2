@@ -38,7 +38,23 @@ export const getMainParamSubarrayHandler = (
     return subService.getByQuery({ query, subarray })
   }
 
+  // ---
+
+  const count: RouteHandlerMethod = async (req, rep) => {
+    if (!handlerAccesses.includes(HandlerAccessEnum.COUNT_SUB))
+      throw httpErrors.unauthorized(ROLE_DOES_NOT_HAVE_ACCESS_HANDLER_LEVEL)
+
+    const { subarray } = await getSubarray(req, modelName, subPathName, true)
+
+    const query = getQueryForSubarray(req.query, { ignoreSelect: true })
+
+    return subService.count({ query, subarray })
+  }
+
+  // ---
+
   return {
     getByQuery,
+    count,
   }
 }

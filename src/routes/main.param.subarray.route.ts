@@ -19,5 +19,7 @@ export const mainParamSubarrayRoute =
       const prefix = `/${subPathName}`
 
       app.get(prefix, mainParamSubarrayHandler.getByQuery)
+
+      app.get(`${prefix}/count`, mainParamSubarrayHandler.count)
     }
   }

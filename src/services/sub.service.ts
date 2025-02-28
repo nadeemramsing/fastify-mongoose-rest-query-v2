@@ -1,7 +1,7 @@
 import { Model } from 'mongoose'
 import { FastifyRequest } from 'fastify'
 import { MrqDocument, MrqQuery } from '../mrq.interfaces'
-import { drop, filter, map, orderBy, pick, pipe, take } from 'lodash/fp'
+import { drop, filter, map, orderBy, pick, pipe, size, take } from 'lodash/fp'
 import sift from 'sift'
 
 interface IBaseOptions {
@@ -31,4 +31,13 @@ export async function getByQuery({
     take(query.limit),
     map(query.select.length > 1 ? pick(query.select) : (x) => x)
   )(subarray)
+}
+
+// ---
+
+export async function count({
+  query,
+  subarray,
+}: Pick<IBaseOptions, 'query' | 'subarray'>) {
+  return pipe(filter(sift(query.filter)), size)(subarray)
 }
