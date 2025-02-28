@@ -21,5 +21,7 @@ export const mainParamSubarrayRoute =
       app.get(prefix, mainParamSubarrayHandler.getByQuery)
 
       app.get(`${prefix}/count`, mainParamSubarrayHandler.count)
+
+      app.get(`${prefix}/distinct/:path`, mainParamSubarrayHandler.distinct)
     }
   }

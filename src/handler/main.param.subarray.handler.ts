@@ -53,8 +53,22 @@ export const getMainParamSubarrayHandler = (
 
   // ---
 
+  const distinct: RouteHandlerMethod = async (req, rep) => {
+    if (!handlerAccesses.includes(HandlerAccessEnum.DISTINCT_SUB))
+      throw httpErrors.unauthorized(ROLE_DOES_NOT_HAVE_ACCESS_HANDLER_LEVEL)
+
+    const { subarray } = await getSubarray(req, modelName, subPathName, true)
+
+    const query = getQueryForSubarray(req.query, { ignoreSelect: true })
+
+    const { path } = req.params as { path: string }
+
+    return subService.distinct({ query, path, subarray })
+  }
+
   return {
     getByQuery,
     count,
+    distinct,
   }
 }

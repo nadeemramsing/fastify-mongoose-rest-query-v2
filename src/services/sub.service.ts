@@ -1,7 +1,20 @@
 import { Model } from 'mongoose'
 import { FastifyRequest } from 'fastify'
 import { MrqDocument, MrqQuery } from '../mrq.interfaces'
-import { drop, filter, map, orderBy, pick, pipe, size, take } from 'lodash/fp'
+import {
+  drop,
+  filter,
+  isNil,
+  map,
+  orderBy,
+  pick,
+  pipe,
+  pluck,
+  reject,
+  size,
+  take,
+  uniq,
+} from 'lodash/fp'
 import sift from 'sift'
 
 interface IBaseOptions {
@@ -41,3 +54,20 @@ export async function count({
 }: Pick<IBaseOptions, 'query' | 'subarray'>) {
   return pipe(filter(sift(query.filter)), size)(subarray)
 }
+
+// ---
+
+export async function distinct({
+  query,
+  path,
+  subarray,
+}: Pick<IBaseOptions, 'query' | 'path' | 'subarray'>) {
+  return pipe(
+    filter(sift(query.filter)),
+    pluck(path),
+    uniq,
+    reject(isNil)
+  )(subarray)
+}
+
+// ---
