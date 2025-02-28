@@ -21,11 +21,10 @@ describe.sequential('/ GET (getByQuery > Error handling)', () => {
       query: { select: 'all' },
     })
 
-    expect(response.statusCode).toBe(404)
-    // TOOD: This will work once getById is implemented
-    // expect(response.json().message).toMatch(
-    //   /^Cast to ObjectId failed for value \"non-existing\" \(type string\) at path \"_id\" for model \"Resource\"/
-    // )
+    expect(response.statusCode).toBe(500)
+    expect(response.json().message).toMatch(
+      /^Cast to ObjectId failed for value \"non-existing\" \(type string\) at path \"_id\" for model \"Resource\"/
+    )
   })
 
   it('should return 0 resource with 1 filter name=non-existing', async () => {
