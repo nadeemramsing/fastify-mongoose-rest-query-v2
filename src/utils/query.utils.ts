@@ -2,12 +2,12 @@ import memoize from 'moize'
 import { httpErrors } from '@fastify/sensible'
 import { parseFilter, parseSort, parseProject } from 'mongodb-query-parser'
 import { IMPLICIT_SELECT_ALL_NOT_ALLOWED } from '../mrq.errors'
-import { IGetQueryOptions } from '../mrq.interfaces'
+import { IGetQueryOptions, MrqQuery } from '../mrq.interfaces'
 import { memoOptions } from '../mrq.config'
 
 export const getQuery = memoize(getQuery_, memoOptions)
 
-export function getQuery_(query: any, options: IGetQueryOptions = {}) {
+function getQuery_(query: any, options: IGetQueryOptions = {}): MrqQuery {
   const filter = getFilter(query.filter)
 
   const sort = getSort(query.sort)

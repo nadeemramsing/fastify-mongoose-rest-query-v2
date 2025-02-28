@@ -17,3 +17,16 @@ export interface IRestOptions {
 export interface IGetQueryOptions {
   ignoreSelect?: boolean
 }
+
+export interface MrqDocument extends Document {
+  [key: string]: any
+}
+
+export interface MrqQuery {
+  filter: any
+  sort: any
+  select: any
+  populate: any
+  skip: number
+  limit: number
+}

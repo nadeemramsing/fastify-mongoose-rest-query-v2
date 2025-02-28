@@ -8,7 +8,7 @@
     ".": "./src/index.ts"
   },
   "scripts": {
-    "test": "NODE_OPTIONS='--import tsx' vitest run deleteById"
+    "test": "NODE_OPTIONS='--import tsx' vitest run getByQuery.sub"
   },
   "keywords": [],
   "author": "",
@@ -21,7 +21,8 @@
     "moize": "^6.1.6",
     "mongodb-query-parser": "^4.3.0",
     "mongoose": "^8.10.1",
-    "promise-all": "^1.0.0"
+    "promise-all": "^1.0.0",
+    "sift": "^17.1.3"
   },
   "peerDependencies": {
     "@fastify/sensible": "6.x",

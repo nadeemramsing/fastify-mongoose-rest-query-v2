@@ -1,21 +1,13 @@
 import { RouteHandlerMethod } from 'fastify'
 import { httpErrors } from '@fastify/sensible'
-import { ClientSession, Document } from 'mongoose'
+import { ClientSession } from 'mongoose'
 import { model } from '../utils/db.utils'
 import { leanOptions, toJSONOptions } from '../mrq.config'
 import { getQuery } from '../utils/query.utils'
 import { HandlerAccessEnum } from '../mrq.enum'
-import {
-  getArrayFromBodyWithId,
-  runStaticMethods,
-  useSession,
-} from '../utils/mongoose.utils'
+import { runStaticMethods, useSession } from '../utils/mongoose.utils'
 import {
   DOCUMENT_NOT_FOUND,
-  IMPLICIT_DELETE_ALL_NOT_ALLOWED,
-  INVALID_BODY,
-  NO_DOCUMENT_FOUND,
-  PATH_NOT_FOUND_IN_SCHEMA,
   ROLE_DOES_NOT_HAVE_ACCESS_HANDLER_LEVEL,
 } from '../mrq.errors'
 

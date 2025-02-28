@@ -1,7 +1,15 @@
 import { ClientSession, Model } from 'mongoose'
 import { FastifyRequest } from 'fastify'
 import { httpErrors } from '@fastify/sensible'
-import { EMPTY_BODY, INVALID_BODY } from '../mrq.errors'
+import {
+  DOCUMENT_NOT_FOUND,
+  EMPTY_BODY,
+  INVALID_BODY,
+  SUBARRAY_NOT_FOUND,
+} from '../mrq.errors'
+import { model } from './db.utils'
+import { leanOptions } from '../mrq.config'
+import { MrqDocument } from '../mrq.interfaces'
 
 interface IRunStaticMethods<T> {
   Model: Model<T>
@@ -9,6 +17,8 @@ interface IRunStaticMethods<T> {
   query: { select: { [key: string]: number } }
   req: FastifyRequest
 }
+
+// ---
 
 export function runStaticMethods<T>({
   Model,
@@ -28,6 +38,8 @@ export function runStaticMethods<T>({
   }
 }
 
+// ---
+
 export async function useSession(
   Model: Model<any>,
   req: FastifyRequest,
@@ -44,6 +56,8 @@ export async function useSession(
 
   return res
 }
+
+// ---
 
 export function getArrayFromBodyWithId(body: any[]) {
   if (!Array.isArray(body))
@@ -64,4 +78,31 @@ export function getArrayFromBodyWithId(body: any[]) {
     )
 
   return body
+}
+
+// ---
+
+export async function getSubarray(
+  req: FastifyRequest,
+  modelName: string,
+  subPathName: string,
+  useLean: boolean = false
+): Promise<{ Model: Model<any>; doc: MrqDocument; subarray: any }> {
+  const Model = model(req, modelName)
+
+  const { id } = req.params as { id: string }
+
+  const p = Model.findById(id, {}, { req }).select(subPathName)
+
+  const doc: MrqDocument = await (useLean ? p.lean(leanOptions) : p)
+
+  if (!doc) throw httpErrors.notFound(DOCUMENT_NOT_FOUND)
+
+  if (!doc[subPathName]) throw httpErrors.notFound(SUBARRAY_NOT_FOUND)
+
+  return {
+    Model,
+    doc,
+    subarray: doc[subPathName],
+  }
 }
