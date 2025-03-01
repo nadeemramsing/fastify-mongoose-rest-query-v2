@@ -1,6 +1,6 @@
+import { ObjectId } from 'bson'
 import { Model } from 'mongoose'
 import { FastifyRequest } from 'fastify'
-import { MrqDocument, MrqQuery } from '../mrq.interfaces'
 import {
   drop,
   filter,
@@ -16,6 +16,9 @@ import {
   uniq,
 } from 'lodash/fp'
 import sift from 'sift'
+import { MrqDocument, MrqQuery } from '../mrq.interfaces'
+import { toJSONOptions } from '../mrq.config'
+import { useSession } from '../utils/mongoose.utils'
 
 interface IBaseOptions {
   body: any
@@ -24,9 +27,6 @@ interface IBaseOptions {
   Model: Model<any>
   path: string
   req: FastifyRequest
-  shouldForceDelete: boolean
-  shouldReturnAll: boolean
-  shouldUseSession: boolean
   subarray: any[]
   subId: string
 }
@@ -71,3 +71,35 @@ export async function distinct({
 }
 
 // ---
+
+export async function create({
+  body,
+  doc,
+  Model,
+  req,
+  subarray,
+}: Pick<IBaseOptions, 'body' | 'doc' | 'Model' | 'req' | 'subarray'>) {
+  const _prev = doc.toJSON(toJSONOptions)
+
+  const idsMap = body
+    .map((item: any) => ((item._id = item._id ?? new ObjectId()), item))
+    .reduce((acc: {}, v: any) => ({ ...acc, [v._id]: true }), {})
+
+  for (const item of body) subarray.push(item)
+
+  await useSession(
+    Model,
+    req,
+    // @ts-ignore: custom arg req
+    (session?: ClientSession) => doc.save({ req, session, _prev })
+  )
+
+  const subarraySaved = subarray.map((subitem) => subitem.toJSON(toJSONOptions))
+
+  const query = req.query as { returnAll: string }
+  const shouldReturnAll = query.returnAll === 'true'
+
+  if (shouldReturnAll) return subarraySaved
+
+  return subarraySaved.filter((subitem) => idsMap[subitem._id])
+}
