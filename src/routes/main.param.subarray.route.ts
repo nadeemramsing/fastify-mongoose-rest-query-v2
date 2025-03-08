@@ -25,5 +25,7 @@ export const mainParamSubarrayRoute =
       app.get(`${prefix}/distinct/:path`, mainParamSubarrayHandler.distinct)
 
       app.post(prefix, mainParamSubarrayHandler.create)
+
+      app.put(prefix, mainParamSubarrayHandler.updateMany)
     }
   }

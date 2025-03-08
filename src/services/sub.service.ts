@@ -1,5 +1,5 @@
 import { ObjectId } from 'bson'
-import { Model } from 'mongoose'
+import { Model, Types } from 'mongoose'
 import { FastifyRequest } from 'fastify'
 import {
   drop,
@@ -7,6 +7,7 @@ import {
   isNil,
   map,
   orderBy,
+  partition,
   pick,
   pipe,
   pluck,
@@ -27,7 +28,7 @@ interface IBaseOptions {
   Model: Model<any>
   path: string
   req: FastifyRequest
-  subarray: any[]
+  subarray: any[] | Types.DocumentArray<any>
   subId: string
 }
 
@@ -102,4 +103,53 @@ export async function create({
   if (shouldReturnAll) return subarraySaved
 
   return subarraySaved.filter((subitem) => idsMap[subitem._id])
+}
+
+// ---
+
+export async function updateMany({
+  body,
+  doc,
+  Model,
+  req,
+  subarray,
+}: Pick<IBaseOptions, 'body' | 'doc' | 'Model' | 'req' | 'subarray'> & {
+  subarray: Types.DocumentArray<any>
+}) {
+  const _prev = doc.toJSON(toJSONOptions)
+
+  const bodyIdsMap = body.reduce(
+    (acc: {}, v: any) => ({ ...acc, [v._id]: true }),
+    {}
+  )
+
+  const [subitemsToUpdate, subitemsToNotUpdate] = partition(
+    (subitem) => bodyIdsMap[subitem._id],
+    subarray
+  )
+
+  for (const item of body) {
+    const subitem: Types.Subdocument = subarray.id(item._id)
+
+    if (!subitem) continue
+
+    subitem.set(item)
+  }
+
+  if (req.routeOptions.url?.endsWith?.('/overwrite'))
+    for (const subitem of subitemsToNotUpdate) subitem.deleteOne()
+
+  await useSession(
+    Model,
+    req,
+    // @ts-ignore: custom arg req
+    (session?: ClientSession) => doc.save({ req, session, _prev })
+  )
+
+  const query = req.query as { returnAll: string }
+  const shouldReturnAll = query.returnAll === 'true'
+
+  return shouldReturnAll
+    ? subarray.map((subitem) => subitem.toJSON(toJSONOptions))
+    : subitemsToUpdate.map((subitem) => subitem.toJSON(toJSONOptions))
 }

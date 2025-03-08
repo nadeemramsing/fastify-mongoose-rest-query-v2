@@ -8,7 +8,7 @@
     ".": "./src/index.ts"
   },
   "scripts": {
-    "test": "NODE_OPTIONS='--import tsx' vitest run create.sub"
+    "test": "NODE_OPTIONS='--import tsx' vitest run updateMany.sub"
   },
   "keywords": [],
   "author": "",

@@ -87,10 +87,32 @@ export const getMainParamSubarrayHandler = (
     })
   }
 
+  // ---
+
+  const updateMany: RouteHandlerMethod = async (req, rep) => {
+    if (!handlerAccesses.includes(HandlerAccessEnum.UPDATE_MANY_SUB))
+      throw httpErrors.unauthorized(ROLE_DOES_NOT_HAVE_ACCESS_HANDLER_LEVEL)
+
+    const { Model, doc, subarray } = await getSubarray(
+      req,
+      modelName,
+      subPathName
+    )
+
+    return subService.updateMany({
+      body: req.body,
+      doc,
+      Model,
+      req,
+      subarray,
+    })
+  }
+
   return {
     getByQuery,
     count,
     distinct,
     create,
+    updateMany
   }
 }
