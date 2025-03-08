@@ -18,8 +18,13 @@ import {
 } from 'lodash/fp'
 import sift from 'sift'
 import { MrqDocument, MrqQuery } from '../mrq.interfaces'
-import { toJSONOptions } from '../mrq.config'
+import { toJSONOptions, toObjectOptions } from '../mrq.config'
 import { useSession } from '../utils/mongoose.utils'
+import { httpErrors } from '@fastify/sensible'
+import {
+  IMPLICIT_DELETE_ALL_NOT_ALLOWED,
+  NO_SUBITEM_FOUND,
+} from '@src/mrq.errors'
 
 interface IBaseOptions {
   body: any
@@ -152,4 +157,41 @@ export async function updateMany({
   return shouldReturnAll
     ? subarray.map((subitem) => subitem.toJSON(toJSONOptions))
     : subitemsToUpdate.map((subitem) => subitem.toJSON(toJSONOptions))
+}
+
+// ---
+
+export async function deleteByQuery({
+  doc,
+  query,
+  Model,
+  req,
+  subarray,
+}: Pick<IBaseOptions, 'doc' | 'query' | 'Model' | 'req' | 'subarray'> & {
+  subarray: Types.DocumentArray<Types.Subdocument>
+}) {
+  const isDeleteAll = !Object.keys(query.filter).length
+
+  if (isDeleteAll)
+    throw httpErrors.methodNotAllowed(IMPLICIT_DELETE_ALL_NOT_ALLOWED)
+
+  const subarrayToDelete = filter(
+    sift(query.filter),
+    subarray
+  ) as Types.DocumentArray<Types.Subdocument>
+
+  if (subarrayToDelete.length === 0) throw httpErrors.notFound(NO_SUBITEM_FOUND)
+
+  const _prev = doc.toJSON(toJSONOptions)
+
+  for (const subitem of subarrayToDelete) subitem.deleteOne()
+
+  await useSession(
+    Model,
+    req,
+    // @ts-ignore: custom arg req
+    (session?: ClientSession) => doc.save({ req, session, _prev })
+  )
+
+  return subarray.map((subitem) => subitem.toJSON(toJSONOptions))
 }

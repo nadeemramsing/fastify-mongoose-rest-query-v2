@@ -29,5 +29,7 @@ export const mainParamSubarrayRoute =
       app.put(prefix, mainParamSubarrayHandler.updateMany)
 
       app.put(`${prefix}/overwrite`, mainParamSubarrayHandler.updateMany)
+
+      app.delete(prefix, mainParamSubarrayHandler.deleteByQuery)
     }
   }

@@ -108,11 +108,29 @@ export const getMainParamSubarrayHandler = (
     })
   }
 
+  // ---
+
+  const deleteByQuery: RouteHandlerMethod = async (req, rep) => {
+    if (!handlerAccesses.includes(HandlerAccessEnum.DELETE_BY_QUERY_SUB))
+      throw httpErrors.unauthorized(ROLE_DOES_NOT_HAVE_ACCESS_HANDLER_LEVEL)
+
+    const { Model, doc, subarray } = await getSubarray(
+      req,
+      modelName,
+      subPathName
+    )
+
+    const query = getQueryForSubarray(req.query, { ignoreSelect: true })
+
+    return subService.deleteByQuery({ doc, Model, req, subarray, query })
+  }
+
   return {
     getByQuery,
     count,
     distinct,
     create,
-    updateMany
+    updateMany,
+    deleteByQuery,
   }
 }
