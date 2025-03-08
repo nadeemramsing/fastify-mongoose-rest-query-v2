@@ -78,7 +78,7 @@ describe.sequential('/:id/subarray PUT (updateMany.sub)', () => {
     })
 
     expect(response.statusCode).toBe(200)
-    expect(response.json()).toMatchObject(addresses)
+    expect(response.json()).toMatchObject(resource.addresses)
   })
 
   it('should update, return updated subitems and delete non-updated subitems when /overwrite path used', async () => {
