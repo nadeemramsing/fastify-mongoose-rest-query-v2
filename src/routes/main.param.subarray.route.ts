@@ -27,5 +27,7 @@ export const mainParamSubarrayRoute =
       app.post(prefix, mainParamSubarrayHandler.create)
 
       app.put(prefix, mainParamSubarrayHandler.updateMany)
+
+      app.put(`${prefix}/overwrite`, mainParamSubarrayHandler.updateMany)
     }
   }
