@@ -2,8 +2,7 @@ import { FastifyInstance } from 'fastify'
 import { IRestOptions } from '../mrq.interfaces'
 import { getMainHandler } from '../handler/main.handler'
 import { roleHook } from '../hooks/role.hook'
-import { mainParamRoute } from './main.param.route'
-import { mainParamSubarrayRoute } from './sub.route'
+import { subRoute } from './sub.route'
 
 export const mainRoute =
   (opts: IRestOptions) => async (app: FastifyInstance) => {
@@ -41,9 +40,6 @@ export const mainRoute =
 
       app.delete(prefix, mainHandler.deleteById)
 
-      app.register(
-        mainParamSubarrayRoute(modelName, { schema, handlerAccesses }),
-        { prefix }
-      )
+      app.register(subRoute(modelName, { schema, handlerAccesses }), { prefix })
     }
   }

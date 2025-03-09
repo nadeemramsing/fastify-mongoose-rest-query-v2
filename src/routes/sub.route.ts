@@ -1,8 +1,8 @@
 import { FastifyInstance } from 'fastify'
 import { ISchemaOption } from '../mrq.interfaces'
-import { getMainParamSubarrayHandler } from '../handler/sub.handler'
+import { getSubHandler } from '../handler/sub.handler'
 
-export const mainParamSubarrayRoute =
+export const subRoute =
   (modelName: string, schemaOptions: Omit<ISchemaOption, 'endpointName'>) =>
   async (app: FastifyInstance) => {
     const { schema, handlerAccesses } = schemaOptions
@@ -10,26 +10,28 @@ export const mainParamSubarrayRoute =
     for (const [subPathName, schemaInstance] of Object.entries(schema.obj)) {
       if (!Array.isArray(schemaInstance)) continue
 
-      const mainParamSubarrayHandler = getMainParamSubarrayHandler(
+      const subHandler = getSubHandler(
         modelName,
         subPathName,
         handlerAccesses
       )
 
-      const prefix = `/${subPathName}`
+      let prefix = `/${subPathName}`
 
-      app.get(prefix, mainParamSubarrayHandler.getByQuery)
+      app.get(prefix, subHandler.getByQuery)
 
-      app.get(`${prefix}/count`, mainParamSubarrayHandler.count)
+      app.get(`${prefix}/count`, subHandler.count)
 
-      app.get(`${prefix}/distinct/:path`, mainParamSubarrayHandler.distinct)
+      app.get(`${prefix}/distinct/:path`, subHandler.distinct)
 
-      app.post(prefix, mainParamSubarrayHandler.create)
+      app.post(prefix, subHandler.create)
 
-      app.put(prefix, mainParamSubarrayHandler.updateMany)
+      app.put(prefix, subHandler.updateMany)
 
-      app.put(`${prefix}/overwrite`, mainParamSubarrayHandler.updateMany)
+      app.put(`${prefix}/overwrite`, subHandler.updateMany)
 
-      app.delete(prefix, mainParamSubarrayHandler.deleteByQuery)
+      app.delete(prefix, subHandler.deleteByQuery)
+
+      prefix += `/:id`
     }
   }
