@@ -2,7 +2,7 @@ import { Schema } from 'mongoose'
 import { FastifyInstance } from 'fastify'
 import { ISchemaOption } from '../mrq.interfaces'
 import { getSubHandler } from '../handler/sub.handler'
-import { getChildArray } from '../utils/mongoose.utils'
+import { getChildarray } from '../utils/mongoose.utils'
 
 export const subRoute =
   (modelName: string, schemaOptions: Omit<ISchemaOption, 'endpointName'>) =>
@@ -50,7 +50,7 @@ export const subRoute =
         const childRoute = subRoute(modelName, {
           ...schemaOptions,
           schema: childSchemaInstance as Schema,
-          getSubarray: getChildArray,
+          getSubarray: getChildarray,
           subIdName: 'childId',
         })
 

@@ -111,7 +111,7 @@ export async function getSubarray(
 
 // ---
 
-export async function getChildArray(
+export async function getChildarray(
   req: FastifyRequest,
   modelName: string,
   subPathName: string,
@@ -149,6 +149,6 @@ export async function getChildArray(
     Model,
     doc,
     subItem,
-    childArray: subItem.get(childPathName),
+    subarray: subItem.get(childPathName),
   }
 }
