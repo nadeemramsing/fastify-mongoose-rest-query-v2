@@ -109,6 +109,21 @@ export const getSubHandler = (
     return subService.deleteByQuery({ doc, Model, req, subarray, query })
   }
 
+  // ---
+
+  const getById: RouteHandlerMethod = async (req, rep) => {
+    if (!handlerAccesses.includes(HandlerAccessEnum.GET_BY_ID_SUB))
+      throw httpErrors.unauthorized(ROLE_DOES_NOT_HAVE_ACCESS_HANDLER_LEVEL)
+
+    const { subarray } = await getSubarray(req, modelName, subPathName)
+
+    const { subId } = req.params as { subId: string }
+
+    const query = getQueryForSubarray(req.query)
+
+    return subService.getById({ query, subarray, subId })
+  }
+
   return {
     getByQuery,
     count,
@@ -116,5 +131,7 @@ export const getSubHandler = (
     create,
     updateMany,
     deleteByQuery,
+
+    getById,
   }
 }

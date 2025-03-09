@@ -10,11 +10,7 @@ export const subRoute =
     for (const [subPathName, schemaInstance] of Object.entries(schema.obj)) {
       if (!Array.isArray(schemaInstance)) continue
 
-      const subHandler = getSubHandler(
-        modelName,
-        subPathName,
-        handlerAccesses
-      )
+      const subHandler = getSubHandler(modelName, subPathName, handlerAccesses)
 
       let prefix = `/${subPathName}`
 
@@ -32,6 +28,8 @@ export const subRoute =
 
       app.delete(prefix, subHandler.deleteByQuery)
 
-      prefix += `/:id`
+      prefix += `/:subId`
+
+      app.get(prefix, subHandler.getById)
     }
   }

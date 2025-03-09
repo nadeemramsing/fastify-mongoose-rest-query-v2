@@ -4,6 +4,7 @@ import { FastifyRequest } from 'fastify'
 import {
   drop,
   filter,
+  find,
   isNil,
   map,
   orderBy,
@@ -24,6 +25,7 @@ import { httpErrors } from '@fastify/sensible'
 import {
   IMPLICIT_DELETE_ALL_NOT_ALLOWED,
   NO_SUBITEM_FOUND,
+  SUBITEM_NOT_FOUND,
 } from '@src/mrq.errors'
 
 interface IBaseOptions {
@@ -194,4 +196,22 @@ export async function deleteByQuery({
   )
 
   return subarray.map((subitem) => subitem.toJSON(toJSONOptions))
+}
+
+// ---
+
+export async function getById({
+  query,
+  subarray,
+  subId,
+}: Pick<IBaseOptions, 'query' | 'subarray' | 'subId'>) {
+  const subItem = pipe(
+    find((subItem: { _id: ObjectId }) => subItem._id.equals(subId)),
+    query.select.length > 1 ? pick(query.select) : (x) => x
+  )(subarray)
+
+  if (!subItem || !Object.keys(subItem).length)
+    throw httpErrors.notFound(SUBITEM_NOT_FOUND)
+
+  return subItem
 }
