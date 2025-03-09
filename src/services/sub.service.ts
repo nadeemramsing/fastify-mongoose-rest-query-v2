@@ -26,7 +26,7 @@ import {
   IMPLICIT_DELETE_ALL_NOT_ALLOWED,
   NO_SUBITEM_FOUND,
   SUBITEM_NOT_FOUND,
-} from '@src/mrq.errors'
+} from '../mrq.errors'
 
 interface IBaseOptions {
   body: any
