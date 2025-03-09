@@ -254,3 +254,32 @@ export async function updateById({
     ? subarray.map((subitem) => subitem.toJSON(toJSONOptions))
     : subitem.toJSON(toJSONOptions)
 }
+
+// ---
+
+export async function deleteById({
+  doc,
+  Model,
+  req,
+  subarray,
+  subId,
+}: Pick<IBaseOptions, 'doc' | 'Model' | 'req' | 'subarray' | 'subId'> & {
+  subarray: Types.DocumentArray<Types.Subdocument>
+}) {
+  const _prev = doc.toJSON(toJSONOptions)
+
+  const subitem = subarray.id(subId)
+
+  if (!subitem) throw httpErrors.notFound(SUBITEM_NOT_FOUND)
+
+  subitem.deleteOne()
+
+  await useSession(
+    Model,
+    req,
+    // @ts-ignore: custom arg req
+    (session?: ClientSession) => doc.save({ req, session, _prev })
+  )
+
+  return subarray.map((subitem) => subitem.toJSON(toJSONOptions))
+}

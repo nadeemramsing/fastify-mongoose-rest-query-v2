@@ -35,5 +35,7 @@ export const subRoute =
       app.put(prefix, subHandler.updateById)
 
       app.put(`${prefix}/overwrite`, subHandler.updateById)
+    
+      app.delete(prefix, subHandler.deleteById)
     }
   }
