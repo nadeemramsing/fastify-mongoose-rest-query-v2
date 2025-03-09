@@ -1,4 +1,4 @@
-import { ClientSession, Model, Document, Types } from 'mongoose'
+import { ClientSession, Model } from 'mongoose'
 import { FastifyRequest } from 'fastify'
 import { httpErrors } from '@fastify/sensible'
 import {
@@ -87,12 +87,14 @@ export function getArrayFromBodyWithId(body: any[]) {
 export async function getSubarray(
   req: FastifyRequest,
   modelName: string,
-  subPathName: string,
+  subPathName_: string,
   useLean: boolean = false
 ): Promise<{ Model: Model<any>; doc: MrqDocument; subarray: any }> {
   const Model = model(req, modelName)
 
   const { id } = req.params as { id: string }
+
+  const [subPathName] = subPathName_.split(':')
 
   const p = Model.findById(id, {}, { req }).select(subPathName)
 
@@ -114,13 +116,14 @@ export async function getSubarray(
 export async function getChildarray(
   req: FastifyRequest,
   modelName: string,
-  subPathName: string,
-  childPathName: string,
+  fullPathName: string,
   useLean: boolean = false
 ) {
   const Model = model(req, modelName)
 
   const { id, subId } = req.params as { id: string; subId: string }
+
+  const [subPathName, childPathName] = fullPathName.split(':')
 
   const p = Model.find(
     {
@@ -134,21 +137,18 @@ export async function getChildarray(
       ${subPathName}.${childPathName}
     `)
 
-  const [doc]: Document[] = (await (useLean ? p.lean(leanOptions) : p)) ?? []
+  const [doc]: any[] = (await (useLean ? p.lean(leanOptions) : p)) ?? []
 
   if (!doc) throw httpErrors.notFound(DOCUMENT_NOT_FOUND)
 
-  const subItem: Types.Subdocument = find(
-    (subItem) => subItem._id.equals(subId),
-    doc.get(subPathName)
-  )
+  const subitem = find((subitem) => subitem._id.equals(subId), doc[subPathName])
 
-  if (!subItem) throw httpErrors.notFound(SUBITEM_NOT_FOUND)
+  if (!subitem) throw httpErrors.notFound(SUBITEM_NOT_FOUND)
 
   return {
     Model,
     doc,
-    subItem,
-    subarray: subItem.get(childPathName),
+    subitem,
+    subarray: subitem[childPathName],
   }
 }

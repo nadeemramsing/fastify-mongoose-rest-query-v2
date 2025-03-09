@@ -13,7 +13,7 @@ describe.sequential(
     it('should return all aliases of the address', async () => {
       const response = await app.inject({
         method: 'GET',
-        url: `/secure/admin/mrq/resources/mrq/${resourceId}/addresses/${addressId}/aliases`,
+        url: `/secure/admin/mrq/resources/${resourceId}/addresses/${addressId}/aliases`,
         query: {
           select: 'all',
         },

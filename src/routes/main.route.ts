@@ -42,7 +42,13 @@ export const mainRoute =
       app.delete(prefix, mainHandler.deleteById)
 
       app.register(
-        subRoute(modelName, { schema, handlerAccesses, getSubarray }),
+        subRoute(modelName, {
+          schema,
+          handlerAccesses,
+          getSubarray,
+          subPathName: '',
+          subIdName: 'subId',
+        }),
         { prefix }
       )
     }

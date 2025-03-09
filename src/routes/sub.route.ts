@@ -3,22 +3,19 @@ import { FastifyInstance } from 'fastify'
 import { ISchemaOption } from '../mrq.interfaces'
 import { getSubHandler } from '../handler/sub.handler'
 import { getChildarray } from '../utils/mongoose.utils'
+import { countCharacter } from '../utils/misc.utils'
 
 export const subRoute =
   (modelName: string, schemaOptions: Omit<ISchemaOption, 'endpointName'>) =>
   async (app: FastifyInstance) => {
-    const { schema, handlerAccesses, subIdName = 'subId' } = schemaOptions
+    const { schema } = schemaOptions
 
     for (const [subPathName, schemaInstance] of Object.entries(schema.obj)) {
       if (!Array.isArray(schemaInstance)) continue
 
-      const subHandler = getSubHandler(
-        modelName,
-        subPathName,
-        handlerAccesses,
-        schemaOptions.getSubarray,
-        subIdName
-      )
+      schemaOptions.subPathName += subPathName + ':'
+
+      const subHandler = getSubHandler(modelName, schemaOptions)
 
       let prefix = `/${subPathName}`
 
@@ -36,7 +33,7 @@ export const subRoute =
 
       app.delete(prefix, subHandler.deleteByQuery)
 
-      prefix += `/:${subIdName}`
+      prefix += `/:${schemaOptions.subIdName}`
 
       app.get(prefix, subHandler.getById)
 
@@ -45,6 +42,9 @@ export const subRoute =
       app.put(`${prefix}/overwrite`, subHandler.updateById)
 
       app.delete(prefix, subHandler.deleteById)
+
+      const noOfColons = countCharacter(':', schemaOptions.subPathName)
+      if (noOfColons > 2) continue
 
       for (const childSchemaInstance of schemaInstance) {
         const childRoute = subRoute(modelName, {
