@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify'
 import { ISchemaOption } from '../mrq.interfaces'
-import { getMainParamSubarrayHandler } from '../handler/main.param.subarray.handler'
+import { getMainParamSubarrayHandler } from '../handler/sub.handler'
 
 export const mainParamSubarrayRoute =
   (modelName: string, schemaOptions: Omit<ISchemaOption, 'endpointName'>) =>

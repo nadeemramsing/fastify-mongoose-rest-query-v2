@@ -3,6 +3,7 @@ import { IRestOptions } from '../mrq.interfaces'
 import { getMainHandler } from '../handler/main.handler'
 import { roleHook } from '../hooks/role.hook'
 import { mainParamRoute } from './main.param.route'
+import { mainParamSubarrayRoute } from './sub.route'
 
 export const mainRoute =
   (opts: IRestOptions) => async (app: FastifyInstance) => {
@@ -12,9 +13,9 @@ export const mainRoute =
       modelName,
       { endpointName, schema, handlerAccesses },
     ] of Object.entries(opts.schemas)) {
-      const prefix = `/${endpointName}`
-
       const mainHandler = getMainHandler(modelName, handlerAccesses)
+
+      let prefix = `/${endpointName}`
 
       app.get(prefix, mainHandler.getByQuery)
 
@@ -30,8 +31,19 @@ export const mainRoute =
 
       app.delete(prefix, mainHandler.deleteByQuery)
 
-      app.register(mainParamRoute(modelName, { schema, handlerAccesses }), {
-        prefix,
-      })
+      prefix += `/:id`
+
+      app.get(prefix, mainHandler.getById)
+
+      app.put(prefix, mainHandler.updateById)
+
+      app.put(`${prefix}/overwrite`, mainHandler.updateById)
+
+      app.delete(prefix, mainHandler.deleteById)
+
+      app.register(
+        mainParamSubarrayRoute(modelName, { schema, handlerAccesses }),
+        { prefix }
+      )
     }
   }
