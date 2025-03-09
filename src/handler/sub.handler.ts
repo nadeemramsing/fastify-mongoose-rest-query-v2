@@ -3,13 +3,14 @@ import { httpErrors } from '@fastify/sensible'
 import { HandlerAccessEnum } from '../mrq.enum'
 import * as subService from '../services/sub.service'
 import { getQueryForSubarray } from '../utils/query.sub.utils'
-import { getSubarray } from '../utils/mongoose.utils'
 import { ROLE_DOES_NOT_HAVE_ACCESS_HANDLER_LEVEL } from '../mrq.errors'
 
 export const getSubHandler = (
   modelName: string,
   subPathName: string,
-  handlerAccesses: HandlerAccessEnum[] = []
+  handlerAccesses: HandlerAccessEnum[] = [],
+  getSubarray: Function,
+  subIdName: string
 ) => {
   const getByQuery: RouteHandlerMethod = async (req, rep) => {
     if (!handlerAccesses.includes(HandlerAccessEnum.GET_BY_ID_SUB))
@@ -117,11 +118,11 @@ export const getSubHandler = (
 
     const { subarray } = await getSubarray(req, modelName, subPathName)
 
-    const { subId } = req.params as { subId: string }
+    const params = req.params as { [key: string]: string }
 
     const query = getQueryForSubarray(req.query)
 
-    return subService.getById({ query, subarray, subId })
+    return subService.getById({ query, subarray, subId: params[subIdName] })
   }
 
   // ---
@@ -136,15 +137,15 @@ export const getSubHandler = (
       subPathName
     )
 
-    const { subId } = req.params as { subId: string }
+    const params = req.params as { [key: string]: string }
 
     return subService.updateById({
       body: req.body,
+      subId: params[subIdName],
       doc,
       Model,
       req,
       subarray,
-      subId,
     })
   }
 
@@ -160,14 +161,14 @@ export const getSubHandler = (
       subPathName
     )
 
-    const { subId } = req.params as { subId: string }
+    const params = req.params as { [key: string]: string }
 
     return subService.deleteById({
       doc,
       Model,
       req,
       subarray,
-      subId,
+      subId: params[subIdName],
     })
   }
 

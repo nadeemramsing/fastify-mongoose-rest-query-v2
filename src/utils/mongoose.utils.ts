@@ -1,4 +1,4 @@
-import { ClientSession, Model } from 'mongoose'
+import { ClientSession, Model, Document, Types } from 'mongoose'
 import { FastifyRequest } from 'fastify'
 import { httpErrors } from '@fastify/sensible'
 import {
@@ -6,10 +6,12 @@ import {
   EMPTY_BODY,
   INVALID_BODY,
   SUBARRAY_NOT_FOUND,
+  SUBITEM_NOT_FOUND,
 } from '../mrq.errors'
 import { model } from './db.utils'
 import { leanOptions } from '../mrq.config'
 import { MrqDocument } from '../mrq.interfaces'
+import { find } from 'lodash/fp'
 
 interface IRunStaticMethods<T> {
   Model: Model<T>
@@ -104,5 +106,49 @@ export async function getSubarray(
     Model,
     doc,
     subarray: doc[subPathName],
+  }
+}
+
+// ---
+
+export async function getChildArray(
+  req: FastifyRequest,
+  modelName: string,
+  subPathName: string,
+  childPathName: string,
+  useLean: boolean = false
+) {
+  const Model = model(req, modelName)
+
+  const { id, subId } = req.params as { id: string; subId: string }
+
+  const p = Model.find(
+    {
+      _id: id,
+      [`${subPathName}._id`]: subId,
+    },
+    {},
+    { req }
+  ).select(`
+      ${subPathName}._id
+      ${subPathName}.${childPathName}
+    `)
+
+  const [doc]: Document[] = (await (useLean ? p.lean(leanOptions) : p)) ?? []
+
+  if (!doc) throw httpErrors.notFound(DOCUMENT_NOT_FOUND)
+
+  const subItem: Types.Subdocument = find(
+    (subItem) => subItem._id.equals(subId),
+    doc.get(subPathName)
+  )
+
+  if (!subItem) throw httpErrors.notFound(SUBITEM_NOT_FOUND)
+
+  return {
+    Model,
+    doc,
+    subItem,
+    childArray: subItem.get(childPathName),
   }
 }

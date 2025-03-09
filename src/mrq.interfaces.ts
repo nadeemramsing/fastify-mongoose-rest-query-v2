@@ -4,6 +4,8 @@ import { HandlerAccessEnum } from './mrq.enum'
 export interface ISchemaOption {
   endpointName: string
   schema: Schema
+  getSubarray: Function
+  subIdName?: string
   handlerAccesses?: HandlerAccessEnum[]
 }
 

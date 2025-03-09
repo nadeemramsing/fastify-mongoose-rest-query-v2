@@ -25,56 +25,33 @@ export enum HandlerAccessEnum {
   GET_BY_ID_SUB = 'GET_BY_ID_SUB',
   UPDATE_BY_ID_SUB = 'UPDATE_BY_ID_SUB',
   DELETE_BY_ID_SUB = 'DELETE_BY_ID_SUB',
-
-  // CHILD
-  GET_BY_QUERY_SUB_CHILD = 'GET_BY_QUERY_SUB_CHILD',
-  COUNT_SUB_CHILD = 'COUNT_SUB_CHILD',
-  DISTINCT_SUB_CHILD = 'DISTINCT_SUB_CHILD',
-  CREATE_SUB_CHILD = 'CREATE_SUB_CHILD',
-  UPDATE_MANY_SUB_CHILD = 'UPDATE_MANY_SUB_CHILD',
-  DELETE_BY_QUERY_SUB_CHILD = 'DELETE_BY_QUERY_SUB_CHILD',
-
-  // CHILD WITH ID
-  GET_BY_ID_SUB_CHILD = 'GET_BY_ID_SUB_CHILD',
-  UPDATE_BY_ID_SUB_CHILD = 'UPDATE_BY_ID_SUB_CHILD',
-  DELETE_BY_ID_SUB_CHILD = 'DELETE_BY_ID_SUB_CHILD',
 }
 
 export const ALL_GET = [
   HandlerAccessEnum.GET_BY_QUERY,
   HandlerAccessEnum.GET_BY_QUERY_SUB,
-  HandlerAccessEnum.GET_BY_QUERY_SUB_CHILD,
   HandlerAccessEnum.GET_BY_ID,
   HandlerAccessEnum.GET_BY_ID_SUB,
-  HandlerAccessEnum.GET_BY_ID_SUB_CHILD,
   HandlerAccessEnum.COUNT,
   HandlerAccessEnum.COUNT_SUB,
-  HandlerAccessEnum.COUNT_SUB_CHILD,
   HandlerAccessEnum.DISTINCT,
   HandlerAccessEnum.DISTINCT_SUB,
-  HandlerAccessEnum.DISTINCT_SUB_CHILD,
-];
+]
 
-export const ALL_POST = [
-  HandlerAccessEnum.CREATE,
-  HandlerAccessEnum.CREATE_SUB,
-  HandlerAccessEnum.CREATE_SUB_CHILD,
-];
+export const ALL_POST = [HandlerAccessEnum.CREATE, HandlerAccessEnum.CREATE_SUB]
 
 export const ALL_PUT = [
   HandlerAccessEnum.UPDATE_MANY,
   HandlerAccessEnum.UPDATE_MANY_SUB,
-  HandlerAccessEnum.UPDATE_MANY_SUB_CHILD,
   HandlerAccessEnum.UPDATE_BY_ID,
   HandlerAccessEnum.UPDATE_BY_ID_SUB,
-  HandlerAccessEnum.UPDATE_BY_ID_SUB_CHILD,
-];
+]
 
 export const ALL_DELETE = [
   HandlerAccessEnum.DELETE_BY_QUERY,
   HandlerAccessEnum.DELETE_BY_QUERY_SUB,
-  HandlerAccessEnum.DELETE_BY_QUERY_SUB_CHILD,
   HandlerAccessEnum.DELETE_BY_ID,
   HandlerAccessEnum.DELETE_BY_ID_SUB,
-  HandlerAccessEnum.DELETE_BY_ID_SUB_CHILD,
-];
+]
+
+export const ALL_HANDLERS = [...ALL_GET, ...ALL_POST, ...ALL_PUT, ...ALL_DELETE]

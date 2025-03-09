@@ -3,6 +3,7 @@ import { IRestOptions } from '../mrq.interfaces'
 import { getMainHandler } from '../handler/main.handler'
 import { roleHook } from '../hooks/role.hook'
 import { subRoute } from './sub.route'
+import { getSubarray } from '../utils/mongoose.utils'
 
 export const mainRoute =
   (opts: IRestOptions) => async (app: FastifyInstance) => {
@@ -40,6 +41,9 @@ export const mainRoute =
 
       app.delete(prefix, mainHandler.deleteById)
 
-      app.register(subRoute(modelName, { schema, handlerAccesses }), { prefix })
+      app.register(
+        subRoute(modelName, { schema, handlerAccesses, getSubarray }),
+        { prefix }
+      )
     }
   }
