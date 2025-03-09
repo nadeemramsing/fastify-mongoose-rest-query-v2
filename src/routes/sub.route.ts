@@ -31,5 +31,9 @@ export const subRoute =
       prefix += `/:subId`
 
       app.get(prefix, subHandler.getById)
+
+      app.put(prefix, subHandler.updateById)
+
+      app.put(`${prefix}/overwrite`, subHandler.updateById)
     }
   }

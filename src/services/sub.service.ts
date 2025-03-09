@@ -35,7 +35,7 @@ interface IBaseOptions {
   Model: Model<any>
   path: string
   req: FastifyRequest
-  subarray: any[] | Types.DocumentArray<any>
+  subarray: any[] | Types.DocumentArray<Types.Subdocument>
   subId: string
 }
 
@@ -121,7 +121,7 @@ export async function updateMany({
   req,
   subarray,
 }: Pick<IBaseOptions, 'body' | 'doc' | 'Model' | 'req' | 'subarray'> & {
-  subarray: Types.DocumentArray<any>
+  subarray: Types.DocumentArray<Types.Subdocument>
 }) {
   const _prev = doc.toJSON(toJSONOptions)
 
@@ -136,7 +136,7 @@ export async function updateMany({
   )
 
   for (const item of body) {
-    const subitem: Types.Subdocument = subarray.id(item._id)
+    const subitem = subarray.id(item._id)
 
     if (!subitem) continue
 
@@ -205,13 +205,52 @@ export async function getById({
   subarray,
   subId,
 }: Pick<IBaseOptions, 'query' | 'subarray' | 'subId'>) {
-  const subItem = pipe(
-    find((subItem: { _id: ObjectId }) => subItem._id.equals(subId)),
+  const subitem = pipe(
+    find((subitem: { _id: ObjectId }) => subitem._id.equals(subId)),
     query.select.length > 1 ? pick(query.select) : (x) => x
   )(subarray)
 
-  if (!subItem || !Object.keys(subItem).length)
+  if (!subitem || !Object.keys(subitem).length)
     throw httpErrors.notFound(SUBITEM_NOT_FOUND)
 
-  return subItem
+  return subitem
+}
+
+// ---
+
+export async function updateById({
+  body,
+  doc,
+  Model,
+  req,
+  subarray,
+  subId,
+}: Pick<
+  IBaseOptions,
+  'body' | 'doc' | 'Model' | 'req' | 'subarray' | 'subId'
+> & {
+  subarray: Types.DocumentArray<Types.Subdocument>
+}) {
+  const _prev = doc.toJSON(toJSONOptions)
+
+  const subitem = subarray.id(subId)
+
+  if (!subitem) throw httpErrors.notFound(SUBITEM_NOT_FOUND)
+
+  if (req.routeOptions.url?.endsWith?.('/overwrite')) subitem.overwrite(body)
+  else subitem.set(body)
+
+  await useSession(
+    Model,
+    req,
+    // @ts-ignore: custom arg req
+    (session?: ClientSession) => doc.save({ req, session, _prev })
+  )
+
+  const query = req.query as { returnAll: string }
+  const shouldReturnAll = query.returnAll === 'true'
+
+  return shouldReturnAll
+    ? subarray.map((subitem) => subitem.toJSON(toJSONOptions))
+    : subitem.toJSON(toJSONOptions)
 }

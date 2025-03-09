@@ -1,4 +1,3 @@
-import { useSession } from '@src/utils/mongoose.utils'
 import { getDocsInJSON } from '@test/setup/fixtures/get-docs-in-json.method'
 import { resources } from '@test/setup/fixtures/resources'
 import { app } from '@test/setup/setup'
