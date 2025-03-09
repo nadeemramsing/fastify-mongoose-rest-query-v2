@@ -19,7 +19,7 @@ import {
 } from 'lodash/fp'
 import sift from 'sift'
 import { MrqDocument, MrqQuery } from '../mrq.interfaces'
-import { toJSONOptions, toObjectOptions } from '../mrq.config'
+import { toJSONOptions } from '../mrq.config'
 import { useSession } from '../utils/mongoose.utils'
 import { httpErrors } from '@fastify/sensible'
 import {

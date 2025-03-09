@@ -1,16 +1,9 @@
-import { ToObjectOptions } from 'mongoose'
-
 export const leanOptions = {
   virtuals: true,
   versionKey: false,
 }
 
 export const toJSONOptions = {
-  virtuals: true,
-  versionKey: false,
-}
-
-export const toObjectOptions: ToObjectOptions = {
   virtuals: true,
   versionKey: false,
 }
