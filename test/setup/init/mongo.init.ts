@@ -5,7 +5,7 @@ import { ResourceSchema } from '@test/setup/schemas'
 export const mongoInit = async (
   uri: string = 'mongodb://localhost:27016/test'
 ) => {
-  await mongoose.connect(uri)
+  if (mongoose.connection.readyState !== 1) await mongoose.connect(uri)
 
   // mongoose.set('debug', true);
 
