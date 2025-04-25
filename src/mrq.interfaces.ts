@@ -5,9 +5,9 @@ export interface ISchemaOption {
   endpointName: string
   schema: Schema
   handlerAccesses: HandlerAccessEnum[]
-  getSubarray: Function
-  subIdName: string
-  subPathName: string
+  getSubarray?: Function
+  subIdName?: string
+  subPathName?: string
 }
 
 export interface IRestOptions {
