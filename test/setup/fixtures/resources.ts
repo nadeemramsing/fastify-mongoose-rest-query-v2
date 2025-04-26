@@ -4,6 +4,7 @@ import { TypeResource } from '@test/setup/schemas/resource.schema'
 export const resources: TypeResource[] = [
   {
     _id: ObjectId.createFromTime(1),
+    auth: { password: 'tmp1234' },
     name: 'Nadeem',
     age: 28,
     mobile: 51234567,

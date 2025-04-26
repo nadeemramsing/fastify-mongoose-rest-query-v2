@@ -29,6 +29,14 @@ export const ResourceSchema = new Schema({
     default: () => new Types.ObjectId(),
   },
 
+  auth: {
+    password: {
+      type: String,
+      select: false,
+      secure: true,
+    },
+  },
+
   name: {
     type: String,
     trim: true,

@@ -38,10 +38,14 @@ describe.sequential('/:id/subarray/:subId GET (getById)', () => {
       getDocsInJSON(resources)
     )
 
+    console.log({ resource }, resource.addresses, addressId.toString())
+
     const address = pipe(
       find({ _id: addressId.toString() }),
       pick(['city', 'street', 'flags.is_a_city'])
     )(resource.addresses)
+
+    console.log({ address, response })
 
     expect(response.json()).toMatchObject(address)
   })

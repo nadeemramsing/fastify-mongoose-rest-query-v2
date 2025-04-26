@@ -1,18 +1,35 @@
 import memoize from 'moize'
+import { FastifyRequest } from 'fastify'
 import { httpErrors } from '@fastify/sensible'
 import { parseFilter, parseSort, parseProject } from 'mongodb-query-parser'
 import { IMPLICIT_SELECT_ALL_NOT_ALLOWED } from '../mrq.errors'
 import { IGetQueryOptions, MrqQuery } from '../mrq.interfaces'
 import { memoOptions } from '../mrq.config'
 
-export const getQuery = memoize(getQuery_, memoOptions)
+type TypeSecurePaths = { [path: string]: boolean }
 
-function getQuery_(query: any, options: IGetQueryOptions = {}): MrqQuery {
+export function getQuery(
+  req: FastifyRequest,
+  modelName: string,
+  options: IGetQueryOptions = {}
+) {
+  const securePaths = req.mongoose_conn.securePathsPerModel[modelName]
+
+  return getQueryInternal(req.query, securePaths, options)
+}
+
+const getQueryInternal = memoize(getQueryInternal_, memoOptions)
+
+function getQueryInternal_(
+  query: any,
+  securePaths: TypeSecurePaths,
+  options: IGetQueryOptions = {}
+): MrqQuery {
   const filter = getFilter(query.filter)
 
   const sort = getSort(query.sort)
 
-  const select = getSelect(query.select, options)
+  const select = getSelect(query.select, securePaths, options)
 
   const populate = getPopulate(query.populate)
 
@@ -51,7 +68,11 @@ export function getSort(fields: string) {
   return parseSort(JSON.stringify(sort))
 }
 
-export function getSelect(fields: string = '', options: IGetQueryOptions = {}) {
+export function getSelect(
+  fields: string = '',
+  securePaths: TypeSecurePaths = {},
+  options: IGetQueryOptions = {}
+) {
   if (options.ignoreSelect) return {}
 
   const select: Record<string, 1 | 0> = {}
@@ -66,16 +87,27 @@ export function getSelect(fields: string = '', options: IGetQueryOptions = {}) {
       `${IMPLICIT_SELECT_ALL_NOT_ALLOWED}: use select=all query param`
     )
 
-  if (fieldList.includes('all')) return {}
-
-  // What happens to controllers not using query.select but query.filter only for example count
+  if (fieldList.includes('all'))
+    return transformSecurePathsToSelect(securePaths)
 
   for (const field of fieldList) {
+    if (securePaths[field]) continue
+
     if (field.startsWith('-')) select[field.slice(1)] = 0
     else select[field] = 1
   }
 
   return parseProject(JSON.stringify(select))
+}
+
+function transformSecurePathsToSelect(securePaths: TypeSecurePaths) {
+  const select: Record<string, 1 | 0> = {}
+
+  for (const [path, value] of Object.entries(securePaths)) {
+    if (value) select[path] = 0
+  }
+
+  return select
 }
 
 function getPopulate(populate: string): any {

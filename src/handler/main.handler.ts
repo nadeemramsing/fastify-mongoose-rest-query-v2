@@ -29,7 +29,7 @@ export const getMainHandler = (
 
     const Model = model(req, modelName)
 
-    const query = getQuery(req.query)
+    const query = getQuery(req, modelName)
 
     const docs = await Model.find(query.filter, query.select, { req })
       .populate(query.populate)
@@ -52,7 +52,7 @@ export const getMainHandler = (
 
     const Model = model(req, modelName)
 
-    const query = getQuery(req.query, { ignoreSelect: true })
+    const query = getQuery(req, modelName, { ignoreSelect: true })
 
     return { n: await Model.countDocuments(query.filter) }
   }
@@ -71,7 +71,7 @@ export const getMainHandler = (
 
     if (!doesPathExists) throw httpErrors.notFound(PATH_NOT_FOUND_IN_SCHEMA)
 
-    const query = getQuery(req.query, { ignoreSelect: true })
+    const query = getQuery(req, modelName, { ignoreSelect: true })
 
     return Model.distinct(params.path, query.filter)
   }
@@ -149,7 +149,7 @@ export const getMainHandler = (
 
     const Model = model(req, modelName)
 
-    const query = getQuery(req.query, { ignoreSelect: true })
+    const query = getQuery(req, modelName, { ignoreSelect: true })
 
     const isDeleteAll = !Object.keys(query.filter).length
 
@@ -179,7 +179,7 @@ export const getMainHandler = (
 
     const { id } = req.params as { id: string }
 
-    const query = getQuery(req.query)
+    const query = getQuery(req, modelName)
 
     const doc = await Model.findById(id, query.select, { req })
       .and(query.filter)

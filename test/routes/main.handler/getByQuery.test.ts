@@ -1,7 +1,18 @@
 import { app } from '@test/setup/setup'
 import { resources } from '@test/setup/fixtures/resources'
 import { getDocsInJSON } from '@test/setup/fixtures/get-docs-in-json.method'
-import { drop, filter, find, map, orderBy, pick, pipe, take } from 'lodash/fp'
+import {
+  drop,
+  filter,
+  find,
+  map,
+  orderBy,
+  pick,
+  pipe,
+  take,
+  forEach,
+} from 'lodash/fp'
+import { TypeResource } from '@test/setup/schemas/resource.schema'
 
 describe.sequential('/ GET (getByQuery)', () => {
   //#region filter
@@ -14,7 +25,12 @@ describe.sequential('/ GET (getByQuery)', () => {
       },
     })
 
-    const resourcesExpected = getDocsInJSON(resources)
+    const resourcesExpected = (getDocsInJSON(resources) as TypeResource[]).map(
+      (resource) => {
+        delete resource.auth?.password
+        return resource
+      }
+    )
 
     expect(response.statusCode).toBe(200)
     expect(response.json()).toMatchObject(resourcesExpected)
@@ -30,10 +46,12 @@ describe.sequential('/ GET (getByQuery)', () => {
       },
     })
 
-    const resourcesExpected = filter(
-      { name: 'Nadeem' },
-      getDocsInJSON(resources)
-    )
+    const resourcesExpected = pipe(
+      filter({ name: 'Nadeem' }),
+      forEach<TypeResource>((resource) => {
+        delete resource.auth?.password
+      })
+    )(getDocsInJSON(resources))
 
     expect(response.statusCode).toBe(200)
     expect(response.json()).toMatchObject(resourcesExpected)
@@ -49,10 +67,12 @@ describe.sequential('/ GET (getByQuery)', () => {
       },
     })
 
-    const resourcesExpected = filter(
-      (doc: any) => RegExp('mira', 'i').test(doc.name) && doc.age >= 10,
-      getDocsInJSON(resources)
-    )
+    const resourcesExpected = pipe(
+      filter((doc: any) => RegExp('mira', 'i').test(doc.name) && doc.age >= 10),
+      forEach<TypeResource>((resource) => {
+        delete resource.auth?.password
+      })
+    )(getDocsInJSON(resources))
 
     expect(response.statusCode).toBe(200)
     expect(response.json()).toMatchObject(resourcesExpected)
@@ -68,11 +88,14 @@ describe.sequential('/ GET (getByQuery)', () => {
       },
     })
 
-    const resourcesExpected = filter(
-      (doc: any) =>
-        doc.addresses.find((addr: any) => addr.street === 'street3'),
-      getDocsInJSON(resources)
-    )
+    const resourcesExpected = pipe(
+      filter((doc: any) =>
+        doc.addresses.find((addr: any) => addr.street === 'street3')
+      ),
+      forEach<TypeResource>((resource) => {
+        delete resource.auth?.password
+      })
+    )(getDocsInJSON(resources))
 
     expect(response.statusCode).toBe(200)
     expect(response.json()).toMatchObject(resourcesExpected)
@@ -88,10 +111,12 @@ describe.sequential('/ GET (getByQuery)', () => {
       },
     })
 
-    const resourcesExpected = filter(
-      (doc: any) => !doc.noField,
-      getDocsInJSON(resources)
-    )
+    const resourcesExpected = pipe(
+      filter((doc: any) => !doc.noField),
+      forEach<TypeResource>((resource) => {
+        delete resource.auth?.password
+      })
+    )(getDocsInJSON(resources))
 
     expect(response.statusCode).toBe(200)
     expect(response.json()).toMatchObject(resourcesExpected)
@@ -173,7 +198,12 @@ describe.sequential('/ GET (getByQuery)', () => {
       },
     })
 
-    const resourcesExpected = orderBy('age', 'asc', getDocsInJSON(resources))
+    const resourcesExpected = pipe(
+      orderBy('age', 'asc'),
+      forEach<TypeResource>((resource) => {
+        delete resource.auth?.password
+      })
+    )(getDocsInJSON(resources))
 
     expect(response.statusCode).toBe(200)
     expect(response.json()).toMatchObject(resourcesExpected)
@@ -189,9 +219,12 @@ describe.sequential('/ GET (getByQuery)', () => {
       },
     })
 
-    const resourcesExpected = (getDocsInJSON(resources) as any[]).sort((a, b) =>
-      b.name.localeCompare(a.name)
-    )
+    const resourcesExpected = (getDocsInJSON(resources) as any[])
+      .map((resource: any) => {
+        delete resource.auth?.password
+        return resource
+      })
+      .sort((a, b) => b.name.localeCompare(a.name))
 
     expect(response.statusCode).toBe(200)
     expect(response.json()).toMatchObject(resourcesExpected)
@@ -207,9 +240,12 @@ describe.sequential('/ GET (getByQuery)', () => {
       },
     })
 
-    const resourcesExpected = (getDocsInJSON(resources) as any[]).sort((a, b) =>
-      a.name.localeCompare(b.name)
-    )
+    const resourcesExpected = (getDocsInJSON(resources) as any[])
+      .map((resource: any) => {
+        delete resource.auth?.password
+        return resource
+      })
+      .sort((a, b) => a.name.localeCompare(b.name))
 
     expect(response.statusCode).toBe(200)
     expect(response.json()).toMatchObject(resourcesExpected)
@@ -245,7 +281,12 @@ describe.sequential('/ GET (getByQuery)', () => {
       },
     })
 
-    const resourcesExpected = take(2, getDocsInJSON(resources))
+    const resourcesExpected = pipe(
+      take(2),
+      forEach<TypeResource>((resource) => {
+        delete resource.auth?.password
+      })
+    )(getDocsInJSON(resources))
 
     expect(response.statusCode).toBe(200)
     expect(response.json()).toMatchObject(resourcesExpected)
@@ -268,7 +309,9 @@ describe.sequential('/ GET (getByQuery)', () => {
 
     const resourceExpected: any = find({ name: 'Zakariyya' }, resourcesJSON)
 
-    const father = find({ _id: resourceExpected.father }, resourcesJSON)
+    const father: any = find({ _id: resourceExpected.father }, resourcesJSON)
+
+    delete father.auth.password
 
     resourceExpected.father = father
 

@@ -35,6 +35,8 @@ async function mapModels(
 ) {
   const p: { [modelName: string]: Promise<IndexesDiff> } = {}
 
+  conn.securePathsPerModel = {}
+
   for (const modelName in schemas) {
     const { schema } = schemas[modelName]
 
@@ -43,6 +45,14 @@ async function mapModels(
     const Model = conn.model(modelName, schema)
 
     p[modelName] = Model.diffIndexes()
+
+    schema.eachPath((path, schemaType) => {
+      if (!conn.securePathsPerModel[modelName])
+        conn.securePathsPerModel[modelName] = {}
+
+      if (schemaType.options.secure)
+        conn.securePathsPerModel[modelName][path] = true
+    })
   }
 
   const diffs = await promiseAll(p).then(

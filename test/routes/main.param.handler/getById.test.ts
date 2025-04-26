@@ -1,5 +1,6 @@
 import { getDocsInJSON } from '@test/setup/fixtures/get-docs-in-json.method'
 import { resources } from '@test/setup/fixtures/resources'
+import { TypeResource } from '@test/setup/schemas/resource.schema'
 import { app } from '@test/setup/setup'
 import { ObjectId } from 'bson'
 import { find, pick, pipe } from 'lodash/fp'
@@ -17,7 +18,12 @@ describe.sequential('/:id GET (getById)', () => {
         select: 'all',
       },
     })
-    const resourceExpected = find({ name: 'Nadeem' }, getDocsInJSON(resources))
+    const resourceExpected = find(
+      { name: 'Nadeem' },
+      getDocsInJSON(resources) as TypeResource[]
+    )
+
+    delete resourceExpected?.auth?.password
 
     expect(response.statusCode).toBe(200)
     expect(response.json()).toEqual(resourceExpected)
@@ -33,7 +39,12 @@ describe.sequential('/:id GET (getById)', () => {
       },
     })
 
-    const resourceExpected = find({ name: 'Nadeem' }, getDocsInJSON(resources))
+    const resourceExpected = find(
+      { name: 'Nadeem' },
+      getDocsInJSON(resources) as TypeResource[]
+    )
+
+    delete resourceExpected?.auth?.password
 
     expect(response.statusCode).toBe(200)
     expect(response.json()).toEqual(resourceExpected)
@@ -92,8 +103,10 @@ describe.sequential('/:id GET (getById)', () => {
 
     const resourceExpected = find(
       (doc: any) => !doc.noField,
-      getDocsInJSON(resources)
+      getDocsInJSON(resources) as TypeResource[]
     )
+
+    delete resourceExpected?.auth?.password
 
     expect(response.statusCode).toBe(200)
     expect(response.json()).toEqual(resourceExpected)
@@ -173,7 +186,9 @@ describe.sequential('/:id GET (getById)', () => {
 
     const resourceExpected: any = find({ name: 'Zakariyya' }, resourcesJSON)
 
-    const father = find({ _id: resourceExpected.father }, resourcesJSON)
+    const father: any = find({ _id: resourceExpected.father }, resourcesJSON)
+
+    delete father.auth.password
 
     resourceExpected.father = father
 
