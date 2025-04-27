@@ -11,6 +11,9 @@ importers:
       '@fastify/sensible':
         specifier: ^6.0.3
         version: 6.0.3
+      bson:
+        specifier: ^6.10.3
+        version: 6.10.3
       fastify:
         specifier: ^5.0.0
         version: 5.2.1
@@ -54,9 +57,6 @@ importers:
       '@types/semver':
         specifier: ^7.7.0
         version: 7.7.0
-      bson:
-        specifier: ^6.10.3
-        version: 6.10.3
       fastify-tsconfig:
         specifier: ^3.0.0
         version: 3.0.0
