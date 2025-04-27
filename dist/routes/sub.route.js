@@ -1,7 +1,8 @@
-import { getSubHandler } from "../handler/sub.handler";
-import { getChildarray } from "../utils/mongoose.utils";
-import { countCharacter } from "../utils/misc.utils";
-const subRoute = (modelName, schemaOptions) => async (app) => {
+// src/routes/sub.route.ts
+import { getSubHandler } from "../handler/sub.handler.mjs";
+import { getChildarray } from "../utils/mongoose.utils.mjs";
+import { countCharacter } from "../utils/misc.utils.mjs";
+var subRoute = (modelName, schemaOptions) => async (app) => {
   const { schema } = schemaOptions;
   for (const [subPathName, schemaInstance] of Object.entries(schema.obj)) {
     if (!Array.isArray(schemaInstance)) continue;

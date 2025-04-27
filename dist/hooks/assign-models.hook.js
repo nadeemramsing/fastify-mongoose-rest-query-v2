@@ -1,5 +1,6 @@
-import { getDB } from "../utils/db.utils";
-const assignModelsHook = (app, opts) => {
+// src/hooks/assign-models.hook.ts
+import { getDB } from "../utils/db.utils.mjs";
+var assignModelsHook = (app, opts) => {
   if (!app.hasRequestDecorator("models")) {
     app.decorateRequest("models", null);
   }

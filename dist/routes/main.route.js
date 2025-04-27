@@ -1,8 +1,9 @@
-import { getMainHandler } from "../handler/main.handler";
-import { roleHook } from "../hooks/role.hook";
-import { subRoute } from "./sub.route";
-import { getSubarray } from "../utils/mongoose.utils";
-const mainRoute = (opts) => async (app) => {
+// src/routes/main.route.ts
+import { getMainHandler } from "../handler/main.handler.mjs";
+import { roleHook } from "../hooks/role.hook.mjs";
+import { subRoute } from "./sub.route.mjs";
+import { getSubarray } from "../utils/mongoose.utils.mjs";
+var mainRoute = (opts) => async (app) => {
   app.addHook("onRequest", roleHook(opts));
   for (const [
     modelName,

@@ -2,6 +2,6 @@
   "version": 3,
   "sources": ["../src/index.ts"],
   "sourcesContent": ["import { FastifyInstance } from 'fastify'\nimport { IRestOptions } from './mrq.interfaces'\nimport { assignModelsHook } from './hooks/assign-models.hook'\nimport { closeConnections } from './utils/db.utils'\nimport { mainRoute } from './routes/main.route'\n\nexport * from './mrq.errors'\nexport * from './mrq.interfaces'\nexport * from './mrq.enum'\nexport * from './utils/db.utils'\n\nexport const restify = (opts: IRestOptions) => async (app: FastifyInstance) => {\n  app.addHook('onRequest', assignModelsHook(app, opts))\n\n  app.addHook('onRoute', ({ url, method }) =>\n    app.log.info(`Endpoint created: ${url} ${method}`)\n  )\n\n  app.addHook('onClose', closeConnections)\n\n  app.register(mainRoute(opts))\n}\n"],
-  "mappings": "AAEA,SAAS,wBAAwB;AACjC,SAAS,wBAAwB;AACjC,SAAS,iBAAiB;AAE1B,cAAc;AACd,cAAc;AACd,cAAc;AACd,cAAc;AAEP,MAAM,UAAU,CAAC,SAAuB,OAAO,QAAyB;AAC7E,MAAI,QAAQ,aAAa,iBAAiB,KAAK,IAAI,CAAC;AAEpD,MAAI;AAAA,IAAQ;AAAA,IAAW,CAAC,EAAE,KAAK,OAAO,MACpC,IAAI,IAAI,KAAK,qBAAqB,GAAG,IAAI,MAAM,EAAE;AAAA,EACnD;AAEA,MAAI,QAAQ,WAAW,gBAAgB;AAEvC,MAAI,SAAS,UAAU,IAAI,CAAC;AAC9B;",
+  "mappings": ";AAEA,SAAS,wBAAwB;AACjC,SAAS,wBAAwB;AACjC,SAAS,iBAAiB;AAE1B,cAAc;AACd,cAAc;AACd,cAAc;AACd,cAAc;AAEP,IAAM,UAAU,CAAC,SAAuB,OAAO,QAAyB;AAC7E,MAAI,QAAQ,aAAa,iBAAiB,KAAK,IAAI,CAAC;AAEpD,MAAI;AAAA,IAAQ;AAAA,IAAW,CAAC,EAAE,KAAK,OAAO,MACpC,IAAI,IAAI,KAAK,qBAAqB,GAAG,IAAI,MAAM,EAAE;AAAA,EACnD;AAEA,MAAI,QAAQ,WAAW,gBAAgB;AAEvC,MAAI,SAAS,UAAU,IAAI,CAAC;AAC9B;",
   "names": []
 }

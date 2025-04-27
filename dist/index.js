@@ -1,11 +1,12 @@
-import { assignModelsHook } from "./hooks/assign-models.hook";
-import { closeConnections } from "./utils/db.utils";
-import { mainRoute } from "./routes/main.route";
-export * from "./mrq.errors";
-export * from "./mrq.interfaces";
-export * from "./mrq.enum";
-export * from "./utils/db.utils";
-const restify = (opts) => async (app) => {
+// src/index.ts
+import { assignModelsHook } from "./hooks/assign-models.hook.mjs";
+import { closeConnections } from "./utils/db.utils.mjs";
+import { mainRoute } from "./routes/main.route.mjs";
+export * from "./mrq.errors.mjs";
+export * from "./mrq.interfaces.mjs";
+export * from "./mrq.enum.mjs";
+export * from "./utils/db.utils.mjs";
+var restify = (opts) => async (app) => {
   app.addHook("onRequest", assignModelsHook(app, opts));
   app.addHook(
     "onRoute",

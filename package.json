@@ -1,6 +1,6 @@
 {
   "name": "@nadeemramsing/fastify-mongoose-rest-query",
-  "version": "2.0.13",
+  "version": "2.0.14",
   "publishConfig": {
     "access": "public"
   },
@@ -15,7 +15,7 @@
     ".": "./dist/index.js"
   },
   "scripts": {
-    "build": "esbuild src/**/*.ts --platform=node --outdir=dist --sourcemap --format=esm",
+    "build": "rm -rf dist && node esbuild.config.js",
     "test": "NODE_OPTIONS='--import tsx' vitest run",
     "prepublishOnly": "npm run build"
   },
@@ -51,6 +51,7 @@
     "@types/node": "^22.13.5",
     "@types/semver": "^7.7.0",
     "esbuild": "^0.25.3",
+    "esbuild-plugin-file-path-extensions": "^2.1.4",
     "fastify-tsconfig": "^3.0.0",
     "map-obj": "^5.0.2",
     "mongodb-memory-server": "^10.1.4",
