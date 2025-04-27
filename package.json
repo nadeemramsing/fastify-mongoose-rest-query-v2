@@ -1,17 +1,19 @@
 {
   "name": "@nadeemramsing/fastify-mongoose-rest-query",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "publishConfig": {
     "access": "public"
   },
   "description": "",
   "type": "module",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./dist/index.js"
   },
   "scripts": {
-    "test": "NODE_OPTIONS='--import tsx' vitest run"
+    "test": "NODE_OPTIONS='--import tsx' vitest run",
+    "prepublishOnly": "tsc"
   },
   "keywords": [],
   "author": "",
