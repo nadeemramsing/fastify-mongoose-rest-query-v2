@@ -1,5 +1,5 @@
 {
-  "name": "fastify-mongoose-rest-query",
+  "name": "@nadeemramsing/fastify-mongoose-rest-query",
   "version": "2.0.0",
   "description": "",
   "type": "module",
