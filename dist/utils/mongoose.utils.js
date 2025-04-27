@@ -9,7 +9,7 @@ import {
 } from "../mrq.errors.js";
 import { model } from "./db.utils.js";
 import { leanOptions } from "../mrq.config.js";
-import { find } from "lodash/fp";
+import { find } from "lodash/fp.js";
 function runStaticMethods({
   Model,
   docs,

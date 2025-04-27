@@ -9,11 +9,11 @@
       "@src/*": ["src/*"],
       "@test/*": ["test/*"]
     },
-    "rootDir": "./src", 
+    "rootDir": ".", 
     "outDir": "./dist",
     "strict": true,
     "declaration": true
   },
-  "include": ["src/**/*"],  
-  "exclude": ["node_modules", "test"]
+  "include": ["src/**/*", "test/**/*"],  
+  "exclude": ["node_modules"]
 }

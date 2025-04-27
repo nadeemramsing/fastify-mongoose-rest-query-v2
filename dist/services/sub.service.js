@@ -15,7 +15,7 @@ import {
   size,
   take,
   uniq
-} from "lodash/fp";
+} from "lodash/fp.js";
 import sift from "sift";
 import { toJSONOptions } from "../mrq.config.js";
 import { useSession } from "../utils/mongoose.utils.js";

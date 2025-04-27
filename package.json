@@ -1,6 +1,6 @@
 {
   "name": "@nadeemramsing/fastify-mongoose-rest-query",
-  "version": "2.0.16",
+  "version": "2.0.17",
   "publishConfig": {
     "access": "public"
   },
@@ -38,7 +38,6 @@
     "@fastify/sensible": "6.x",
     "fastify": "5.x",
     "fastify-plugin": "5.x",
-    "lodash": "4.x",
     "moize": "6.x",
     "mongoose": "8.x",
     "promise-all": "1.x"
@@ -47,7 +46,7 @@
     "@fastify/autoload": "^6.1.0",
     "@fastify/type-provider-typebox": "^5.1.0",
     "@sinclair/typebox": "^0.34.27",
-    "@types/lodash": "^4.17.15",
+    "@types/lodash": "^4.17.16",
     "@types/node": "^22.13.5",
     "@types/semver": "^7.7.0",
     "esbuild": "^0.25.3",

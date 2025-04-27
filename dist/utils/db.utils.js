@@ -1,7 +1,7 @@
 // src/utils/db.utils.ts
 import { httpErrors } from "@fastify/sensible";
 import { createConnection } from "mongoose";
-import { pickBy } from "lodash/fp";
+import { pickBy } from "lodash/fp.js";
 import promiseAll from "promise-all";
 import { SCHEMA_NOT_REGISTERED } from "../mrq.errors.js";
 var pool = {};
