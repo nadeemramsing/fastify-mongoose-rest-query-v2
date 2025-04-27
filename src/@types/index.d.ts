@@ -1,5 +1,6 @@
 import 'fastify'
 import { Connection } from 'mongoose'
+import './promise-all'
 
 declare module 'fastify' {
   interface FastifyRequest {
