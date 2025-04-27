@@ -3,7 +3,7 @@
     "module": "ESNext",
     "moduleResolution": "Node",
     "target": "ESNext",
-    "types": ["vitest/globals"],
+    "types": ["vitest/globals", "./src/@types"],
     "baseUrl": "./",
     "paths": {
       "@src/*": ["src/*"],
