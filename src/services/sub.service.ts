@@ -1,22 +1,7 @@
 import { ObjectId } from 'bson'
 import { Model, Types } from 'mongoose'
 import { FastifyRequest } from 'fastify'
-import {
-  drop,
-  filter,
-  find,
-  isNil,
-  map,
-  orderBy,
-  partition,
-  pick,
-  pipe,
-  pluck,
-  reject,
-  size,
-  take,
-  uniq,
-} from 'lodash/fp'
+import fp from 'lodash/fp'
 import sift from 'sift'
 import { MrqDocument, MrqQuery } from '../mrq.interfaces'
 import { toJSONOptions } from '../mrq.config'
@@ -43,14 +28,14 @@ export async function getByQuery({
   query,
   subarray,
 }: Pick<IBaseOptions, 'query' | 'subarray'>) {
-  return pipe(
-    filter(sift(query.filter)),
+  return fp.pipe(
+    fp.filter(sift(query.filter)),
     query.sort.sortFieldsArr.length
-      ? orderBy(query.sort.sortFieldsArr, query.sort.sortOrderArr)
+      ? fp.orderBy(query.sort.sortFieldsArr, query.sort.sortOrderArr)
       : (x) => x,
-    drop(query.skip),
-    take(query.limit),
-    map(query.select.length > 1 ? pick(query.select) : (x) => x)
+    fp.drop(query.skip),
+    fp.take(query.limit),
+    fp.map(query.select.length > 1 ? fp.pick(query.select) : (x) => x)
   )(subarray)
 }
 
@@ -60,7 +45,7 @@ export async function count({
   query,
   subarray,
 }: Pick<IBaseOptions, 'query' | 'subarray'>) {
-  return pipe(filter(sift(query.filter)), size)(subarray)
+  return fp.pipe(fp.filter(sift(query.filter)), fp.size)(subarray)
 }
 
 // ---
@@ -70,11 +55,11 @@ export async function distinct({
   path,
   subarray,
 }: Pick<IBaseOptions, 'query' | 'path' | 'subarray'>) {
-  return pipe(
-    filter(sift(query.filter)),
-    pluck(path),
-    uniq,
-    reject(isNil)
+  return fp.pipe(
+    fp.filter(sift(query.filter)),
+    fp.pluck(path),
+    fp.uniq,
+    fp.reject(fp.isNil)
   )(subarray)
 }
 
@@ -130,7 +115,7 @@ export async function updateMany({
     {}
   )
 
-  const [subitemsToUpdate, subitemsToNotUpdate] = partition(
+  const [subitemsToUpdate, subitemsToNotUpdate] = fp.partition(
     (subitem) => bodyIdsMap[subitem._id],
     subarray
   )
@@ -177,7 +162,7 @@ export async function deleteByQuery({
   if (isDeleteAll)
     throw httpErrors.methodNotAllowed(IMPLICIT_DELETE_ALL_NOT_ALLOWED)
 
-  const subarrayToDelete = filter(
+  const subarrayToDelete = fp.filter(
     sift(query.filter),
     subarray
   ) as Types.DocumentArray<Types.Subdocument>
@@ -206,7 +191,7 @@ export async function getById({
   subId,
 }: Pick<IBaseOptions, 'query' | 'subarray' | 'subId'>) {
   const subitem = pipe(
-    find((subitem: { _id: ObjectId }) => subitem._id.equals(subId)),
+    fp.find((subitem: { _id: ObjectId }) => subitem._id.equals(subId)),
     query.select.length > 1 ? pick(query.select) : (x) => x
   )(subarray)
 

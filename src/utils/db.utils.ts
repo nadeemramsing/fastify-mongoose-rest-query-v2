@@ -1,7 +1,7 @@
 import { FastifyInstance, FastifyRequest } from 'fastify'
 import { httpErrors } from '@fastify/sensible'
 import { Connection, createConnection, IndexesDiff } from 'mongoose'
-import { pickBy } from 'lodash/fp'
+import fp from 'lodash/fp'
 import promiseAll from 'promise-all'
 import { IRestOptions } from '../mrq.interfaces'
 import { SCHEMA_NOT_REGISTERED } from '../mrq.errors'
@@ -56,7 +56,7 @@ async function mapModels(
   }
 
   const diffs = await promiseAll(p).then(
-    pickBy<IndexesDiff>((v, k) => v.toDrop.length || v.toCreate.length)
+    fp.pickBy<IndexesDiff>((v, k) => v.toDrop.length || v.toCreate.length)
   )
 
   const hasAnyDiff = Object.keys(diffs).length

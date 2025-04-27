@@ -11,7 +11,7 @@ import {
 import { model } from './db.utils'
 import { leanOptions } from '../mrq.config'
 import { MrqDocument } from '../mrq.interfaces'
-import { find } from 'lodash/fp'
+import fp from 'lodash/fp'
 
 interface IRunStaticMethods<T> {
   Model: Model<T>
@@ -141,7 +141,7 @@ export async function getChildarray(
 
   if (!doc) throw httpErrors.notFound(DOCUMENT_NOT_FOUND)
 
-  const subitem = find((subitem) => subitem._id.equals(subId), doc[subPathName])
+  const subitem = fp.find((subitem) => subitem._id.equals(subId), doc[subPathName])
 
   if (!subitem) throw httpErrors.notFound(SUBITEM_NOT_FOUND)
 
