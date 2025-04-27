@@ -1,6 +1,6 @@
 {
   "name": "@nadeemramsing/fastify-mongoose-rest-query",
-  "version": "2.0.19",
+  "version": "2.0.20",
   "publishConfig": {
     "access": "public"
   },
@@ -17,7 +17,8 @@
   "scripts": {
     "build": "rm -rf dist && node esbuild.config.js",
     "test": "NODE_OPTIONS='--import tsx' vitest run",
-    "prepublishOnly": "npm run build"
+    "tsc": "tsc --emitDeclarationOnly --declaration --rootDir src --outDir dist",
+    "prepublishOnly": "npm run build && npm run tsc"
   },
   "keywords": [],
   "author": "",
