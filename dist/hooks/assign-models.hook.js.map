@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/hooks/assign-models.hook.ts"],
+  "sourcesContent": ["import { FastifyInstance, onRequestAsyncHookHandler } from 'fastify'\nimport { IRestOptions } from '../mrq.interfaces'\nimport { getDB } from '../utils/db.utils'\n\nexport const assignModelsHook: (\n  app: FastifyInstance,\n  opts: IRestOptions\n) => onRequestAsyncHookHandler = (app, opts) => {\n  if (!app.hasRequestDecorator('models')) {\n    app.decorateRequest('models', null)\n  }\n\n  if (!app.hasRequestDecorator('x-client-mongodb-path')) {\n    app.decorateRequest('x-client-mongodb-path', '')\n  }\n\n  return async (req, rep) => {\n    req.mongoose_conn = await getDB(\n      app,\n      req['x-client-mongodb-path'] as string,\n      opts.schemas\n    )\n  }\n}\n"],
+  "mappings": "AAEA,SAAS,aAAa;AAEf,MAAM,mBAGoB,CAAC,KAAK,SAAS;AAC9C,MAAI,CAAC,IAAI,oBAAoB,QAAQ,GAAG;AACtC,QAAI,gBAAgB,UAAU,IAAI;AAAA,EACpC;AAEA,MAAI,CAAC,IAAI,oBAAoB,uBAAuB,GAAG;AACrD,QAAI,gBAAgB,yBAAyB,EAAE;AAAA,EACjD;AAEA,SAAO,OAAO,KAAK,QAAQ;AACzB,QAAI,gBAAgB,MAAM;AAAA,MACxB;AAAA,MACA,IAAI,uBAAuB;AAAA,MAC3B,KAAK;AAAA,IACP;AAAA,EACF;AACF;",
+  "names": []
+}

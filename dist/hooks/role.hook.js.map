@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/hooks/role.hook.ts"],
+  "sourcesContent": ["import { onRequestAsyncHookHandler } from 'fastify'\nimport { httpErrors } from '@fastify/sensible'\nimport { IRestOptions } from '../mrq.interfaces'\nimport { ROLE_DOES_NOT_HAVE_ACCESS_HOOK_LEVEL } from '../mrq.errors'\n\nexport const roleHook: (opts: IRestOptions) => onRequestAsyncHookHandler = (\n  opts\n) => {\n  return async (req, rep) => {\n    if (req.role !== opts.role) throw httpErrors.unauthorized(ROLE_DOES_NOT_HAVE_ACCESS_HOOK_LEVEL)\n  }\n}\n"],
+  "mappings": "AACA,SAAS,kBAAkB;AAE3B,SAAS,4CAA4C;AAE9C,MAAM,WAA8D,CACzE,SACG;AACH,SAAO,OAAO,KAAK,QAAQ;AACzB,QAAI,IAAI,SAAS,KAAK,KAAM,OAAM,WAAW,aAAa,oCAAoC;AAAA,EAChG;AACF;",
+  "names": []
+}

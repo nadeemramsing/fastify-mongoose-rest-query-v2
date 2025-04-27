@@ -1,6 +1,6 @@
 {
   "name": "@nadeemramsing/fastify-mongoose-rest-query",
-  "version": "2.0.12",
+  "version": "2.0.13",
   "publishConfig": {
     "access": "public"
   },
@@ -15,7 +15,7 @@
     ".": "./dist/index.js"
   },
   "scripts": {
-    "build": "esbuild src/index.ts --platform=node --outdir=dist --sourcemap --format=esm",
+    "build": "esbuild src/**/*.ts --platform=node --outdir=dist --sourcemap --format=esm",
     "test": "NODE_OPTIONS='--import tsx' vitest run",
     "prepublishOnly": "npm run build"
   },
