@@ -3,7 +3,6 @@ import { IRestOptions } from './mrq.interfaces'
 import { assignModelsHook } from './hooks/assign-models.hook'
 import { closeConnections } from './utils/db.utils'
 import { mainRoute } from './routes/main.route'
-import './@types'
 
 export * from './mrq.errors'
 export * from './mrq.interfaces'
