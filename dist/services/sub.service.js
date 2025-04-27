@@ -18125,13 +18125,13 @@ var buffer = ByteUtils.allocate(MAXSIZE);
 var import_fp = __toESM(require_fp(), 1);
 var import_sift = __toESM(require_sift(), 1);
 var import_sensible = __toESM(require_sensible(), 1);
-import { toJSONOptions } from "../mrq.config.mjs";
-import { useSession } from "../utils/mongoose.utils.mjs";
+import { toJSONOptions } from "../mrq.config..js";
+import { useSession } from "../utils/mongoose.utils..js";
 import {
   IMPLICIT_DELETE_ALL_NOT_ALLOWED,
   NO_SUBITEM_FOUND,
   SUBITEM_NOT_FOUND
-} from "../mrq.errors.mjs";
+} from "../mrq.errors..js";
 async function getByQuery({
   query,
   subarray

@@ -18984,8 +18984,8 @@ var toJSString = import_index.default.toJSString;
 var validate = import_index.default.validate;
 
 // src/utils/query.sub.utils.ts
-import { memoOptions } from "../mrq.config.mjs";
-import { getSelect, getSort } from "./query.utils.mjs";
+import { memoOptions } from "../mrq.config..js";
+import { getSelect, getSort } from "./query.utils..js";
 var sortMap = {
   "1": "asc",
   "-1": "desc"

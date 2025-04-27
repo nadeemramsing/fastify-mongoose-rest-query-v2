@@ -10256,10 +10256,10 @@ var require_sensible = __commonJS({
 
 // src/handler/sub.handler.ts
 var import_sensible = __toESM(require_sensible(), 1);
-import { HandlerAccessEnum } from "../mrq.enum.mjs";
-import * as subService from "../services/sub.service.mjs";
-import { getQueryForSubarray } from "../utils/query.sub.utils.mjs";
-import { ROLE_DOES_NOT_HAVE_ACCESS_HANDLER_LEVEL } from "../mrq.errors.mjs";
+import { HandlerAccessEnum } from "../mrq.enum..js";
+import * as subService from "../services/sub.service..js";
+import { getQueryForSubarray } from "../utils/query.sub.utils..js";
+import { ROLE_DOES_NOT_HAVE_ACCESS_HANDLER_LEVEL } from "../mrq.errors..js";
 var getSubHandler = (modelName, {
   subPathName,
   handlerAccesses,

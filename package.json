@@ -1,6 +1,6 @@
 {
   "name": "@nadeemramsing/fastify-mongoose-rest-query",
-  "version": "2.0.14",
+  "version": "2.0.15",
   "publishConfig": {
     "access": "public"
   },

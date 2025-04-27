@@ -14220,9 +14220,9 @@ import {
   INVALID_BODY,
   SUBARRAY_NOT_FOUND,
   SUBITEM_NOT_FOUND
-} from "../mrq.errors.mjs";
-import { model } from "./db.utils.mjs";
-import { leanOptions } from "../mrq.config.mjs";
+} from "../mrq.errors..js";
+import { model } from "./db.utils..js";
+import { leanOptions } from "../mrq.config..js";
 function runStaticMethods({
   Model,
   docs,

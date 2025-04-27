@@ -32821,7 +32821,7 @@ ${body}`);
 
 // src/@types/index.d.ts
 var import_fastify = __toESM(require_fastify(), 1);
-import "./other-types-d.mjs";
+import "./other-types-d..js";
 /*! Bundled license information:
 
 @fastify/forwarded/index.js:

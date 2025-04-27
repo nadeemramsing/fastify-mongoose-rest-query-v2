@@ -78763,7 +78763,7 @@ var import_sensible = __toESM(require_sensible(), 1);
 var import_mongoose = __toESM(require_mongoose2(), 1);
 var import_fp = __toESM(require_fp(), 1);
 var import_promise_all = __toESM(require_src2(), 1);
-import { SCHEMA_NOT_REGISTERED } from "../mrq.errors.mjs";
+import { SCHEMA_NOT_REGISTERED } from "../mrq.errors..js";
 var pool = {};
 async function getDB(app, uri, schemas) {
   let conn = pool[uri];

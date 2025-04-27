@@ -29209,8 +29209,8 @@ var toJSString = import_index.default.toJSString;
 var validate = import_index.default.validate;
 
 // src/utils/query.utils.ts
-import { IMPLICIT_SELECT_ALL_NOT_ALLOWED } from "../mrq.errors.mjs";
-import { memoOptions } from "../mrq.config.mjs";
+import { IMPLICIT_SELECT_ALL_NOT_ALLOWED } from "../mrq.errors..js";
+import { memoOptions } from "../mrq.config..js";
 function getQuery(req, modelName, options = {}) {
   const securePaths = req.mongoose_conn.securePathsPerModel[modelName];
   return getQueryInternal(req.query, securePaths, options);

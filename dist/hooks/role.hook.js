@@ -10256,7 +10256,7 @@ var require_sensible = __commonJS({
 
 // src/hooks/role.hook.ts
 var import_sensible = __toESM(require_sensible(), 1);
-import { ROLE_DOES_NOT_HAVE_ACCESS_HOOK_LEVEL } from "../mrq.errors.mjs";
+import { ROLE_DOES_NOT_HAVE_ACCESS_HOOK_LEVEL } from "../mrq.errors..js";
 var roleHook = (opts) => {
   return async (req, rep) => {
     if (req.role !== opts.role) throw import_sensible.httpErrors.unauthorized(ROLE_DOES_NOT_HAVE_ACCESS_HOOK_LEVEL);

@@ -10256,15 +10256,15 @@ var require_sensible = __commonJS({
 
 // src/handler/main.handler.ts
 var import_sensible = __toESM(require_sensible(), 1);
-import { model } from "../utils/db.utils.mjs";
-import { leanOptions, toJSONOptions } from "../mrq.config.mjs";
-import { getQuery } from "../utils/query.utils.mjs";
-import { HandlerAccessEnum } from "../mrq.enum.mjs";
+import { model } from "../utils/db.utils..js";
+import { leanOptions, toJSONOptions } from "../mrq.config..js";
+import { getQuery } from "../utils/query.utils..js";
+import { HandlerAccessEnum } from "../mrq.enum..js";
 import {
   getArrayFromBodyWithId,
   runStaticMethods,
   useSession
-} from "../utils/mongoose.utils.mjs";
+} from "../utils/mongoose.utils..js";
 import {
   DOCUMENT_NOT_FOUND,
   IMPLICIT_DELETE_ALL_NOT_ALLOWED,
@@ -10272,7 +10272,7 @@ import {
   NO_DOCUMENT_FOUND,
   PATH_NOT_FOUND_IN_SCHEMA,
   ROLE_DOES_NOT_HAVE_ACCESS_HANDLER_LEVEL
-} from "../mrq.errors.mjs";
+} from "../mrq.errors..js";
 var getMainHandler = (modelName, handlerAccesses = []) => {
   const getByQuery = async (req, rep) => {
     if (!handlerAccesses.includes(HandlerAccessEnum.GET_BY_QUERY))

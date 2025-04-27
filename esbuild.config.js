@@ -8,5 +8,5 @@ build({
   platform: 'node',
   format: 'esm',
   sourcemap: true,
-  plugins: [esbuildPluginFilePathExtensions()],
+  plugins: [esbuildPluginFilePathExtensions({ esmExtension: 'js' })],
 }).catch(() => process.exit(1))
