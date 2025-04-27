@@ -190,9 +190,9 @@ export async function getById({
   subarray,
   subId,
 }: Pick<IBaseOptions, 'query' | 'subarray' | 'subId'>) {
-  const subitem = pipe(
+  const subitem = fp.pipe(
     fp.find((subitem: { _id: ObjectId }) => subitem._id.equals(subId)),
-    query.select.length > 1 ? pick(query.select) : (x) => x
+    query.select.length > 1 ? fp.pick(query.select) : (x) => x
   )(subarray)
 
   if (!subitem || !Object.keys(subitem).length)

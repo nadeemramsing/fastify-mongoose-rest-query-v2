@@ -1,38 +1,28 @@
-import { readFile } from 'fs/promises'
-import { build } from 'esbuild'
-import { esbuildPluginFilePathExtensions } from 'esbuild-plugin-file-path-extensions'
+const { readFile } = require('fs/promises')
+const { build } = require('esbuild')
+const path = require('path')
 
-const pkgRaw = await readFile(
-  new URL('./package.json', import.meta.url),
-  'utf8'
-)
-const pkg = JSON.parse(pkgRaw)
+async function run() {
+  const pkgRaw = await readFile(
+    path.join(__dirname, 'package.json'),
+    'utf8'
+  )
+  const pkg = JSON.parse(pkgRaw)
 
-const externals = [
-  ...Object.keys(pkg.dependencies || {}),
-  ...Object.keys(pkg.peerDependencies || {}),
-]
+  const externals = [
+    ...Object.keys(pkg.dependencies || {}),
+    ...Object.keys(pkg.peerDependencies || {}),
+  ]
 
-const addExtToLodashFPPlugin = {
-  name: 'add-ext-to-lodash-fp-plugin',
-  setup(build) {
-    build.onResolve({ filter: /^lodash\/fp$/ }, (args) => ({
-      path: 'lodash/fp.js',
-      external: true,
-    }))
-  },
+  build({
+    entryPoints: ['src/**/*'],
+    outdir: 'dist',
+    bundle: true,
+    platform: 'node',
+    format: 'cjs',
+    sourcemap: true,
+    external: externals,
+  }).catch(() => process.exit(1))
 }
 
-build({
-  entryPoints: ['src/**/*'], // Change if your entry is different
-  outdir: 'dist',
-  bundle: true,
-  platform: 'node',
-  format: 'esm',
-  sourcemap: true,
-  external: externals,
-  plugins: [
-    esbuildPluginFilePathExtensions({ esmExtension: 'js' }),
-    addExtToLodashFPPlugin,
-  ],
-}).catch(() => process.exit(1))
+run()

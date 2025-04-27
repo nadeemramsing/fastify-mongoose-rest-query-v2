@@ -1,7 +1,7 @@
 {
   "version": 3,
-  "sources": [],
-  "sourcesContent": [],
-  "mappings": "",
+  "sources": ["../src/mrq.interfaces.ts"],
+  "sourcesContent": ["import { Schema, Document } from 'mongoose'\nimport { HandlerAccessEnum } from './mrq.enum'\n\nexport interface ISchemaOption {\n  endpointName: string\n  schema: Schema\n  handlerAccesses: HandlerAccessEnum[]\n  getSubarray: Function\n  subIdName: string\n  subPathName: string\n}\n\nexport interface IRestOptions {\n  role?: string\n  schemas: {\n    [modelName: string]: ISchemaOption\n  }\n}\n\nexport interface IGetQueryOptions {\n  ignoreSelect?: boolean\n}\n\nexport interface MrqDocument extends Document {\n  [key: string]: any\n}\n\nexport interface MrqQuery {\n  filter: any\n  sort: any\n  select: any\n  populate: any\n  skip: number\n  limit: number\n}\n"],
+  "mappings": ";;;;;;;;;;;;;;;;AAAA;AAAA;",
   "names": []
 }

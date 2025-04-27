@@ -2,6 +2,6 @@
   "version": 3,
   "sources": ["../../src/@types/index.d.ts"],
   "sourcesContent": ["import 'fastify'\nimport { Connection } from 'mongoose'\nimport './other-types-d'\n\ndeclare module 'fastify' {\n  interface FastifyRequest {\n    mongoose_conn: Connection\n    role: string\n    'x-client-mongodb-path': string\n  }\n}\n\ndeclare module 'mongoose' {\n  interface Connection {\n    securePathsPerModel: { [modelName: string]: { [path: string]: boolean } }\n  }\n}\n"],
-  "mappings": ";AAAA,OAAO;AAEP,OAAO;",
+  "mappings": ";;;AAAA,qBAAO;",
   "names": []
 }

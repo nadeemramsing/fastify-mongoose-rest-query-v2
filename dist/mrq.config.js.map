@@ -2,6 +2,6 @@
   "version": 3,
   "sources": ["../src/mrq.config.ts"],
   "sourcesContent": ["export const leanOptions = {\n  virtuals: true,\n  versionKey: false,\n}\n\nexport const toJSONOptions = {\n  virtuals: true,\n  versionKey: false,\n}\n\nexport const memoOptions = {\n  maxAge: 30 * 24 * 60 * 60 * 1_000, // 1 month\n}\n"],
-  "mappings": ";AAAO,IAAM,cAAc;AAAA,EACzB,UAAU;AAAA,EACV,YAAY;AACd;AAEO,IAAM,gBAAgB;AAAA,EAC3B,UAAU;AAAA,EACV,YAAY;AACd;AAEO,IAAM,cAAc;AAAA,EACzB,QAAQ,KAAK,KAAK,KAAK,KAAK;AAAA;AAC9B;",
+  "mappings": ";;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAO,IAAM,cAAc;AAAA,EACzB,UAAU;AAAA,EACV,YAAY;AACd;AAEO,IAAM,gBAAgB;AAAA,EAC3B,UAAU;AAAA,EACV,YAAY;AACd;AAEO,IAAM,cAAc;AAAA,EACzB,QAAQ,KAAK,KAAK,KAAK,KAAK;AAAA;AAC9B;",
   "names": []
 }

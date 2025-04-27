@@ -1,11 +1,11 @@
 {
   "name": "@nadeemramsing/fastify-mongoose-rest-query",
-  "version": "2.0.18",
+  "version": "2.0.19",
   "publishConfig": {
     "access": "public"
   },
   "description": "",
-  "type": "module",
+  "type": "commonjs",
   "files": [
     "dist"
   ],
@@ -50,7 +50,6 @@
     "@types/node": "^22.13.5",
     "@types/semver": "^7.7.0",
     "esbuild": "^0.25.3",
-    "esbuild-plugin-file-path-extensions": "^2.1.4",
     "fastify-tsconfig": "^3.0.0",
     "map-obj": "^5.0.2",
     "mongodb-memory-server": "^10.1.4",
