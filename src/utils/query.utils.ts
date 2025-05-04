@@ -13,7 +13,7 @@ export function getQuery(
   modelName: string,
   options: IGetQueryOptions = {}
 ) {
-  const securePaths = req.mongoose_conn.securePathsPerModel[modelName]
+  const securePaths = req.mongooseConn.securePathsPerModel[modelName]
 
   return getQueryInternal(req.query, securePaths, options)
 }

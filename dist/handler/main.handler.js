@@ -52,13 +52,6 @@ var INVALID_BODY = "INVALID_BODY";
 var EMPTY_BODY = "EMPTY_BODY";
 var DOCUMENT_NOT_FOUND = "DOCUMENT_NOT_FOUND";
 
-// src/utils/db.utils.ts
-function model(req, modelName) {
-  const Model = req.mongoose_conn.models[modelName];
-  if (!Model) throw import_sensible.httpErrors.badRequest(SCHEMA_NOT_REGISTERED);
-  return Model;
-}
-
 // src/mrq.config.ts
 var leanOptions = {
   virtuals: true,
@@ -73,12 +66,19 @@ var memoOptions = {
   // 1 month
 };
 
+// src/utils/db.utils.ts
+function model(req, modelName) {
+  const Model = req.mongooseConn.models[modelName];
+  if (!Model) throw import_sensible.httpErrors.badRequest(SCHEMA_NOT_REGISTERED);
+  return Model;
+}
+
 // src/utils/query.utils.ts
 var import_moize = __toESM(require("moize"));
 var import_sensible2 = require("@fastify/sensible");
 var import_mongodb_query_parser = require("mongodb-query-parser");
 function getQuery(req, modelName, options = {}) {
-  const securePaths = req.mongoose_conn.securePathsPerModel[modelName];
+  const securePaths = req.mongooseConn.securePathsPerModel[modelName];
   return getQueryInternal(req.query, securePaths, options);
 }
 var getQueryInternal = (0, import_moize.default)(getQueryInternal_, memoOptions);

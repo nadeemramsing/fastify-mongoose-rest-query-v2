@@ -4,7 +4,7 @@ import './other-types-d'
 
 declare module 'fastify' {
   interface FastifyRequest {
-    mongoose_conn: Connection
+    mongooseConn: Connection
     role: string
     'x-client-mongodb-path': string
   }

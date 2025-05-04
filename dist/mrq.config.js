@@ -22,6 +22,7 @@ var mrq_config_exports = {};
 __export(mrq_config_exports, {
   leanOptions: () => leanOptions,
   memoOptions: () => memoOptions,
+  store: () => store,
   toJSONOptions: () => toJSONOptions
 });
 module.exports = __toCommonJS(mrq_config_exports);
@@ -37,10 +38,12 @@ var memoOptions = {
   maxAge: 30 * 24 * 60 * 60 * 1e3
   // 1 month
 };
+var store = { mongoPath: "" };
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   leanOptions,
   memoOptions,
+  store,
   toJSONOptions
 });
 //# sourceMappingURL=mrq.config.js.map

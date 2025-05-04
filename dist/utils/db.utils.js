@@ -32,6 +32,7 @@ var db_utils_exports = {};
 __export(db_utils_exports, {
   closeConnections: () => closeConnections,
   getDB: () => getDB,
+  getSingleConnection: () => getSingleConnection,
   model: () => model
 });
 module.exports = __toCommonJS(db_utils_exports);
@@ -43,9 +44,22 @@ var import_promise_all = __toESM(require("promise-all"));
 // src/mrq.errors.ts
 var SCHEMA_NOT_REGISTERED = "SCHEMA_NOT_REGISTERED";
 
+// src/mrq.config.ts
+var memoOptions = {
+  maxAge: 30 * 24 * 60 * 60 * 1e3
+  // 1 month
+};
+var store = { mongoPath: "" };
+
 // src/utils/db.utils.ts
 var pool = {};
+var singleConnection = null;
+async function getSingleConnection(app, opts) {
+  if (!store.mongoPath) return;
+  singleConnection = await getDB(app, store.mongoPath, opts.schemas);
+}
 async function getDB(app, uri, schemas) {
+  if (singleConnection) return singleConnection;
   let conn = pool[uri];
   if (!conn) {
     conn = (0, import_mongoose.createConnection)(uri, { autoIndex: false });
@@ -83,7 +97,7 @@ async function closeConnections() {
   await Promise.allSettled(p);
 }
 function model(req, modelName) {
-  const Model = req.mongoose_conn.models[modelName];
+  const Model = req.mongooseConn.models[modelName];
   if (!Model) throw import_sensible.httpErrors.badRequest(SCHEMA_NOT_REGISTERED);
   return Model;
 }
@@ -91,6 +105,7 @@ function model(req, modelName) {
 0 && (module.exports = {
   closeConnections,
   getDB,
+  getSingleConnection,
   model
 });
 //# sourceMappingURL=db.utils.js.map

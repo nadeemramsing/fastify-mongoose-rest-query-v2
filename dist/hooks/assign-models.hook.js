@@ -39,8 +39,18 @@ var import_sensible = require("@fastify/sensible");
 var import_mongoose = require("mongoose");
 var import_fp = __toESM(require("lodash/fp"));
 var import_promise_all = __toESM(require("promise-all"));
+
+// src/mrq.config.ts
+var memoOptions = {
+  maxAge: 30 * 24 * 60 * 60 * 1e3
+  // 1 month
+};
+
+// src/utils/db.utils.ts
 var pool = {};
+var singleConnection = null;
 async function getDB(app, uri, schemas) {
+  if (singleConnection) return singleConnection;
   let conn = pool[uri];
   if (!conn) {
     conn = (0, import_mongoose.createConnection)(uri, { autoIndex: false });
@@ -81,8 +91,8 @@ var assignModelsHook = (app, opts) => {
   if (!app.hasRequestDecorator("x-client-mongodb-path")) {
     app.decorateRequest("x-client-mongodb-path", "");
   }
-  return async (req, rep) => {
-    req.mongoose_conn = await getDB(
+  return async (req) => {
+    req.mongooseConn = await getDB(
       app,
       req["x-client-mongodb-path"],
       opts.schemas

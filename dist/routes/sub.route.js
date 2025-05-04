@@ -100,7 +100,7 @@ var import_mongoose = require("mongoose");
 var import_fp = __toESM(require("lodash/fp"));
 var import_promise_all = __toESM(require("promise-all"));
 function model(req, modelName) {
-  const Model = req.mongoose_conn.models[modelName];
+  const Model = req.mongooseConn.models[modelName];
   if (!Model) throw import_sensible.httpErrors.badRequest(SCHEMA_NOT_REGISTERED);
   return Model;
 }

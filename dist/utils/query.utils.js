@@ -50,7 +50,7 @@ var memoOptions = {
 
 // src/utils/query.utils.ts
 function getQuery(req, modelName, options = {}) {
-  const securePaths = req.mongoose_conn.securePathsPerModel[modelName];
+  const securePaths = req.mongooseConn.securePathsPerModel[modelName];
   return getQueryInternal(req.query, securePaths, options);
 }
 var getQueryInternal = (0, import_moize.default)(getQueryInternal_, memoOptions);

@@ -76,12 +76,6 @@ describe.sequential('/:id/subarray POST (create.sub)', () => {
 
     resource.addresses.push(...addresses)
 
-    console.log(
-      JSON.stringify(resource.addresses, null, 2),
-      JSON.stringify({ addresses }, null, 2),
-      JSON.stringify(response.json(), null, 2)
-    )
-
     expect(response.json()).toMatchObject(resource.addresses)
   })
 })

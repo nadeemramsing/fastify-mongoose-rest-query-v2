@@ -5,14 +5,27 @@ import fp from 'lodash/fp'
 import promiseAll from 'promise-all'
 import { IRestOptions } from '../mrq.interfaces'
 import { SCHEMA_NOT_REGISTERED } from '../mrq.errors'
+import { store } from '../mrq.config'
 
 const pool: { [key: string]: Connection } = {}
+
+let singleConnection: Connection | null = null
+
+export async function getSingleConnection(
+  app: FastifyInstance,
+  opts: IRestOptions
+) {
+  if (!store.mongoPath) return
+  singleConnection = await getDB(app, store.mongoPath, opts.schemas)
+}
 
 export async function getDB(
   app: FastifyInstance,
   uri: string,
   schemas: IRestOptions['schemas']
 ) {
+  if (singleConnection) return singleConnection
+
   let conn: Connection = pool[uri]
 
   if (!conn) {
@@ -74,7 +87,7 @@ export async function closeConnections() {
 }
 
 export function model(req: FastifyRequest, modelName: string) {
-  const Model = req.mongoose_conn.models[modelName]
+  const Model = req.mongooseConn.models[modelName]
 
   if (!Model) throw httpErrors.badRequest(SCHEMA_NOT_REGISTERED)
 

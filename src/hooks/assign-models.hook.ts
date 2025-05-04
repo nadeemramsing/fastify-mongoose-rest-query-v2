@@ -14,8 +14,8 @@ export const assignModelsHook: (
     app.decorateRequest('x-client-mongodb-path', '')
   }
 
-  return async (req, rep) => {
-    req.mongoose_conn = await getDB(
+  return async (req) => {
+    req.mongooseConn = await getDB(
       app,
       req['x-client-mongodb-path'] as string,
       opts.schemas

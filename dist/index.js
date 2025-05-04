@@ -52,6 +52,7 @@ __export(index_exports, {
   SUBITEM_NOT_FOUND: () => SUBITEM_NOT_FOUND,
   closeConnections: () => closeConnections,
   getDB: () => getDB,
+  getSingleConnection: () => getSingleConnection,
   model: () => model,
   restify: () => restify
 });
@@ -79,9 +80,30 @@ var SUBARRAY_NOT_FOUND = "SUBARRAY_NOT_FOUND";
 var NO_SUBITEM_FOUND = "NO_SUBITEM_FOUND";
 var SUBITEM_NOT_FOUND = "SUBITEM_NOT_FOUND";
 
+// src/mrq.config.ts
+var leanOptions = {
+  virtuals: true,
+  versionKey: false
+};
+var toJSONOptions = {
+  virtuals: true,
+  versionKey: false
+};
+var memoOptions = {
+  maxAge: 30 * 24 * 60 * 60 * 1e3
+  // 1 month
+};
+var store = { mongoPath: "" };
+
 // src/utils/db.utils.ts
 var pool = {};
+var singleConnection = null;
+async function getSingleConnection(app, opts) {
+  if (!store.mongoPath) return;
+  singleConnection = await getDB(app, store.mongoPath, opts.schemas);
+}
 async function getDB(app, uri, schemas) {
+  if (singleConnection) return singleConnection;
   let conn = pool[uri];
   if (!conn) {
     conn = (0, import_mongoose.createConnection)(uri, { autoIndex: false });
@@ -119,7 +141,7 @@ async function closeConnections() {
   await Promise.allSettled(p);
 }
 function model(req, modelName) {
-  const Model = req.mongoose_conn.models[modelName];
+  const Model = req.mongooseConn.models[modelName];
   if (!Model) throw import_sensible.httpErrors.badRequest(SCHEMA_NOT_REGISTERED);
   return Model;
 }
@@ -132,8 +154,8 @@ var assignModelsHook = (app, opts) => {
   if (!app.hasRequestDecorator("x-client-mongodb-path")) {
     app.decorateRequest("x-client-mongodb-path", "");
   }
-  return async (req, rep) => {
-    req.mongoose_conn = await getDB(
+  return async (req) => {
+    req.mongooseConn = await getDB(
       app,
       req["x-client-mongodb-path"],
       opts.schemas
@@ -144,26 +166,12 @@ var assignModelsHook = (app, opts) => {
 // src/handler/main.handler.ts
 var import_sensible4 = require("@fastify/sensible");
 
-// src/mrq.config.ts
-var leanOptions = {
-  virtuals: true,
-  versionKey: false
-};
-var toJSONOptions = {
-  virtuals: true,
-  versionKey: false
-};
-var memoOptions = {
-  maxAge: 30 * 24 * 60 * 60 * 1e3
-  // 1 month
-};
-
 // src/utils/query.utils.ts
 var import_moize = __toESM(require("moize"));
 var import_sensible2 = require("@fastify/sensible");
 var import_mongodb_query_parser = require("mongodb-query-parser");
 function getQuery(req, modelName, options = {}) {
-  const securePaths = req.mongoose_conn.securePathsPerModel[modelName];
+  const securePaths = req.mongooseConn.securePathsPerModel[modelName];
   return getQueryInternal(req.query, securePaths, options);
 }
 var getQueryInternal = (0, import_moize.default)(getQueryInternal_, memoOptions);
@@ -937,6 +945,7 @@ var mainRoute = (opts) => async (app) => {
 
 // src/index.ts
 var restify = (opts) => async (app) => {
+  await getSingleConnection(app, opts);
   app.addHook("onRequest", assignModelsHook(app, opts));
   app.addHook(
     "onRoute",
@@ -969,6 +978,7 @@ var restify = (opts) => async (app) => {
   SUBITEM_NOT_FOUND,
   closeConnections,
   getDB,
+  getSingleConnection,
   model,
   restify
 });

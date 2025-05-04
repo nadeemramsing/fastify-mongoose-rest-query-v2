@@ -9,3 +9,6 @@ export declare const toJSONOptions: {
 export declare const memoOptions: {
     maxAge: number;
 };
+export declare const store: {
+    mongoPath: string;
+};
