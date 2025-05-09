@@ -8,6 +8,7 @@ import { getSingleConnection } from './utils/db.utils'
 export * from './mrq.errors'
 export * from './mrq.interfaces'
 export * from './mrq.enum'
+export * from './mrq.config'
 export * from './utils/db.utils'
 
 export const restify = (opts: IRestOptions) => async (app: FastifyInstance) => {
