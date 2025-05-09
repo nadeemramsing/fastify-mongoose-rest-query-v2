@@ -1,6 +1,6 @@
 import { RouteHandlerMethod } from 'fastify';
-import { ISchemaOption } from '../mrq.interfaces';
-export declare const getSubHandler: (modelName: string, { subPathName, handlerAccesses, getSubarray, subIdName, }: Omit<ISchemaOption, "endpointName">) => {
+import { ISchemaOptionSub } from '../mrq.interfaces';
+export declare const getSubHandler: (modelName: string, { handlerAccesses, getSubarray, subIdName, subPathName, }: Omit<ISchemaOptionSub, "endpointName">) => {
     getByQuery: RouteHandlerMethod;
     count: RouteHandlerMethod;
     distinct: RouteHandlerMethod;

@@ -1,12 +1,12 @@
 import { Schema } from 'mongoose'
 import { FastifyInstance } from 'fastify'
-import { ISchemaOption } from '../mrq.interfaces'
+import { ISchemaOptionSub } from '../mrq.interfaces'
 import { getSubHandler } from '../handler/sub.handler'
 import { getChildarray } from '../utils/mongoose.utils'
 import { countCharacter } from '../utils/misc.utils'
 
 export const subRoute =
-  (modelName: string, schemaOptions: Omit<ISchemaOption, 'endpointName'>) =>
+  (modelName: string, schemaOptions: Omit<ISchemaOptionSub, 'endpointName'>) =>
   async (app: FastifyInstance) => {
     const { schema } = schemaOptions
 

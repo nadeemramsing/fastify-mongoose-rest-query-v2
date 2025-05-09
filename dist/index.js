@@ -744,10 +744,10 @@ function getSortForSubArray(sort) {
 
 // src/handler/sub.handler.ts
 var getSubHandler = (modelName, {
-  subPathName,
   handlerAccesses,
   getSubarray: getSubarray2,
-  subIdName
+  subIdName,
+  subPathName
 }) => {
   const getByQuery2 = async (req, rep) => {
     if (!handlerAccesses.includes("GET_BY_ID_SUB" /* GET_BY_ID_SUB */))

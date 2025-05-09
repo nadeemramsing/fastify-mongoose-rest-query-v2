@@ -4,16 +4,16 @@ import { HandlerAccessEnum } from '../mrq.enum'
 import * as subService from '../services/sub.service'
 import { getQueryForSubarray } from '../utils/query.sub.utils'
 import { ROLE_DOES_NOT_HAVE_ACCESS_HANDLER_LEVEL } from '../mrq.errors'
-import { ISchemaOption } from '../mrq.interfaces'
+import { ISchemaOptionSub } from '../mrq.interfaces'
 
 export const getSubHandler = (
   modelName: string,
   {
-    subPathName,
     handlerAccesses,
     getSubarray,
     subIdName,
-  }: Omit<ISchemaOption, 'endpointName'>
+    subPathName,
+  }: Omit<ISchemaOptionSub, 'endpointName'>
 ) => {
   const getByQuery: RouteHandlerMethod = async (req, rep) => {
     if (!handlerAccesses.includes(HandlerAccessEnum.GET_BY_ID_SUB))
