@@ -13,4 +13,5 @@ export declare const store: {
     mongoPath: string;
     mongoUser: string;
     mongoPassword: string;
+    mongoAdminSource: string;
 };

@@ -35,6 +35,7 @@ export async function getDB(
         username: store.mongoUser,
         password: store.mongoPassword,
       },
+      authSource: store.mongoAdminSource,
     })
 
     await conn.asPromise()

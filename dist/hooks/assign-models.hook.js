@@ -48,7 +48,8 @@ var memoOptions = {
 var store = {
   mongoPath: "",
   mongoUser: "",
-  mongoPassword: ""
+  mongoPassword: "",
+  mongoAdminSource: "admin"
 };
 
 // src/utils/db.utils.ts
@@ -60,7 +61,11 @@ async function getDB(app, uri, schemas) {
   if (!conn) {
     conn = (0, import_mongoose.createConnection)(uri, {
       autoIndex: false,
-      auth: { username: store.mongoUser, password: store.mongoPassword }
+      auth: {
+        username: store.mongoUser,
+        password: store.mongoPassword
+      },
+      authSource: store.mongoAdminSource
     });
     await conn.asPromise();
     pool[uri] = conn;

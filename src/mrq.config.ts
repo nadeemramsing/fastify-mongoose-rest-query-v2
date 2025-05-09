@@ -16,4 +16,5 @@ export const store = {
   mongoPath: '',
   mongoUser: '',
   mongoPassword: '',
+  mongoAdminSource: 'admin',
 }
