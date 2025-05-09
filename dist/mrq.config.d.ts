@@ -11,4 +11,6 @@ export declare const memoOptions: {
 };
 export declare const store: {
     mongoPath: string;
+    mongoUser: string;
+    mongoPassword: string;
 };

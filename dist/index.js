@@ -53,8 +53,12 @@ __export(index_exports, {
   closeConnections: () => closeConnections,
   getDB: () => getDB,
   getSingleConnection: () => getSingleConnection,
+  leanOptions: () => leanOptions,
+  memoOptions: () => memoOptions,
   model: () => model,
-  restify: () => restify
+  restify: () => restify,
+  store: () => store,
+  toJSONOptions: () => toJSONOptions
 });
 module.exports = __toCommonJS(index_exports);
 
@@ -93,7 +97,11 @@ var memoOptions = {
   maxAge: 30 * 24 * 60 * 60 * 1e3
   // 1 month
 };
-var store = { mongoPath: "" };
+var store = {
+  mongoPath: "",
+  mongoUser: "",
+  mongoPassword: ""
+};
 
 // src/utils/db.utils.ts
 var pool = {};
@@ -106,7 +114,10 @@ async function getDB(app, uri, schemas) {
   if (singleConnection) return singleConnection;
   let conn = pool[uri];
   if (!conn) {
-    conn = (0, import_mongoose.createConnection)(uri, { autoIndex: false });
+    conn = (0, import_mongoose.createConnection)(uri, {
+      autoIndex: false,
+      auth: { username: store.mongoUser, password: store.mongoPassword }
+    });
     await conn.asPromise();
     pool[uri] = conn;
     await mapModels(app, conn, schemas);
@@ -979,7 +990,11 @@ var restify = (opts) => async (app) => {
   closeConnections,
   getDB,
   getSingleConnection,
+  leanOptions,
+  memoOptions,
   model,
-  restify
+  restify,
+  store,
+  toJSONOptions
 });
 //# sourceMappingURL=index.js.map

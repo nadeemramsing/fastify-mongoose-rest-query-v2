@@ -29,7 +29,13 @@ export async function getDB(
   let conn: Connection = pool[uri]
 
   if (!conn) {
-    conn = createConnection(uri, { autoIndex: false })
+    conn = createConnection(uri, {
+      autoIndex: false,
+      auth: {
+        username: store.mongoUser,
+        password: store.mongoPassword,
+      },
+    })
 
     await conn.asPromise()
 

@@ -38,7 +38,11 @@ var memoOptions = {
   maxAge: 30 * 24 * 60 * 60 * 1e3
   // 1 month
 };
-var store = { mongoPath: "" };
+var store = {
+  mongoPath: "",
+  mongoUser: "",
+  mongoPassword: ""
+};
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   leanOptions,
