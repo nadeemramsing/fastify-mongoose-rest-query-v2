@@ -56,7 +56,6 @@ var store = {
 };
 
 // src/utils/db.utils.ts
-var mongoUrl = `${store.mongoBaseUrl}/${store.mongoDatabaseName ?? ""}`;
 var connGlobal;
 async function getDB(app, databaseName, schemas) {
   let connDB;

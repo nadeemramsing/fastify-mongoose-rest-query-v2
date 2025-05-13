@@ -81,15 +81,6 @@ var memoOptions = {
   maxAge: 30 * 24 * 60 * 60 * 1e3
   // 1 month
 };
-var store = {
-  mongoDatabaseName: "",
-  mongoUser: "",
-  mongoPassword: "",
-  mongoBaseUrl: "mongodb://localhost:27016",
-  mongoAdminSource: "admin",
-  mongoMinPoolSize: 2,
-  mongoMaxPoolSize: 20
-};
 
 // src/utils/mongoose.utils.ts
 var import_sensible2 = require("@fastify/sensible");
@@ -108,7 +99,6 @@ var import_sensible = require("@fastify/sensible");
 var import_mongoose = require("mongoose");
 var import_fp = __toESM(require("lodash/fp"));
 var import_promise_all = __toESM(require("promise-all"));
-var mongoUrl = `${store.mongoBaseUrl}/${store.mongoDatabaseName ?? ""}`;
 function model(req, modelName) {
   const Model = req.mongooseConn.models[modelName];
   if (!Model) throw import_sensible.httpErrors.badRequest(SCHEMA_NOT_REGISTERED);

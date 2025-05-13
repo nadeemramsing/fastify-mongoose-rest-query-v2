@@ -60,9 +60,9 @@ var store = {
 };
 
 // src/utils/db.utils.ts
-var mongoUrl = `${store.mongoBaseUrl}/${store.mongoDatabaseName ?? ""}`;
 var connGlobal;
 async function initConnection() {
+  const mongoUrl = `${store.mongoBaseUrl}/${store.mongoDatabaseName ?? ""}`;
   connGlobal = await (0, import_mongoose.createConnection)(mongoUrl, {
     autoIndex: false,
     auth: {

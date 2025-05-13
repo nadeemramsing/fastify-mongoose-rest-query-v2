@@ -7,11 +7,11 @@ import { IRestOptions } from '../mrq.interfaces'
 import { SCHEMA_NOT_REGISTERED } from '../mrq.errors'
 import { store } from '../mrq.config'
 
-const mongoUrl = `${store.mongoBaseUrl}/${store.mongoDatabaseName ?? ''}`
-
 let connGlobal: Connection
 
 export async function initConnection() {
+  const mongoUrl = `${store.mongoBaseUrl}/${store.mongoDatabaseName ?? ''}`
+
   connGlobal = await createConnection(mongoUrl, {
     autoIndex: false,
     auth: {
