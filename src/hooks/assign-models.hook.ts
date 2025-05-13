@@ -10,14 +10,14 @@ export const assignModelsHook: (
     app.decorateRequest('models', null)
   }
 
-  if (!app.hasRequestDecorator('x-client-mongodb-path')) {
-    app.decorateRequest('x-client-mongodb-path', '')
+  if (!app.hasRequestDecorator('mrq-db-name')) {
+    app.decorateRequest('mrq-db-name', '')
   }
 
   return async (req) => {
     req.mongooseConn = await getDB(
       app,
-      req['x-client-mongodb-path'] as string,
+      req['mrq-db-name'] as string,
       opts.schemas
     )
   }

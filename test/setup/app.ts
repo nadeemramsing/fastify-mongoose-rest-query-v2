@@ -25,10 +25,10 @@ async function buildApp(
     options: { prefix: '/api' },
   })
 
-  // Stub: Hook for x-client-mongodb-path
+  // Stub: Hook for mrq-db-name
   app.addHook('onRequest', async (req) => {
     req['role'] = (req.query as { role: string }).role ?? 'admin'
-    req['x-client-mongodb-path'] = uri
+    req['mrq-db-name'] = 'test'
   })
 
   app.register(

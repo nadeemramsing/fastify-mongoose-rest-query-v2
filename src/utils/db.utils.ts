@@ -7,71 +7,61 @@ import { IRestOptions } from '../mrq.interfaces'
 import { SCHEMA_NOT_REGISTERED } from '../mrq.errors'
 import { store } from '../mrq.config'
 
-const pool: { [key: string]: Connection } = {}
+const mongoUrl = `${store.mongoBaseUrl}/${store.mongoDatabaseName ?? ''}`
 
-let singleConnection: Connection | null = null
-
-export async function getSingleConnection(
-  app: FastifyInstance,
-  opts: IRestOptions
-) {
-  if (!store.mongoPath) return
-  singleConnection = await getDB(app, store.mongoPath, opts.schemas)
-}
+const conn: Connection = createConnection(mongoUrl, {
+  autoIndex: false,
+  auth: {
+    username: store.mongoUser,
+    password: store.mongoPassword,
+  },
+  authSource: store.mongoAdminSource,
+  minPoolSize: store.mongoMinPoolSize,
+  maxPoolSize: store.mongoMaxPoolSize,
+})
 
 export async function getDB(
   app: FastifyInstance,
-  uri: string,
+  databaseName: string,
   schemas: IRestOptions['schemas']
 ) {
-  if (singleConnection) return singleConnection
+  let connDB: Connection
 
-  let conn: Connection = pool[uri]
+  if (store.mongoDatabaseName) connDB = conn
+  else connDB = conn.useDb(databaseName, { useCache: true })
 
-  if (!conn) {
-    conn = createConnection(uri, {
-      autoIndex: false,
-      auth: {
-        username: store.mongoUser,
-        password: store.mongoPassword,
-      },
-      authSource: store.mongoAdminSource,
-    })
+  if (!connDB.get('hasMapModelsBeenCalled'))
+    await mapModels(app, connDB, schemas)
 
-    await conn.asPromise()
-
-    pool[uri] = conn
-
-    await mapModels(app, conn, schemas)
-  }
-
-  return conn
+  return connDB
 }
 
 async function mapModels(
   app: FastifyInstance,
-  conn: Connection,
+  connDB: Connection,
   schemas: IRestOptions['schemas']
 ) {
+  connDB.set('hasMapModelsBeenCalled', true)
+
   const p: { [modelName: string]: Promise<IndexesDiff> } = {}
 
-  conn.securePathsPerModel = {}
+  connDB.securePathsPerModel = {}
 
   for (const modelName in schemas) {
     const { schema } = schemas[modelName]
 
-    if (modelName in conn.models) continue
+    if (modelName in connDB.models) continue
 
-    const Model = conn.model(modelName, schema)
+    const Model = connDB.model(modelName, schema)
 
     p[modelName] = Model.diffIndexes()
 
     schema.eachPath((path, schemaType) => {
-      if (!conn.securePathsPerModel[modelName])
-        conn.securePathsPerModel[modelName] = {}
+      if (!connDB.securePathsPerModel[modelName])
+        connDB.securePathsPerModel[modelName] = {}
 
       if (schemaType.options.secure)
-        conn.securePathsPerModel[modelName][path] = true
+        connDB.securePathsPerModel[modelName][path] = true
     })
   }
 
@@ -86,11 +76,7 @@ async function mapModels(
 }
 
 export async function closeConnections() {
-  const p = []
-
-  for (const uri in pool) p.push(pool[uri].close())
-
-  await Promise.allSettled(p)
+  await conn.close()
 }
 
 export function model(req: FastifyRequest, modelName: string) {

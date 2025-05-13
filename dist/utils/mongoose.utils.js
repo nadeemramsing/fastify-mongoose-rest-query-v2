@@ -62,8 +62,28 @@ var memoOptions = {
   maxAge: 30 * 24 * 60 * 60 * 1e3
   // 1 month
 };
+var store = {
+  mongoDatabaseName: "",
+  mongoUser: "",
+  mongoPassword: "",
+  mongoBaseUrl: "mongodb://localhost:27016",
+  mongoAdminSource: "admin",
+  mongoMinPoolSize: 2,
+  mongoMaxPoolSize: 20
+};
 
 // src/utils/db.utils.ts
+var mongoUrl = `${store.mongoBaseUrl}/${store.mongoDatabaseName ?? ""}`;
+var conn = (0, import_mongoose.createConnection)(mongoUrl, {
+  autoIndex: false,
+  auth: {
+    username: store.mongoUser,
+    password: store.mongoPassword
+  },
+  authSource: store.mongoAdminSource,
+  minPoolSize: store.mongoMinPoolSize,
+  maxPoolSize: store.mongoMaxPoolSize
+});
 function model(req, modelName) {
   const Model = req.mongooseConn.models[modelName];
   if (!Model) throw import_sensible.httpErrors.badRequest(SCHEMA_NOT_REGISTERED);

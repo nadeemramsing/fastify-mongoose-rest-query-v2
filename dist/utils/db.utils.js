@@ -32,7 +32,6 @@ var db_utils_exports = {};
 __export(db_utils_exports, {
   closeConnections: () => closeConnections,
   getDB: () => getDB,
-  getSingleConnection: () => getSingleConnection,
   model: () => model
 });
 module.exports = __toCommonJS(db_utils_exports);
@@ -50,50 +49,49 @@ var memoOptions = {
   // 1 month
 };
 var store = {
-  mongoPath: "",
+  mongoDatabaseName: "",
   mongoUser: "",
   mongoPassword: "",
-  mongoAdminSource: "admin"
+  mongoBaseUrl: "mongodb://localhost:27016",
+  mongoAdminSource: "admin",
+  mongoMinPoolSize: 2,
+  mongoMaxPoolSize: 20
 };
 
 // src/utils/db.utils.ts
-var pool = {};
-var singleConnection = null;
-async function getSingleConnection(app, opts) {
-  if (!store.mongoPath) return;
-  singleConnection = await getDB(app, store.mongoPath, opts.schemas);
+var mongoUrl = `${store.mongoBaseUrl}/${store.mongoDatabaseName ?? ""}`;
+var conn = (0, import_mongoose.createConnection)(mongoUrl, {
+  autoIndex: false,
+  auth: {
+    username: store.mongoUser,
+    password: store.mongoPassword
+  },
+  authSource: store.mongoAdminSource,
+  minPoolSize: store.mongoMinPoolSize,
+  maxPoolSize: store.mongoMaxPoolSize
+});
+async function getDB(app, databaseName, schemas) {
+  let connDB;
+  if (store.mongoDatabaseName) connDB = conn;
+  else connDB = conn.useDb(databaseName, { useCache: true });
+  if (!connDB.get("hasMapModelsBeenCalled"))
+    await mapModels(app, connDB, schemas);
+  return connDB;
 }
-async function getDB(app, uri, schemas) {
-  if (singleConnection) return singleConnection;
-  let conn = pool[uri];
-  if (!conn) {
-    conn = (0, import_mongoose.createConnection)(uri, {
-      autoIndex: false,
-      auth: {
-        username: store.mongoUser,
-        password: store.mongoPassword
-      },
-      authSource: store.mongoAdminSource
-    });
-    await conn.asPromise();
-    pool[uri] = conn;
-    await mapModels(app, conn, schemas);
-  }
-  return conn;
-}
-async function mapModels(app, conn, schemas) {
+async function mapModels(app, connDB, schemas) {
+  connDB.set("hasMapModelsBeenCalled", true);
   const p = {};
-  conn.securePathsPerModel = {};
+  connDB.securePathsPerModel = {};
   for (const modelName in schemas) {
     const { schema } = schemas[modelName];
-    if (modelName in conn.models) continue;
-    const Model = conn.model(modelName, schema);
+    if (modelName in connDB.models) continue;
+    const Model = connDB.model(modelName, schema);
     p[modelName] = Model.diffIndexes();
     schema.eachPath((path, schemaType) => {
-      if (!conn.securePathsPerModel[modelName])
-        conn.securePathsPerModel[modelName] = {};
+      if (!connDB.securePathsPerModel[modelName])
+        connDB.securePathsPerModel[modelName] = {};
       if (schemaType.options.secure)
-        conn.securePathsPerModel[modelName][path] = true;
+        connDB.securePathsPerModel[modelName][path] = true;
     });
   }
   const diffs = await (0, import_promise_all.default)(p).then(
@@ -104,9 +102,7 @@ async function mapModels(app, conn, schemas) {
     app.log.info("Result of diffIndexes:", JSON.stringify(diffs, null, 2));
 }
 async function closeConnections() {
-  const p = [];
-  for (const uri in pool) p.push(pool[uri].close());
-  await Promise.allSettled(p);
+  await conn.close();
 }
 function model(req, modelName) {
   const Model = req.mongooseConn.models[modelName];
@@ -117,7 +113,6 @@ function model(req, modelName) {
 0 && (module.exports = {
   closeConnections,
   getDB,
-  getSingleConnection,
   model
 });
 //# sourceMappingURL=db.utils.js.map

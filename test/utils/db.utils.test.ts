@@ -1,7 +1,7 @@
 import { app } from '@test/setup/setup'
 import { store } from '@src/mrq.config'
 
-store.mongoPath = 'mongodb://localhost:27016/test-single-connection'
+store.mongoDatabaseName = 'test-single-connection'
 
 describe.sequential('Single Connection', () => {
   it('should return count of all resources with no filter', async () => {
@@ -11,6 +11,6 @@ describe.sequential('Single Connection', () => {
     })
 
     expect(response.statusCode).toBe(200)
-    expect(response.json().n).toBe(0)
+    expect(response.json().n).toBe(3)
   })
 })

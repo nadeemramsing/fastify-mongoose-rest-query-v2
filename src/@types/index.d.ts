@@ -6,7 +6,7 @@ declare module 'fastify' {
   interface FastifyRequest {
     mongooseConn: Connection
     role: string
-    'x-client-mongodb-path': string
+    'mrq-db-name': string
   }
 }
 

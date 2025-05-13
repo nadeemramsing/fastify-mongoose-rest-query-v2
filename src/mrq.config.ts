@@ -13,8 +13,11 @@ export const memoOptions = {
 }
 
 export const store = {
-  mongoPath: '',
+  mongoDatabaseName: '',
   mongoUser: '',
   mongoPassword: '',
+  mongoBaseUrl: 'mongodb://localhost:27016',
   mongoAdminSource: 'admin',
+  mongoMinPoolSize: 2,
+  mongoMaxPoolSize: 20,
 }
