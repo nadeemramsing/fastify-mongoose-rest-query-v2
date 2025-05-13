@@ -78,16 +78,6 @@ var import_mongoose = require("mongoose");
 var import_fp = __toESM(require("lodash/fp"));
 var import_promise_all = __toESM(require("promise-all"));
 var mongoUrl = `${store.mongoBaseUrl}/${store.mongoDatabaseName ?? ""}`;
-var conn = (0, import_mongoose.createConnection)(mongoUrl, {
-  autoIndex: false,
-  auth: {
-    username: store.mongoUser,
-    password: store.mongoPassword
-  },
-  authSource: store.mongoAdminSource,
-  minPoolSize: store.mongoMinPoolSize,
-  maxPoolSize: store.mongoMaxPoolSize
-});
 
 // src/utils/mongoose.utils.ts
 var import_fp2 = __toESM(require("lodash/fp"));

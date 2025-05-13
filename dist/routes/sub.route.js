@@ -109,16 +109,6 @@ var import_mongoose = require("mongoose");
 var import_fp = __toESM(require("lodash/fp"));
 var import_promise_all = __toESM(require("promise-all"));
 var mongoUrl = `${store.mongoBaseUrl}/${store.mongoDatabaseName ?? ""}`;
-var conn = (0, import_mongoose.createConnection)(mongoUrl, {
-  autoIndex: false,
-  auth: {
-    username: store.mongoUser,
-    password: store.mongoPassword
-  },
-  authSource: store.mongoAdminSource,
-  minPoolSize: store.mongoMinPoolSize,
-  maxPoolSize: store.mongoMaxPoolSize
-});
 function model(req, modelName) {
   const Model = req.mongooseConn.models[modelName];
   if (!Model) throw import_sensible.httpErrors.badRequest(SCHEMA_NOT_REGISTERED);

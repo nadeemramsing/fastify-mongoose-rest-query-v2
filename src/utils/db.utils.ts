@@ -9,16 +9,20 @@ import { store } from '../mrq.config'
 
 const mongoUrl = `${store.mongoBaseUrl}/${store.mongoDatabaseName ?? ''}`
 
-const conn: Connection = createConnection(mongoUrl, {
-  autoIndex: false,
-  auth: {
-    username: store.mongoUser,
-    password: store.mongoPassword,
-  },
-  authSource: store.mongoAdminSource,
-  minPoolSize: store.mongoMinPoolSize,
-  maxPoolSize: store.mongoMaxPoolSize,
-})
+let connGlobal: Connection
+
+export async function initConnection() {
+  connGlobal = await createConnection(mongoUrl, {
+    autoIndex: false,
+    auth: {
+      username: store.mongoUser,
+      password: store.mongoPassword,
+    },
+    authSource: store.mongoAdminSource,
+    minPoolSize: store.mongoMinPoolSize,
+    maxPoolSize: store.mongoMaxPoolSize,
+  }).asPromise()
+}
 
 export async function getDB(
   app: FastifyInstance,
@@ -27,8 +31,11 @@ export async function getDB(
 ) {
   let connDB: Connection
 
-  if (store.mongoDatabaseName) connDB = conn
-  else connDB = conn.useDb(databaseName, { useCache: true })
+  if (store.mongoDatabaseName) connDB = connGlobal
+  else
+    connDB = await connGlobal
+      .useDb(databaseName, { useCache: true })
+      .asPromise()
 
   if (!connDB.get('hasMapModelsBeenCalled'))
     await mapModels(app, connDB, schemas)
@@ -76,7 +83,7 @@ async function mapModels(
 }
 
 export async function closeConnections() {
-  await conn.close()
+  await connGlobal.close()
 }
 
 export function model(req: FastifyRequest, modelName: string) {

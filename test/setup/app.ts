@@ -2,7 +2,7 @@ import Fastify, { FastifyInstance } from 'fastify'
 import autoload from '@fastify/autoload'
 import { join } from 'path'
 import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox'
-import { restify } from '@src/index'
+import { initConnection, restify } from '@src/index'
 import { adminSchemas } from './admin-schemas'
 import { userSchemas } from './user-schemas'
 
@@ -15,6 +15,8 @@ async function buildApp(
   options: Partial<typeof defaultOptions> = {},
   uri: string
 ) {
+  await initConnection()
+
   const app: FastifyInstance = Fastify({
     ...defaultOptions,
     ...options,

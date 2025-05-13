@@ -83,16 +83,6 @@ var store = {
 
 // src/utils/db.utils.ts
 var mongoUrl = `${store.mongoBaseUrl}/${store.mongoDatabaseName ?? ""}`;
-var conn = (0, import_mongoose.createConnection)(mongoUrl, {
-  autoIndex: false,
-  auth: {
-    username: store.mongoUser,
-    password: store.mongoPassword
-  },
-  authSource: store.mongoAdminSource,
-  minPoolSize: store.mongoMinPoolSize,
-  maxPoolSize: store.mongoMaxPoolSize
-});
 function model(req, modelName) {
   const Model = req.mongooseConn.models[modelName];
   if (!Model) throw import_sensible.httpErrors.badRequest(SCHEMA_NOT_REGISTERED);

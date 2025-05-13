@@ -52,6 +52,7 @@ __export(index_exports, {
   SUBITEM_NOT_FOUND: () => SUBITEM_NOT_FOUND,
   closeConnections: () => closeConnections,
   getDB: () => getDB,
+  initConnection: () => initConnection,
   leanOptions: () => leanOptions,
   memoOptions: () => memoOptions,
   model: () => model,
@@ -108,20 +109,24 @@ var store = {
 
 // src/utils/db.utils.ts
 var mongoUrl = `${store.mongoBaseUrl}/${store.mongoDatabaseName ?? ""}`;
-var conn = (0, import_mongoose.createConnection)(mongoUrl, {
-  autoIndex: false,
-  auth: {
-    username: store.mongoUser,
-    password: store.mongoPassword
-  },
-  authSource: store.mongoAdminSource,
-  minPoolSize: store.mongoMinPoolSize,
-  maxPoolSize: store.mongoMaxPoolSize
-});
+var connGlobal;
+async function initConnection() {
+  connGlobal = await (0, import_mongoose.createConnection)(mongoUrl, {
+    autoIndex: false,
+    auth: {
+      username: store.mongoUser,
+      password: store.mongoPassword
+    },
+    authSource: store.mongoAdminSource,
+    minPoolSize: store.mongoMinPoolSize,
+    maxPoolSize: store.mongoMaxPoolSize
+  }).asPromise();
+}
 async function getDB(app, databaseName, schemas) {
   let connDB;
-  if (store.mongoDatabaseName) connDB = conn;
-  else connDB = conn.useDb(databaseName, { useCache: true });
+  if (store.mongoDatabaseName) connDB = connGlobal;
+  else
+    connDB = await connGlobal.useDb(databaseName, { useCache: true }).asPromise();
   if (!connDB.get("hasMapModelsBeenCalled"))
     await mapModels(app, connDB, schemas);
   return connDB;
@@ -150,7 +155,7 @@ async function mapModels(app, connDB, schemas) {
     app.log.info("Result of diffIndexes:", JSON.stringify(diffs, null, 2));
 }
 async function closeConnections() {
-  await conn.close();
+  await connGlobal.close();
 }
 function model(req, modelName) {
   const Model = req.mongooseConn.models[modelName];
@@ -989,6 +994,7 @@ var restify = (opts) => async (app) => {
   SUBITEM_NOT_FOUND,
   closeConnections,
   getDB,
+  initConnection,
   leanOptions,
   memoOptions,
   model,
