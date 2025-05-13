@@ -44,8 +44,8 @@ var IMPLICIT_SELECT_ALL_NOT_ALLOWED = "IMPLICIT_SELECT_ALL_NOT_ALLOWED";
 
 // src/mrq.config.ts
 var memoOptions = {
-  maxAge: 30 * 24 * 60 * 60 * 1e3
-  // 1 month
+  maxAge: 24 * 24 * 60 * 60 * 1e3
+  // 24 days
 };
 
 // src/utils/query.utils.ts

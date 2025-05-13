@@ -42,8 +42,8 @@ var import_promise_all = __toESM(require("promise-all"));
 
 // src/mrq.config.ts
 var memoOptions = {
-  maxAge: 30 * 24 * 60 * 60 * 1e3
-  // 1 month
+  maxAge: 24 * 24 * 60 * 60 * 1e3
+  // 24 days
 };
 var store = {
   mongoDatabaseName: "",

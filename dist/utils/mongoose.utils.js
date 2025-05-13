@@ -59,8 +59,8 @@ var leanOptions = {
   versionKey: false
 };
 var memoOptions = {
-  maxAge: 30 * 24 * 60 * 60 * 1e3
-  // 1 month
+  maxAge: 24 * 24 * 60 * 60 * 1e3
+  // 24 days
 };
 
 // src/utils/db.utils.ts

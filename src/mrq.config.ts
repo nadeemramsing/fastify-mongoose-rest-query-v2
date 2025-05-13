@@ -9,7 +9,7 @@ export const toJSONOptions = {
 }
 
 export const memoOptions = {
-  maxAge: 30 * 24 * 60 * 60 * 1_000, // 1 month
+  maxAge: 24 * 24 * 60 * 60 * 1_000, // 24 days
 }
 
 export const store = {
