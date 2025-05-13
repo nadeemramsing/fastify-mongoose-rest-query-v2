@@ -71,7 +71,7 @@ async function mapModels(app, connDB, schemas) {
   const p = {};
   connDB.securePathsPerModel = {};
   for (const modelName in schemas) {
-    const { schema } = schemas[modelName];
+    const schema = schemas[modelName];
     if (modelName in connDB.models) continue;
     const Model = connDB.model(modelName, schema);
     p[modelName] = Model.diffIndexes();
@@ -91,10 +91,7 @@ async function mapModels(app, connDB, schemas) {
 }
 
 // src/hooks/assign-models.hook.ts
-var assignModelsHook = (app, opts) => {
-  if (!app.hasRequestDecorator("models")) {
-    app.decorateRequest("models", null);
-  }
+var assignModelsHook = (app, modelToSchemaMap) => {
   if (!app.hasRequestDecorator("mrq-db-name")) {
     app.decorateRequest("mrq-db-name", "");
   }
@@ -102,7 +99,7 @@ var assignModelsHook = (app, opts) => {
     req.mongooseConn = await getDB(
       app,
       req["mrq-db-name"],
-      opts.schemas
+      modelToSchemaMap
     );
   };
 };

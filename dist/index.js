@@ -62,6 +62,9 @@ __export(index_exports, {
 });
 module.exports = __toCommonJS(index_exports);
 
+// src/handler/main.handler.ts
+var import_sensible4 = require("@fastify/sensible");
+
 // src/utils/db.utils.ts
 var import_sensible = require("@fastify/sensible");
 var import_mongoose = require("mongoose");
@@ -136,7 +139,7 @@ async function mapModels(app, connDB, schemas) {
   const p = {};
   connDB.securePathsPerModel = {};
   for (const modelName in schemas) {
-    const { schema } = schemas[modelName];
+    const schema = schemas[modelName];
     if (modelName in connDB.models) continue;
     const Model = connDB.model(modelName, schema);
     p[modelName] = Model.diffIndexes();
@@ -162,26 +165,6 @@ function model(req, modelName) {
   if (!Model) throw import_sensible.httpErrors.badRequest(SCHEMA_NOT_REGISTERED);
   return Model;
 }
-
-// src/hooks/assign-models.hook.ts
-var assignModelsHook = (app, opts) => {
-  if (!app.hasRequestDecorator("models")) {
-    app.decorateRequest("models", null);
-  }
-  if (!app.hasRequestDecorator("mrq-db-name")) {
-    app.decorateRequest("mrq-db-name", "");
-  }
-  return async (req) => {
-    req.mongooseConn = await getDB(
-      app,
-      req["mrq-db-name"],
-      opts.schemas
-    );
-  };
-};
-
-// src/handler/main.handler.ts
-var import_sensible4 = require("@fastify/sensible");
 
 // src/utils/query.utils.ts
 var import_moize = __toESM(require("moize"));
@@ -962,12 +945,6 @@ var mainRoute = (opts) => async (app) => {
 
 // src/index.ts
 var restify = (opts) => async (app) => {
-  app.addHook("onRequest", assignModelsHook(app, opts));
-  app.addHook(
-    "onRoute",
-    ({ url, method }) => app.log.info(`Endpoint created: ${url} ${method}`)
-  );
-  app.addHook("onClose", closeConnections);
   app.register(mainRoute(opts));
 };
 // Annotate the CommonJS export names for ESM import in node:

@@ -3,7 +3,7 @@ import { httpErrors } from '@fastify/sensible'
 import { Connection, createConnection, IndexesDiff } from 'mongoose'
 import fp from 'lodash/fp'
 import promiseAll from 'promise-all'
-import { IRestOptions } from '../mrq.interfaces'
+import { IModelToSchemaMap } from '../mrq.interfaces'
 import { SCHEMA_NOT_REGISTERED } from '../mrq.errors'
 import { store } from '../mrq.config'
 
@@ -27,7 +27,7 @@ export async function initConnection() {
 export async function getDB(
   app: FastifyInstance,
   databaseName: string,
-  schemas: IRestOptions['schemas']
+  schemas: IModelToSchemaMap
 ) {
   let connDB: Connection
 
@@ -46,7 +46,7 @@ export async function getDB(
 async function mapModels(
   app: FastifyInstance,
   connDB: Connection,
-  schemas: IRestOptions['schemas']
+  schemas: IModelToSchemaMap
 ) {
   connDB.set('hasMapModelsBeenCalled', true)
 
@@ -55,7 +55,7 @@ async function mapModels(
   connDB.securePathsPerModel = {}
 
   for (const modelName in schemas) {
-    const { schema } = schemas[modelName]
+    const schema = schemas[modelName]
 
     if (modelName in connDB.models) continue
 

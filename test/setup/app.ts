@@ -2,9 +2,11 @@ import Fastify, { FastifyInstance } from 'fastify'
 import autoload from '@fastify/autoload'
 import { join } from 'path'
 import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox'
-import { initConnection, restify } from '@src/index'
+import { closeConnections, initConnection, restify } from '@src/index'
 import { adminSchemas } from './admin-schemas'
 import { userSchemas } from './user-schemas'
+import { assignModelsHook } from '@src/hooks/assign-models.hook'
+import { allSchemas } from './all-schemas'
 
 const defaultOptions = {
   logger: true,
@@ -26,6 +28,14 @@ async function buildApp(
     dir: join(__dirname, 'routes'),
     options: { prefix: '/api' },
   })
+
+  app.addHook('onRequest', assignModelsHook(app, allSchemas))
+
+  app.addHook('onRoute', ({ url, method }) =>
+    app.log.info(`Endpoint created: ${url} ${method}`)
+  )
+
+  app.addHook('onClose', closeConnections)
 
   // Stub: Hook for mrq-db-name
   app.addHook('onRequest', async (req) => {

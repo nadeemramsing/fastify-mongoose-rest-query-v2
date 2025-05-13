@@ -1,5 +1,8 @@
 import { Schema, Document } from 'mongoose';
 import { HandlerAccessEnum } from './mrq.enum';
+export interface IModelToSchemaMap {
+    [modelName: string]: Schema;
+}
 export interface ISchemaOption {
     endpointName: string;
     schema: Schema;

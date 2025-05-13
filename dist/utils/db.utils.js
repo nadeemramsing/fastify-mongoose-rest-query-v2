@@ -88,7 +88,7 @@ async function mapModels(app, connDB, schemas) {
   const p = {};
   connDB.securePathsPerModel = {};
   for (const modelName in schemas) {
-    const { schema } = schemas[modelName];
+    const schema = schemas[modelName];
     if (modelName in connDB.models) continue;
     const Model = connDB.model(modelName, schema);
     p[modelName] = Model.diffIndexes();
