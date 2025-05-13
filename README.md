@@ -1,1 +1,1 @@
-# micro-rest-query
+# fastify-mongoose-rest-query

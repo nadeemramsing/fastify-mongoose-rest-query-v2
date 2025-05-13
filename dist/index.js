@@ -52,6 +52,7 @@ __export(index_exports, {
   SUBITEM_NOT_FOUND: () => SUBITEM_NOT_FOUND,
   closeConnections: () => closeConnections,
   getDB: () => getDB,
+  getModelsHook: () => getModelsHook,
   initConnection: () => initConnection,
   leanOptions: () => leanOptions,
   memoOptions: () => memoOptions,
@@ -943,6 +944,20 @@ var mainRoute = (opts) => async (app) => {
   }
 };
 
+// src/hooks/get-models.hook.ts
+var getModelsHook = (app, modelToSchemaMap) => {
+  if (!app.hasRequestDecorator("mrq-db-name")) {
+    app.decorateRequest("mrq-db-name", "");
+  }
+  return async (req) => {
+    req.mongooseConn = await getDB(
+      app,
+      req["mrq-db-name"],
+      modelToSchemaMap
+    );
+  };
+};
+
 // src/index.ts
 var restify = (opts) => async (app) => {
   app.register(mainRoute(opts));
@@ -971,6 +986,7 @@ var restify = (opts) => async (app) => {
   SUBITEM_NOT_FOUND,
   closeConnections,
   getDB,
+  getModelsHook,
   initConnection,
   leanOptions,
   memoOptions,

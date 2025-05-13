@@ -27,12 +27,12 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 ));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-// src/hooks/assign-models.hook.ts
-var assign_models_hook_exports = {};
-__export(assign_models_hook_exports, {
-  assignModelsHook: () => assignModelsHook
+// src/hooks/get-models.hook.ts
+var get_models_hook_exports = {};
+__export(get_models_hook_exports, {
+  getModelsHook: () => getModelsHook
 });
-module.exports = __toCommonJS(assign_models_hook_exports);
+module.exports = __toCommonJS(get_models_hook_exports);
 
 // src/utils/db.utils.ts
 var import_sensible = require("@fastify/sensible");
@@ -90,8 +90,8 @@ async function mapModels(app, connDB, schemas) {
     app.log.info("Result of diffIndexes:", JSON.stringify(diffs, null, 2));
 }
 
-// src/hooks/assign-models.hook.ts
-var assignModelsHook = (app, modelToSchemaMap) => {
+// src/hooks/get-models.hook.ts
+var getModelsHook = (app, modelToSchemaMap) => {
   if (!app.hasRequestDecorator("mrq-db-name")) {
     app.decorateRequest("mrq-db-name", "");
   }
@@ -105,6 +105,6 @@ var assignModelsHook = (app, modelToSchemaMap) => {
 };
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
-  assignModelsHook
+  getModelsHook
 });
-//# sourceMappingURL=assign-models.hook.js.map
+//# sourceMappingURL=get-models.hook.js.map

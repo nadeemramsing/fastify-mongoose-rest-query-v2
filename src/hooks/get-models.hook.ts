@@ -2,7 +2,7 @@ import { FastifyInstance, onRequestAsyncHookHandler } from 'fastify'
 import { IModelToSchemaMap } from '../mrq.interfaces'
 import { getDB } from '../utils/db.utils'
 
-export const assignModelsHook: (
+export const getModelsHook: (
   app: FastifyInstance,
   modelToSchemaMap: IModelToSchemaMap
 ) => onRequestAsyncHookHandler = (app, modelToSchemaMap) => {

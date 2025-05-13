@@ -5,7 +5,7 @@ import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox'
 import { closeConnections, initConnection, restify } from '@src/index'
 import { adminSchemas } from './admin-schemas'
 import { userSchemas } from './user-schemas'
-import { assignModelsHook } from '@src/hooks/assign-models.hook'
+import { getModelsHook } from '@src/hooks/get-models.hook'
 import { allSchemas } from './all-schemas'
 
 const defaultOptions = {
@@ -29,7 +29,7 @@ async function buildApp(
     options: { prefix: '/api' },
   })
 
-  app.addHook('onRequest', assignModelsHook(app, allSchemas))
+  app.addHook('onRequest', getModelsHook(app, allSchemas))
 
   app.addHook('onRoute', ({ url, method }) =>
     app.log.info(`Endpoint created: ${url} ${method}`)
