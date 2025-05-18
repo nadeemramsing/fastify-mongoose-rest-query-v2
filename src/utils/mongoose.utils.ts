@@ -9,7 +9,7 @@ import {
   SUBITEM_NOT_FOUND,
 } from '../mrq.errors'
 import { model } from './db.utils'
-import { leanOptions } from '../mrq.config'
+import { leanOptions, store } from '../mrq.config'
 import { MrqDocument } from '../mrq.interfaces'
 import fp from 'lodash/fp'
 
@@ -48,7 +48,7 @@ export async function useSession(
   cb: (session?: ClientSession) => any
 ) {
   const query = req.query as { useSession: string }
-  const shouldUseSession = query.useSession === 'true'
+  const shouldUseSession = store.alwaysUseSession || query.useSession === 'true'
 
   if (!shouldUseSession) return cb()
 
@@ -141,7 +141,10 @@ export async function getChildarray(
 
   if (!doc) throw httpErrors.notFound(DOCUMENT_NOT_FOUND)
 
-  const subitem = fp.find((subitem) => subitem._id.equals(subId), doc[subPathName])
+  const subitem = fp.find(
+    (subitem) => subitem._id.equals(subId),
+    doc[subPathName]
+  )
 
   if (!subitem) throw httpErrors.notFound(SUBITEM_NOT_FOUND)
 

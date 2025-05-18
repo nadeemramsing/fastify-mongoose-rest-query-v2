@@ -1,7 +1,7 @@
 {
   "version": 3,
   "sources": ["../src/mrq.config.ts"],
-  "sourcesContent": ["export const leanOptions = {\n  virtuals: true,\n  versionKey: false,\n}\n\nexport const toJSONOptions = {\n  virtuals: true,\n  versionKey: false,\n}\n\nexport const memoOptions = {\n  maxAge: 24 * 24 * 60 * 60 * 1_000, // 24 days\n}\n\nexport const store = {\n  mongoDatabaseName: '',\n  mongoUser: '',\n  mongoPassword: '',\n  mongoBaseUrl: 'mongodb://localhost:27016',\n  mongoAdminSource: 'admin',\n  mongoMinPoolSize: 2,\n  mongoMaxPoolSize: 20,\n}\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAO,IAAM,cAAc;AAAA,EACzB,UAAU;AAAA,EACV,YAAY;AACd;AAEO,IAAM,gBAAgB;AAAA,EAC3B,UAAU;AAAA,EACV,YAAY;AACd;AAEO,IAAM,cAAc;AAAA,EACzB,QAAQ,KAAK,KAAK,KAAK,KAAK;AAAA;AAC9B;AAEO,IAAM,QAAQ;AAAA,EACnB,mBAAmB;AAAA,EACnB,WAAW;AAAA,EACX,eAAe;AAAA,EACf,cAAc;AAAA,EACd,kBAAkB;AAAA,EAClB,kBAAkB;AAAA,EAClB,kBAAkB;AACpB;",
+  "sourcesContent": ["export const leanOptions = {\n  virtuals: true,\n  versionKey: false,\n}\n\nexport const toJSONOptions = {\n  virtuals: true,\n  versionKey: false,\n}\n\nexport const memoOptions = {\n  maxAge: 24 * 24 * 60 * 60 * 1_000, // 24 days\n}\n\nexport const store = {\n  alwaysUseSession: false,\n  mongoDatabaseName: '',\n  mongoUser: '',\n  mongoPassword: '',\n  mongoBaseUrl: 'mongodb://localhost:27016',\n  mongoAdminSource: 'admin',\n  mongoMinPoolSize: 2,\n  mongoMaxPoolSize: 20,\n}\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAO,IAAM,cAAc;AAAA,EACzB,UAAU;AAAA,EACV,YAAY;AACd;AAEO,IAAM,gBAAgB;AAAA,EAC3B,UAAU;AAAA,EACV,YAAY;AACd;AAEO,IAAM,cAAc;AAAA,EACzB,QAAQ,KAAK,KAAK,KAAK,KAAK;AAAA;AAC9B;AAEO,IAAM,QAAQ;AAAA,EACnB,kBAAkB;AAAA,EAClB,mBAAmB;AAAA,EACnB,WAAW;AAAA,EACX,eAAe;AAAA,EACf,cAAc;AAAA,EACd,kBAAkB;AAAA,EAClB,kBAAkB;AAAA,EAClB,kBAAkB;AACpB;",
   "names": []
 }

@@ -13,6 +13,7 @@ export const memoOptions = {
 }
 
 export const store = {
+  alwaysUseSession: false,
   mongoDatabaseName: '',
   mongoUser: '',
   mongoPassword: '',

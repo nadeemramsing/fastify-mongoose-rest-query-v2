@@ -71,6 +71,16 @@ var memoOptions = {
   maxAge: 24 * 24 * 60 * 60 * 1e3
   // 24 days
 };
+var store = {
+  alwaysUseSession: false,
+  mongoDatabaseName: "",
+  mongoUser: "",
+  mongoPassword: "",
+  mongoBaseUrl: "mongodb://localhost:27016",
+  mongoAdminSource: "admin",
+  mongoMinPoolSize: 2,
+  mongoMaxPoolSize: 20
+};
 
 // src/utils/db.utils.ts
 function model(req, modelName) {
@@ -202,7 +212,7 @@ function runStaticMethods({
 }
 async function useSession(Model, req, cb) {
   const query = req.query;
-  const shouldUseSession = query.useSession === "true";
+  const shouldUseSession = store.alwaysUseSession || query.useSession === "true";
   if (!shouldUseSession) return cb();
   const session = await Model.startSession();
   const res = await cb(session);
@@ -256,7 +266,10 @@ async function getChildarray(req, modelName, fullPathName, useLean = false) {
     `);
   const [doc] = await (useLean ? p.lean(leanOptions) : p) ?? [];
   if (!doc) throw import_sensible3.httpErrors.notFound(DOCUMENT_NOT_FOUND);
-  const subitem = import_fp2.default.find((subitem2) => subitem2._id.equals(subId), doc[subPathName]);
+  const subitem = import_fp2.default.find(
+    (subitem2) => subitem2._id.equals(subId),
+    doc[subPathName]
+  );
   if (!subitem) throw import_sensible3.httpErrors.notFound(SUBITEM_NOT_FOUND);
   return {
     Model,

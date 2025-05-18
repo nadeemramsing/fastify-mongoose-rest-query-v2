@@ -50,6 +50,7 @@ var memoOptions = {
   // 24 days
 };
 var store = {
+  alwaysUseSession: false,
   mongoDatabaseName: "",
   mongoUser: "",
   mongoPassword: "",

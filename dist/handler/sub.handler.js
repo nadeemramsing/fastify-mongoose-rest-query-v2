@@ -75,6 +75,16 @@ var memoOptions = {
   maxAge: 24 * 24 * 60 * 60 * 1e3
   // 24 days
 };
+var store = {
+  alwaysUseSession: false,
+  mongoDatabaseName: "",
+  mongoUser: "",
+  mongoPassword: "",
+  mongoBaseUrl: "mongodb://localhost:27016",
+  mongoAdminSource: "admin",
+  mongoMinPoolSize: 2,
+  mongoMaxPoolSize: 20
+};
 
 // src/utils/mongoose.utils.ts
 var import_sensible2 = require("@fastify/sensible");
@@ -96,7 +106,7 @@ var import_promise_all = __toESM(require("promise-all"));
 var import_fp2 = __toESM(require("lodash/fp"));
 async function useSession(Model, req, cb) {
   const query = req.query;
-  const shouldUseSession = query.useSession === "true";
+  const shouldUseSession = store.alwaysUseSession || query.useSession === "true";
   if (!shouldUseSession) return cb();
   const session = await Model.startSession();
   const res = await cb(session);

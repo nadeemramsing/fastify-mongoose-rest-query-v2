@@ -10,6 +10,7 @@ export declare const memoOptions: {
     maxAge: number;
 };
 export declare const store: {
+    alwaysUseSession: boolean;
     mongoDatabaseName: string;
     mongoUser: string;
     mongoPassword: string;

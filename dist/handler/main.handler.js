@@ -65,6 +65,16 @@ var memoOptions = {
   maxAge: 24 * 24 * 60 * 60 * 1e3
   // 24 days
 };
+var store = {
+  alwaysUseSession: false,
+  mongoDatabaseName: "",
+  mongoUser: "",
+  mongoPassword: "",
+  mongoBaseUrl: "mongodb://localhost:27016",
+  mongoAdminSource: "admin",
+  mongoMinPoolSize: 2,
+  mongoMaxPoolSize: 20
+};
 
 // src/utils/db.utils.ts
 function model(req, modelName) {
@@ -196,7 +206,7 @@ function runStaticMethods({
 }
 async function useSession(Model, req, cb) {
   const query = req.query;
-  const shouldUseSession = query.useSession === "true";
+  const shouldUseSession = store.alwaysUseSession || query.useSession === "true";
   if (!shouldUseSession) return cb();
   const session = await Model.startSession();
   const res = await cb(session);
