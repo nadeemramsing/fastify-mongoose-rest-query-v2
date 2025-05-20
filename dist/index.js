@@ -916,7 +916,7 @@ var subRoute = (modelName, schemaOptions) => async (app) => {
 
 // src/routes/main.route.ts
 var mainRoute = (opts) => async (app) => {
-  app.addHook("onRequest", roleHook(opts));
+  app.addHook("preHandler", roleHook(opts));
   for (const [
     modelName,
     { endpointName, schema, handlerAccesses }
