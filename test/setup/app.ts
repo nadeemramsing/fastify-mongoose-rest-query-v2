@@ -29,7 +29,7 @@ async function buildApp(
     options: { prefix: '/api' },
   })
 
-  app.addHook('onRequest', getModelsHook(app, allSchemas))
+  app.addHook('preHandler', getModelsHook(app, allSchemas))
 
   app.addHook('onRoute', ({ url, method }) =>
     app.log.info(`Endpoint created: ${url} ${method}`)
@@ -38,7 +38,7 @@ async function buildApp(
   app.addHook('onClose', closeConnections)
 
   // Stub: Hook for mrq-db-name
-  app.addHook('onRequest', async (req) => {
+  app.addHook('preHandler', async (req) => {
     req['role'] = (req.query as { role: string }).role ?? 'admin'
     req['mrq-db-name'] = 'test'
   })

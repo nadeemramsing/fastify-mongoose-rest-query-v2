@@ -7,7 +7,7 @@ import { getSubarray } from '../utils/mongoose.utils'
 
 export const mainRoute =
   (opts: IRestOptions) => async (app: FastifyInstance) => {
-    app.addHook('onRequest', roleHook(opts))
+    app.addHook('preHandler', roleHook(opts))
 
     for (const [
       modelName,
