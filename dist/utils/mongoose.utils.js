@@ -70,7 +70,8 @@ var store = {
   mongoBaseUrl: "mongodb://localhost:27016",
   mongoAdminSource: "admin",
   mongoMinPoolSize: 2,
-  mongoMaxPoolSize: 20
+  mongoMaxPoolSize: 20,
+  mongoReplicaSet: ""
 };
 
 // src/utils/db.utils.ts

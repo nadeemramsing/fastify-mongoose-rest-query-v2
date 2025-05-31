@@ -46,7 +46,8 @@ var store = {
   mongoBaseUrl: "mongodb://localhost:27016",
   mongoAdminSource: "admin",
   mongoMinPoolSize: 2,
-  mongoMaxPoolSize: 20
+  mongoMaxPoolSize: 20,
+  mongoReplicaSet: ""
 };
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {

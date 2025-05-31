@@ -18,4 +18,5 @@ export declare const store: {
     mongoAdminSource: string;
     mongoMinPoolSize: number;
     mongoMaxPoolSize: number;
+    mongoReplicaSet: string;
 };

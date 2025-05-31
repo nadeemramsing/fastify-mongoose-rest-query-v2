@@ -109,7 +109,8 @@ var store = {
   mongoBaseUrl: "mongodb://localhost:27016",
   mongoAdminSource: "admin",
   mongoMinPoolSize: 2,
-  mongoMaxPoolSize: 20
+  mongoMaxPoolSize: 20,
+  mongoReplicaSet: ""
 };
 
 // src/utils/db.utils.ts
@@ -124,7 +125,8 @@ async function initConnection() {
     },
     authSource: store.mongoAdminSource,
     minPoolSize: store.mongoMinPoolSize,
-    maxPoolSize: store.mongoMaxPoolSize
+    maxPoolSize: store.mongoMaxPoolSize,
+    replicaSet: store.mongoReplicaSet || void 0
   }).asPromise();
 }
 async function getDB(app, databaseName, schemas) {

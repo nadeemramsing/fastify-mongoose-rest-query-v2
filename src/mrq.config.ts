@@ -21,4 +21,5 @@ export const store = {
   mongoAdminSource: 'admin',
   mongoMinPoolSize: 2,
   mongoMaxPoolSize: 20,
+  mongoReplicaSet: ''
 }

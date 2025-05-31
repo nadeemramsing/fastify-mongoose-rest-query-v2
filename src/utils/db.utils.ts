@@ -21,6 +21,7 @@ export async function initConnection() {
     authSource: store.mongoAdminSource,
     minPoolSize: store.mongoMinPoolSize,
     maxPoolSize: store.mongoMaxPoolSize,
+    replicaSet: store.mongoReplicaSet || undefined,
   }).asPromise()
 }
 
