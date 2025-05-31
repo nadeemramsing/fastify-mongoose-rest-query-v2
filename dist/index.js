@@ -115,8 +115,9 @@ var store = {
 
 // src/utils/db.utils.ts
 var connGlobal;
-async function initConnection() {
+async function initConnection(app) {
   const mongoUrl = `${store.mongoBaseUrl}/${store.mongoDatabaseName ?? ""}`;
+  app.log.info({ store }, "Connecting to mongodb via mrq using store...");
   connGlobal = await (0, import_mongoose.createConnection)(mongoUrl, {
     autoIndex: false,
     auth: {

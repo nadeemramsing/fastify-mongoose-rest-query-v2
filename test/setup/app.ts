@@ -17,12 +17,12 @@ async function buildApp(
   options: Partial<typeof defaultOptions> = {},
   uri: string
 ) {
-  await initConnection()
-
   const app: FastifyInstance = Fastify({
     ...defaultOptions,
     ...options,
   }).withTypeProvider<TypeBoxTypeProvider>()
+
+  await initConnection(app)
 
   app.register(autoload, {
     dir: join(__dirname, 'routes'),

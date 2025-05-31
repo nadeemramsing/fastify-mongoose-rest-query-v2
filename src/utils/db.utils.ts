@@ -9,8 +9,10 @@ import { store } from '../mrq.config'
 
 let connGlobal: Connection
 
-export async function initConnection() {
+export async function initConnection(app: FastifyInstance) {
   const mongoUrl = `${store.mongoBaseUrl}/${store.mongoDatabaseName ?? ''}`
+
+  app.log.info({ store }, 'Connecting to mongodb via mrq using store...')
 
   connGlobal = await createConnection(mongoUrl, {
     autoIndex: false,
